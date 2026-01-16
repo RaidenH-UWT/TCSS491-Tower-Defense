@@ -1,6 +1,8 @@
 # TCSS491-Tower-Defense
 Fantasy themed Tower Defense web game made for TCSS491
 
+Stable branch for publishing.
+
 ## Timeline
 Week 2:
 - Finish the project plan (Jan. 18)
