@@ -5,10 +5,10 @@ body {
 main {
     position: relative;
     margin-left: 256px;
-    width: 1536px;
+    width: 1024px;
 }
 
-gameCanvas {
+#gameCanvas {
     background: white;
     border: 1px solid black;
     margin-left: 256px;
