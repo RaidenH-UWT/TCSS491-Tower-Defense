@@ -1,6 +1,34 @@
 # TCSS491-Tower-Defense
 Fantasy themed Tower Defense web game made for TCSS491
 
+## Requirements
+- Prototype (Jan. 30)
+    - Demonstrates entities and control elements
+    - May have missing functionality or hardcoded values before proper implementation
+    - Demonstrates keyboard/mouse controls
+    - Demonstrates implemented interactive logic
+    - Setup GitHub Repo
+    - Build live website from latest stable version
+
+- Minimal Deliverable (Feb. 20)
+    - Minimum version that feels complete to play
+    - Win/loss functionality
+    - All features should be present, even if there’s not a wide variety of features (so like, just a couple enemy/tower types and one map)
+    - Enemies, resources, HUD, etc. should all be present
+
+- Final Deliverable (Mar. 15)
+    - Final version of the project with every feature you were able to implement
+    - Variety of features, handful of levels (maps for us?)
+    - Finishing touches like menus, credits, scores, etc.
+
+- Video Demo (Mar. 8)
+    - Either a game trailer or lets play style video
+    - Maximum 3 minutes, shoot for about 45-90 seconds
+    - Write script
+    - Record video
+    - Edit video
+    - Publish and share your video
+
 ## Timeline
 Week 2:
 - Finish the project plan (Jan. 18)
