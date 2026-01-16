@@ -38,7 +38,8 @@ Week 6:
 - Improve map design (?)
 
 Week 7: (MVP due Feb. 20)
-- Finish up all features
+- Implement win/loss (beat all waves, lose all health)
+- MVP needs all features, but is fine without variety
 
 Week 8:
 - Add difficulties
