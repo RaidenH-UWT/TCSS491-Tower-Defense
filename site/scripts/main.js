@@ -15,7 +15,7 @@ ASSET_MANAGER.downloadAll(async () => {
 	gameEngine.init(ctx);
 	
 	for (let i = 0; i < MAPS.length; i++) {
-		let data = await (await fetch(`../data/${MAPS[i]}`)).text();
+		let data = await (await fetch(`./data/${MAPS[i]}`)).text();
 		MAP_DATA[i] = JSON.parse(data);
 	}
 	
