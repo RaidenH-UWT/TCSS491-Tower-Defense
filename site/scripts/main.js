@@ -21,6 +21,9 @@ ASSET_MANAGER.downloadAll(async () => {
 	
 	const testMap = new TowerDefenseMap(MAP_DATA[0], ASSET_MANAGER);
 	gameEngine.addEntity(testMap);
+	
+	let towerTest = await(await fetch("../data/ArrowTower.json")).text();
+	let tower = new Tower(JSON.parse(towerTest));
 
 	gameEngine.draw();
 	// gameEngine.start();
