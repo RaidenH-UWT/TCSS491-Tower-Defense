@@ -7,10 +7,10 @@ CELL_DESIGN.set("B", "green");
 CELL_DESIGN.set("F", "blue");
 CELL_DESIGN.set("G", "red");
 
-CELL_DESIGN.set("N", "../assets/path_north.png");
-CELL_DESIGN.set("S", "../assets/path_south.png");
-CELL_DESIGN.set("E", "../assets/path_east.png");
-CELL_DESIGN.set("W", "../assets/path_west.png");
+CELL_DESIGN.set("N", "./assets/path_north.png");
+CELL_DESIGN.set("S", "./assets/path_south.png");
+CELL_DESIGN.set("E", "./assets/path_east.png");
+CELL_DESIGN.set("W", "./assets/path_west.png");
 
 class TowerDefenseMap {
   constructor(json, assetManager) {
