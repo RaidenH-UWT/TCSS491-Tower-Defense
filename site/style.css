@@ -16,7 +16,11 @@ main {
 
 #infoBox {
     background: white;
-    width: 1000px;
-    padding: 13px;
+    width: 1024px;
     margin-left: 256px;
+}
+
+#infoBox * {
+    padding: 8px;
+    margin-top: 0px;
 }

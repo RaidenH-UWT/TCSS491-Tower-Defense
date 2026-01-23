@@ -1,0 +1,24 @@
+{
+    "name": "Arrow Tower",
+    "sprite": "arrow_tower.png",
+    "upgrades": [
+        {
+            "0": {
+                "cost": 100,
+                "attack": {
+                    "damage": 1,
+                    "range": 1,
+                    "rate": 1
+                }
+            },
+            "1": {
+                "cost": 150,
+                "attack": {
+                    "damage": 2,
+                    "range": 1,
+                    "rate": 1
+                }
+            }
+        }
+    ]
+}

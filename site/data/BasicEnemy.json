@@ -1,0 +1,11 @@
+{
+    "name": "Basic Enemy",
+    "sprite": "basic_enemy.png",
+    "health": 5,
+    "speed": 1,
+    "attack": {
+        "damage": 1,
+        "range": 1,
+        "rate": 1
+    }
+}
