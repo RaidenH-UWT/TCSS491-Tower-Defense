@@ -20,11 +20,25 @@ ASSET_MANAGER.downloadAll(async () => {
 	}
 	
 	const testMap = new TowerDefenseMap(MAP_DATA[0], ASSET_MANAGER);
-	gameEngine.addEntity(testMap);
+	
 	
 	let towerTest = await(await fetch("./data/ArrowTower.json")).text();
 	let tower = new Tower(JSON.parse(towerTest));
 
-	gameEngine.draw();
-	// gameEngine.start();
+	let enemyData = await (await fetch("./data/BasicEnemy.json")).text();
+	const enemy = new Enemy(JSON.parse(enemyData), testMap);
+	gameEngine.addEntity(enemy);
+	gameEngine.addEntity(testMap);
+	testMap.game = gameEngine;
+
+	canvas.addEventListener("click", (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        testMap.handleClick({ x, y });
+    });
+	
+	// gameEngine.draw();
+	gameEngine.start();
 });
