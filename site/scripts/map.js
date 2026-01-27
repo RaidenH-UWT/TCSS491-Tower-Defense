@@ -1,28 +1,28 @@
 const CELL_SIZE = 64;
-const CELL_DESIGN = new Map();
-
-CELL_DESIGN.set("O", "white");
-CELL_DESIGN.set("B", "green");
-CELL_DESIGN.set("F", "blue");
-CELL_DESIGN.set("G", "red");
-
-CELL_DESIGN.set("N", "./assets/path_north.png");
-CELL_DESIGN.set("S", "./assets/path_south.png");
-CELL_DESIGN.set("E", "./assets/path_east.png");
-CELL_DESIGN.set("W", "./assets/path_west.png");
+const CELL_DESIGN = {
+  O: "white", // empty cell
+  B: "green", // buildable cell
+  F: "blue", // start cell
+  G: "red", // goal cell
+  N: "./assets/path_north.png", // north path
+  S: "./assets/path_south.png", // south path
+  E: "./assets/path_east.png", // east path
+  W: "./assets/path_west.png" // west path
+};
 
 class TowerDefenseMap {
-  constructor(json, assetManager, towerData) {
+  constructor(json, assetManager, gameEngine) {
     this.name = json.name;
     this.waves = json.waves;
     this.cells = json.cells;
     this.rows = this.cells.length;
     this.cols = this.cells[0].length;
-    this.assetManager = assetManager;
 
-    this.towerData = towerData;  // <--- new
     this.placedTowers = [];
     this.selectedCell = null;
+    
+    this.assetManager = assetManager;
+    this.gameEngine = gameEngine;
   }
 
   update() {
@@ -53,7 +53,7 @@ class TowerDefenseMap {
       const towerY = row * CELL_SIZE + CELL_SIZE / 2;
 
       // create a real tower object
-      const tower = new Tower(this.towerData, towerX, towerY, this.game);
+      const tower = new Tower(this.assetManager.getAsset("./data/ArrowTower.json"), towerX, towerY, this.gameEngine);
 
       this.placedTowers.push(tower);
     }
@@ -66,7 +66,7 @@ class TowerDefenseMap {
     for (let r = 0; r < this.rows; r++) {
       for (let c = 0; c < this.cols; c++) {
         let design = this.cells[r][c];
-        this.drawCell(ctx, r, c, CELL_DESIGN.get(design), !("OBFG".indexOf(design) > -1));
+        this.drawCell(ctx, r, c, CELL_DESIGN[design], !("OBFG".indexOf(design) > -1));
       }
     }
 
@@ -115,7 +115,8 @@ class TowerDefenseMap {
 
   getNextCell(row, col) {
     const dir = this.cells[row][col];
-
+    // TODO: if we ensure that the starting cell is always facing east, we won't have to worry about checking around it
+    // not necessary if we wanna keep this but another potential solution - Raiden
     if (dir === "F") {
       const dirs = [
         { r: -1, c: 0 }, // N

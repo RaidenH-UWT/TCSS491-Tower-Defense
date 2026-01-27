@@ -1,39 +1,32 @@
 const gameEngine = new GameEngine();
 const ASSET_MANAGER = new AssetManager();
 const MAPS = ["test_map.json"];
-const MAP_DATA = [];
 
+// queue up all the image assets
 ASSET_MANAGER.queueDownload("./assets/path_north.png");
 ASSET_MANAGER.queueDownload("./assets/path_south.png");
 ASSET_MANAGER.queueDownload("./assets/path_east.png");
 ASSET_MANAGER.queueDownload("./assets/path_west.png");
 ASSET_MANAGER.queueDownload("./assets/arrow_tower.png");
 
-ASSET_MANAGER.downloadAll(async () => {
+// queue up all the data assets
+ASSET_MANAGER.queueDownload("./data/ArrowTower.json");
+ASSET_MANAGER.queueDownload("./data/BasicEnemy.json");
+ASSET_MANAGER.queueDownload("./data/test_map.json");
+
+ASSET_MANAGER.downloadAll(() => {
 	const canvas = document.getElementById("gameCanvas");
 	const ctx = canvas.getContext("2d");
 
 	gameEngine.init(ctx);
 	
-	for (let i = 0; i < MAPS.length; i++) {
-		let data = await (await fetch(`./data/${MAPS[i]}`)).text();
-		MAP_DATA[i] = JSON.parse(data);
-	}
+	const testMap = new TowerDefenseMap(ASSET_MANAGER.getAsset(`./data/${MAPS[0]}`), ASSET_MANAGER, gameEngine);
 
-	// load tower data first
-	let towerTest = await (await fetch("./data/ArrowTower.json")).text();
-	let towerData = JSON.parse(towerTest);
-	
-	// pass towerData into map
-	const testMap = new TowerDefenseMap(MAP_DATA[0], ASSET_MANAGER, towerData);
-
-	let enemyData = await (await fetch("./data/BasicEnemy.json")).text();
-	const enemy = new Enemy(JSON.parse(enemyData), testMap);
+	let enemyData = ASSET_MANAGER.getAsset("./data/BasicEnemy.json");
+	const enemy = new Enemy(enemyData, testMap);
 
 	gameEngine.addEntity(testMap);
 	gameEngine.addEntity(enemy);
-
-	testMap.game = gameEngine;
 
 	canvas.addEventListener("click", (e) => {
         const rect = canvas.getBoundingClientRect();

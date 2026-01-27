@@ -53,7 +53,7 @@ class Enemy {
       return;
     }
 
-    const step = this.speed * this.map.game.clockTick;
+    const step = this.speed * this.map.gameEngine.clockTick;
     this.x += (dx / dist) * step;
     this.y += (dy / dist) * step;
   }
