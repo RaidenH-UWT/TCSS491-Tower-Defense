@@ -28,7 +28,7 @@ class Enemy {
     this.targetCell = map.getNextCell(this.row, this.col);
   }
   
-  update() {
+  update(clockTick) {
     if (!this.targetCell) {
       // reached goal
       this.removeFromWorld = true;
@@ -53,7 +53,7 @@ class Enemy {
       return;
     }
 
-    const step = this.speed * this.map.gameEngine.clockTick;
+    const step = this.speed * clockTick;
     this.x += (dx / dist) * step;
     this.y += (dy / dist) * step;
   }

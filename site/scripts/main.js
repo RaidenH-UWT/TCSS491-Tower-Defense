@@ -22,11 +22,7 @@ ASSET_MANAGER.downloadAll(() => {
 	
 	const testMap = new TowerDefenseMap(ASSET_MANAGER.getAsset(`./data/${MAPS[0]}`), ASSET_MANAGER, gameEngine);
 
-	let enemyData = ASSET_MANAGER.getAsset("./data/BasicEnemy.json");
-	const enemy = new Enemy(enemyData, testMap);
-
 	gameEngine.addEntity(testMap);
-	gameEngine.addEntity(enemy);
 
 	canvas.addEventListener("click", (e) => {
         const rect = canvas.getBoundingClientRect();

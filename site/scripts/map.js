@@ -1,4 +1,6 @@
 const CELL_SIZE = 64;
+// delay between spawns, in seconds
+const SPAWN_DELAY = 1;
 const CELL_DESIGN = {
   O: "white", // empty cell
   B: "green", // buildable cell
@@ -21,21 +23,47 @@ class TowerDefenseMap {
     this.placedTowers = [];
     this.selectedCell = null;
     
+    this.isSpawning = true;
+    this.spawnTimer = 0;
+    
     this.assetManager = assetManager;
     this.gameEngine = gameEngine;
   }
 
-  update() {
+  update(clockTick) {
     // update all towers
     for (const tower of this.placedTowers) {
       tower.update();
     }
+    
+    if (this.isSpawning && this.waves.length > 0) {
+      this.spawnTimer += clockTick;
+      if (this.spawnTimer >= SPAWN_DELAY) {
+          console.log("spawning enemy");
+          this.gameEngine.addEntity(new Enemy(this.assetManager.getAsset(`./data/${this.waves[0].shift()}.json`), this));
+          this.spawnTimer = 0;
+          console.log("wave left: " + this.waves[0].length);
+          if (this.waves[0].length == 0) {
+            console.log("wave done");
+            // we've finished a wave
+            this.waves.shift();
+            console.log(this.waves);
+            
+            // TODO: For now, this just starts the next wave after 5 seconds.
+            // for future, implement a "play" button and toggle this.isSpawning when necessary
+            // this.isSpawning = false;
+            this.spawnTimer -= 5;
+          }
+      }
+    }
   }
 
   handleClick(pos) {
+    // convert pixel coordinates to cell coordinates
     const col = Math.floor(pos.x / CELL_SIZE);
     const row = Math.floor(pos.y / CELL_SIZE);
 
+    // error checking for out of bounds coordinates
     if (
       row < 0 ||
       row >= this.rows ||
@@ -66,7 +94,8 @@ class TowerDefenseMap {
     for (let r = 0; r < this.rows; r++) {
       for (let c = 0; c < this.cols; c++) {
         let design = this.cells[r][c];
-        this.drawCell(ctx, r, c, CELL_DESIGN[design], !("OBFG".indexOf(design) > -1));
+        // draw the cell with the specified design either as a sprite or solid colour
+        this.drawCell(ctx, r, c, CELL_DESIGN[design], "NSEW".indexOf(design) > -1);
       }
     }
 
@@ -78,13 +107,15 @@ class TowerDefenseMap {
     // highlight selected cell
     if (this.selectedCell) {
       ctx.strokeStyle = "yellow";
-      ctx.lineWidth = 3;
+      ctx.lineWidth = 2;
       ctx.strokeRect(
         this.selectedCell.col * CELL_SIZE,
         this.selectedCell.row * CELL_SIZE,
         CELL_SIZE,
         CELL_SIZE
       );
+      // reset the lineWidth
+      ctx.lineWidth = 1;
     }
   }
 
