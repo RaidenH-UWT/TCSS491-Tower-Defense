@@ -21,9 +21,10 @@ ASSET_MANAGER.downloadAll(() => {
 	gameEngine.init(ctx);
 	
 	const testMap = new TowerDefenseMap(ASSET_MANAGER.getAsset(`./data/${MAPS[0]}`), ASSET_MANAGER, gameEngine);
+	const hud = new HUD(gameEngine);
 
 	gameEngine.addEntity(testMap);
-
+	gameEngine.addEntity(hud);
 	canvas.addEventListener("click", (e) => {
         const rect = canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;

@@ -146,25 +146,9 @@ class TowerDefenseMap {
 
   getNextCell(row, col) {
     const dir = this.cells[row][col];
-    // TODO: if we ensure that the starting cell is always facing east, we won't have to worry about checking around it
-    // not necessary if we wanna keep this but another potential solution - Raiden
+    // Starting cell always moves right
     if (dir === "F") {
-      const dirs = [
-        { r: -1, c: 0 }, // N
-        { r: 1, c: 0 },  // S
-        { r: 0, c: -1 }, // W
-        { r: 0, c: 1 }   // E
-      ];
-
-      for (let d of dirs) {
-        const nr = row + d.r;
-        const nc = col + d.c;
-        const cell = this.cells[nr]?.[nc];
-        if ("NSEWG".includes(cell)) {
-          return { row: nr, col: nc };
-        }
-      }
-      return null;
+      return { row, col: col + 1 };
     }
 
     switch (dir) {
