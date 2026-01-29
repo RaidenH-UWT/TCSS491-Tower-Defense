@@ -7,6 +7,7 @@ ASSET_MANAGER.queueDownload("./assets/path_north.png");
 ASSET_MANAGER.queueDownload("./assets/path_south.png");
 ASSET_MANAGER.queueDownload("./assets/path_east.png");
 ASSET_MANAGER.queueDownload("./assets/path_west.png");
+
 ASSET_MANAGER.queueDownload("./assets/arrow_tower.png");
 ASSET_MANAGER.queueDownload("./assets/arrow.png");
 
