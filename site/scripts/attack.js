@@ -2,7 +2,7 @@
  * Attack class, which is used in any entity that attacks other entities.
  * @param damage damage per attack
  * @param range cell distance this attack can target
- * @param rate how frequently this attack triggers
+ * @param rate how frequently this attack triggers (in seconds)
  * @author Raiden H
  */
 class Attack {
@@ -12,10 +12,11 @@ class Attack {
     this.rate = rate;
     // could add targetingMode here
   }
-  
-  // might need to pass neighbors to this or something
-  attack() {
-    // coordinate pair
-    return {x: 0, y: 0}
+
+  // Attack a target entity
+  attack(target) {
+    if (target && target.takeDamage) {
+      target.takeDamage(this.damage);
+    }
   }
 }

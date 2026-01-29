@@ -31,9 +31,9 @@ class TowerDefenseMap {
   }
 
   update(clockTick) {
-    // update all towers
+    // update all towers - FIXED: now passing clockTick!
     for (const tower of this.placedTowers) {
-      tower.update();
+      tower.update(clockTick);
     }
     
     if (this.isSpawning && this.waves.length > 0) {
