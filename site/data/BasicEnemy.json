@@ -4,6 +4,7 @@
     "health": 5,
     "speed": 1,
     "attack": {
+        "sprite": "arrow.png",
         "damage": 1,
         "range": 1,
         "rate": 1

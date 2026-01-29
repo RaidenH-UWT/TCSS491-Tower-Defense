@@ -39,15 +39,15 @@ class TowerDefenseMap {
     if (this.isSpawning && this.waves.length > 0) {
       this.spawnTimer += clockTick;
       if (this.spawnTimer >= SPAWN_DELAY) {
-          console.log("spawning enemy");
+          if (PARAMS.debug) console.log("spawning enemy");
           this.gameEngine.addEntity(new Enemy(this.assetManager.getAsset(`./data/${this.waves[0].shift()}.json`), this));
           this.spawnTimer = 0;
-          console.log("wave left: " + this.waves[0].length);
+          if (PARAMS.debug) console.log("wave left: " + this.waves[0].length);
           if (this.waves[0].length == 0) {
-            console.log("wave done");
+            if (PARAMS.debug) console.log("wave done");
             // we've finished a wave
             this.waves.shift();
-            console.log(this.waves);
+            if (PARAMS.debug) console.log(this.waves);
             
             // TODO: For now, this just starts the next wave after 5 seconds.
             // for future, implement a "play" button and toggle this.isSpawning when necessary
@@ -138,6 +138,16 @@ class TowerDefenseMap {
     for (let r = 0; r < this.rows; r++) {
       for (let c = 0; c < this.cols; c++) {
         if (this.cells[r][c] === "F") {
+          return { row: r, col: c };
+        }
+      }
+    }
+  }
+  
+  getGoalCell() {
+    for (let r = 0; r < this.rows; r++) {
+      for (let c = 0; c < this.cols; c++) {
+        if (this.cells[r][c] === "G") {
           return { row: r, col: c };
         }
       }

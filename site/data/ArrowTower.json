@@ -5,17 +5,21 @@
         "0": {
             "cost": 100,
             "attack": {
+                "sprite": "arrow.png",
                 "damage": 1,
-                "range": 1,
-                "rate": 1
+                "range": 3,
+                "rate": 1,
+                "speed": 4
             }
         },
         "1": {
             "cost": 150,
             "attack": {
+                "sprite": "arrow.png",
                 "damage": 2,
-                "range": 1,
-                "rate": 1
+                "range": 3,
+                "rate": 1,
+                "speed": 4
             }
         }
     }

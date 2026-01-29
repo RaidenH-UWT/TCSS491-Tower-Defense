@@ -1,5 +1,5 @@
 /** Global Parameters Object */
-const params = { };
+const PARAMS = { };
 
 /**
  * @param {Number} n
@@ -57,3 +57,17 @@ window.requestAnimFrame = (() => {
 const getDistance = (p1, p2) => {
     return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
 };
+
+function getFacing(point) {
+    if (point.x === 0 && point.y === 0) return 4;
+    let angle = Math.atan2(point.y, point.x) / Math.PI;
+    
+    if (-0.625 < angle && angle < -0.375) return 0;
+    if (-0.375 < angle && angle < -0.125) return 1;
+    if (-0.125 < angle && angle < 0.125) return 2;
+    if (0.125 < angle && angle < 0.375) return 3;
+    if (0.375 < angle && angle < 0.625) return 4;
+    if (0.625 < angle && angle < 0.875) return 5;
+    if (-0.875 > angle || angle < 0.875) return 6;
+    if (-0.875 < angle && angle < -0.625) return 7;
+}

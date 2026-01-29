@@ -8,6 +8,7 @@ ASSET_MANAGER.queueDownload("./assets/path_south.png");
 ASSET_MANAGER.queueDownload("./assets/path_east.png");
 ASSET_MANAGER.queueDownload("./assets/path_west.png");
 ASSET_MANAGER.queueDownload("./assets/arrow_tower.png");
+ASSET_MANAGER.queueDownload("./assets/arrow.png");
 
 // queue up all the data assets
 ASSET_MANAGER.queueDownload("./data/ArrowTower.json");
@@ -15,6 +16,7 @@ ASSET_MANAGER.queueDownload("./data/BasicEnemy.json");
 ASSET_MANAGER.queueDownload("./data/test_map.json");
 
 ASSET_MANAGER.downloadAll(() => {
+	PARAMS.debug = false;
 	const canvas = document.getElementById("gameCanvas");
 	const ctx = canvas.getContext("2d");
 
