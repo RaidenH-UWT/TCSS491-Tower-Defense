@@ -1,6 +1,3 @@
-/** Global Parameters Object */
-const PARAMS = { };
-
 /**
  * @param {Number} n
  * @returns Random Integer Between 0 and n-1

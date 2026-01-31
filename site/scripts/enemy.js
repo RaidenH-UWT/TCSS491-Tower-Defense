@@ -15,7 +15,7 @@ class Enemy {
     this.removeFromWorld = false;
 
     // Debug log
-    console.log("Enemy created with health:", this.health);
+    if (DEBUG.enemy) console.log("Enemy created with health:", this.health);
 
     // Spawn at start cell
     const start = map.getStartCell();
@@ -29,17 +29,17 @@ class Enemy {
   }
 
   takeDamage(damage) {
-    if (PARAMS.debug) console.log("takeDamage called! Damage:", damage, "Current health:", this.health);
+    if (DEBUG.enemy) console.log("takeDamage called! Damage:", damage, "Current health:", this.health);
     
     this.health -= damage;
     
-    if (PARAMS.debug) console.log("After damage, health:", this.health);
+    if (DEBUG.enemy) console.log("After damage, health:", this.health);
     
     // Remove enemy if health drops to 0 or below
     if (this.health <= 0) {
       this.health = 0;
       this.removeFromWorld = true;
-      if (PARAMS.debug) console.log("Enemy died!");
+      if (DEBUG.enemy) console.log("Enemy died!");
     }
   }
   

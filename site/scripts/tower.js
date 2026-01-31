@@ -17,7 +17,7 @@ class Tower {
     this.upgrade("0");
     
     // Debug log
-    if (PARAMS.debug) console.log("Tower created at", this.x, this.y, "with attack:", this.attack);
+    if (DEBUG.tower) console.log("Tower created at", this.x, this.y, "with attack:", this.attack);
   }
   
   upgrade(path) {

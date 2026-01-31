@@ -29,12 +29,6 @@ class Attack {
     let target = this.targetingModes[this.targetMode](targets)[0];
     return new AttackEntity(this, target);
   }
-  
-  /* TODO:
-   *  - Spawn instance of this attack as an entity in the GameEngine, which is drawn with the given sprite
-   *  - On update move this attack towards it's target
-   *  - When this attack reaches its target, run the damage according to the parameters and remove the attack
-   */
 }
 
 class AttackEntity {
