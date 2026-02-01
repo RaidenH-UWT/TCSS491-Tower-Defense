@@ -15,7 +15,6 @@ class Tower {
       this.gameEngine = gameEngine;
       this.attackTimer = 0;
       this.animState = "idle";
-      this.rotation = -Math.PI / 2; // Start facing right (default: -90°)
       this.currentTarget = null;
       this.upgrade(this.currentLevel);
       
