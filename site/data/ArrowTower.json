@@ -1,25 +1,98 @@
 {
     "name": "Arrow Tower",
-    "sprite": "arrow_tower.png",
     "upgrades": {
         "0": {
             "cost": 100,
             "attack": {
-                "sprite": "arrow.png",
+                "animation": {
+                    "spritesheet": "arrow.png",
+                    "xStart": 0,
+                    "yStart": 0,
+                    "width": 32,
+                    "height": 32,
+                    "frameCount": 1,
+                    "frameDuration": 0.2,
+                    "framePadding": 0,
+                    "reverse": false,
+                    "loop": true
+                },
                 "damage": 1,
                 "range": 3,
                 "rate": 1,
                 "speed": 4
+            },
+            "animations": {
+                "idle": {
+                    "spritesheet": "arrow_tower.png",
+                    "xStart": 0,
+                    "yStart": 0,
+                    "width": 64,
+                    "height": 64,
+                    "frameCount": 1,
+                    "frameDuration": 1,
+                    "framePadding": 0,
+                    "reverse": false,
+                    "loop": true
+                },
+                "attack": {
+                    "spritesheet": "arrow_tower.png",
+                    "xStart": 0,
+                    "yStart": 0,
+                    "width": 64,
+                    "height": 64,
+                    "frameCount": 1,
+                    "frameDuration": 1,
+                    "framePadding": 0,
+                    "reverse": false,
+                    "loop": true
+                }
             }
         },
         "1": {
             "cost": 150,
             "attack": {
-                "sprite": "arrow.png",
+                "animation": {
+                    "spritesheet": "arrow.png",
+                    "xStart": 0,
+                    "yStart": 0,
+                    "width": 32,
+                    "height": 32,
+                    "frameCount": 1,
+                    "frameDuration": 1,
+                    "framePadding": 0,
+                    "reverse": false,
+                    "loop": true
+                },
                 "damage": 2,
                 "range": 3,
                 "rate": 1,
                 "speed": 4
+            },
+            "animations": {
+                "idle": {
+                    "spritesheet": "arrow_tower.png",
+                    "xStart": 0,
+                    "yStart": 0,
+                    "width": 64,
+                    "height": 64,
+                    "frameCount": 1,
+                    "frameDuration": 1,
+                    "framePadding": 0,
+                    "reverse": false,
+                    "loop": true
+                },
+                "attack": {
+                    "spritesheet": "arrow_tower.png",
+                    "xStart": 0,
+                    "yStart": 0,
+                    "width": 64,
+                    "height": 64,
+                    "frameCount": 1,
+                    "frameDuration": 1,
+                    "framePadding": 0,
+                    "reverse": false,
+                    "loop": true
+                }
             }
         }
     }

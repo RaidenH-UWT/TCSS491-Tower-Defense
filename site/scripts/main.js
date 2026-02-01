@@ -1,4 +1,4 @@
-const DEBUG = {error: true, warn: true, tools: false, load: false, tower: false, enemy: false, wave: false, io: false, other: false};
+const DEBUG = {error: true, warn: false, tools: false, load: false, tower: false, enemy: false, wave: false, io: false, other: false};
 
 const gameEngine = new GameEngine();
 const ASSET_MANAGER = new AssetManager();
@@ -47,6 +47,7 @@ ASSET_MANAGER.downloadAll(() => {
 	
 	function spawnWave() {
 		gameEngine.entities[0].waves.push(["BasicEnemy", "BasicEnemy", "BasicEnemy"]);
-		if (DEBUG.tools) console.log("Spawning wave");
+		gameEngine.entities[0].spawnTimer = 0;
+		console.log("Spawning wave");
 	}
 });

@@ -16,8 +16,8 @@ class GameEngine {
         this.entities = [];
 
         // Information on the input
-        this.click = null;
-        this.mouse = null;
+        this.click = {x: 0, y: 0};
+        this.mouse = {x: 0, y: 0};
         this.wheel = null;
         this.keys = {};
 
@@ -105,6 +105,12 @@ class GameEngine {
         // not do that actually
         for (let i = 0; i < this.entities.length; i++) {
             this.entities[i].draw(this.ctx);
+        }
+        
+        if (DEBUG.other) {
+            this.ctx.fillStyle = "white";
+            this.ctx.font = "12pt serif";
+            this.ctx.fillText(`(${this.mouse.x}, ${this.mouse.y})`, this.mouse.x, this.mouse.y);
         }
     };
 

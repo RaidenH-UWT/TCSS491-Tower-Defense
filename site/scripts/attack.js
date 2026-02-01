@@ -6,12 +6,12 @@
  * @author Raiden H
  */
 class Attack {
-  constructor(damage, range, rate, speed, sprite, origin) {
+  constructor(damage, range, rate, speed, animation, origin) {
     this.damage = damage;
     this.range = range;
     this.rate = rate;
     this.speed = speed;
-    this.sprite = ASSET_MANAGER.getAsset("./assets/" + sprite);
+    this.animation = animation;
     this.origin = origin;
     this.targetMode = "weak";
     this.targetingModes = {
@@ -27,17 +27,19 @@ class Attack {
   // Attack a target entity
   attack(targets) {
     let target = this.targetingModes[this.targetMode](targets)[0];
-    return new AttackEntity(this, target);
+    return new AttackEntity(this, target, this.animation);
   }
 }
 
 class AttackEntity {
-  constructor(attack, target) {
+  constructor(attack, target, animation) {
     this.attack = attack;
     this.target = target;
+    this.animation = animation;
     this.coords = {x: attack.origin.x, y: attack.origin.y};
     this.velocity = {x: (this.target.x - this.coords.x) / getDistance(this.coords, this.target) * (this.attack.speed * CELL_SIZE), y: (this.target.y - this.coords.y) / getDistance(this.coords, this.target) * (this.attack.speed * CELL_SIZE)};
     this.removeFromWorld = false;
+    this.clockTick = 0;
   }
   
   explode() {
@@ -50,6 +52,7 @@ class AttackEntity {
   // this may also be because we're targeting based on the projectile x/y, which is the top-left
   // corner. so when that corner reaches the center of enemies that's when it triggers.
   update(clockTick) {
+    this.clockTick = clockTick;
     this.coords.x += this.velocity.x * clockTick;
     this.coords.y += this.velocity.y * clockTick;
     
@@ -63,22 +66,6 @@ class AttackEntity {
   draw(context) {
     let angle = Math.atan2(this.velocity.y, this.velocity.x);
     
-    // rotate the projectile (video #26)
-    let newCanvas = document.createElement("canvas");
-    newCanvas.width = 32;
-    newCanvas.height = 32;
-    
-    let newContext = newCanvas.getContext("2d");
-    
-    newContext.save();
-    
-    newContext.translate(16, 16);
-    newContext.rotate(angle);
-    newContext.translate(-16, -16);
-    newContext.drawImage(this.attack.sprite, 0, 0);
-    
-    newContext.restore();
-    
-    context.drawImage(newCanvas, this.coords.x, this.coords.y);
+    this.animation.drawFrame(this.clockTick, context, this.coords.x, this.coords.y, 1, angle);
   }
 }

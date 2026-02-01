@@ -1,4 +1,9 @@
 /**
+ * Frames per second of the game
+ */
+let framerate = 60;
+
+/**
  * @param {Number} n
  * @returns Random Integer Between 0 and n-1
  */
@@ -42,7 +47,7 @@ window.requestAnimFrame = (() => {
          * @param {DOM} element DOM ELEMENT
          */
         ((callback, element) => {
-            window.setTimeout(callback, 1000 / 60);
+            window.setTimeout(callback, 1000 / framerate);
         });
 })();
 

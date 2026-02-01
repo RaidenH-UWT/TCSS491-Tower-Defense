@@ -6,13 +6,14 @@
 class Enemy {
   constructor(data, map) {
     this.name = data.name;
-    this.sprite = data.sprite;
+    this.animations = {};
     this.maxHealth = data.health;
     this.health = data.health;
     this.speed = data.speed * 60;
     this.map = map;
     this.size = 40;
     this.removeFromWorld = false;
+    this.clockTick = 0;
 
     // Debug log
     if (DEBUG.enemy) console.log("Enemy created with health:", this.health);
@@ -26,6 +27,13 @@ class Enemy {
     this.targetCell = map.getNextCell(this.row, this.col);
     
     this.attack = new Attack(data.attack.damage, data.attack.range, data.attack.rate, data.attack.sprite, {x: this.x, y: this.y});
+    
+    for (let key of Object.getOwnPropertyNames(data.animations)) {
+      let conf = data.animations[key];
+      let anim = new Animator(ASSET_MANAGER.getAsset("./assets/" + conf.spritesheet), conf.xStart, conf.yStart, conf.width, conf.height,
+                              conf.frameCount, conf.frameDuration, conf.framePadding, conf.reverse, conf.loop, conf.rotation, conf.loopStart, conf.loopEnd);
+      this.animations[key] = anim;
+    }
   }
 
   takeDamage(damage) {
@@ -51,6 +59,7 @@ class Enemy {
   }
   
   update(clockTick) {
+    this.clockTick = clockTick;
     if (!this.targetCell) {
       // reached goal
       this.removeFromWorld = true;
@@ -88,8 +97,16 @@ class Enemy {
       this.size
     );
     
+    // TODO: UNCOMMENT ONCE WE HAVE A SPRITE/SPRITESHEET
+//     this.animations[this.animState].drawFrame(this.clockTick, ctx, this.x - CELL_SIZE / 2, this.y - CELL_SIZE / 2, 1);
+//     
+//     // reset animState if attack anim is done
+//     if (this.animState == "attack" && this.animations[this.animState].isDone()) {
+//       this.animState = "idle";
+//     }
+    
     const healthPercentage = this.health / this.maxHealth;
-  
+
     // only draw it if it's actually changed
     if (healthPercentage != 1) {
       // Draw health bar background (gray)
