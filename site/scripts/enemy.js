@@ -12,6 +12,7 @@ class Enemy {
     this.speed = data.speed * 60;
     this.map = map;
     this.size = 40;
+    this.animState = "idle";
     this.removeFromWorld = false;
     this.clockTick = 0;
 
@@ -88,22 +89,12 @@ class Enemy {
   }
 
   draw(ctx) {
-    // Draw enemy body
-    ctx.fillStyle = "black";
-    ctx.fillRect(
-      this.x - this.size / 2,
-      this.y - this.size / 2,
-      this.size,
-      this.size
-    );
+    this.animations[this.animState].drawFrame(this.clockTick, ctx, this.x - CELL_SIZE / 2, this.y - CELL_SIZE / 2, 1);
     
-    // TODO: UNCOMMENT ONCE WE HAVE A SPRITE/SPRITESHEET
-//     this.animations[this.animState].drawFrame(this.clockTick, ctx, this.x - CELL_SIZE / 2, this.y - CELL_SIZE / 2, 1);
-//     
-//     // reset animState if attack anim is done
-//     if (this.animState == "attack" && this.animations[this.animState].isDone()) {
-//       this.animState = "idle";
-//     }
+    // reset animState if attack anim is done
+    if (this.animState == "attack" && this.animations[this.animState].isDone()) {
+      this.animState = "idle";
+    }
     
     const healthPercentage = this.health / this.maxHealth;
 

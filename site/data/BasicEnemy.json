@@ -7,8 +7,8 @@
             "yStart": 0,
             "width": 64,
             "height": 64,
-            "frameCount": 1,
-            "frameDuration": 1,
+            "frameCount": 3,
+            "frameDuration": 0.2,
             "framePadding": 0,
             "reverse": false,
             "loop": true
@@ -19,8 +19,8 @@
             "yStart": 0,
             "width": 64,
             "height": 64,
-            "frameCount": 1,
-            "frameDuration": 1,
+            "frameCount": 3,
+            "frameDuration": 0.2,
             "framePadding": 0,
             "reverse": false,
             "loop": true

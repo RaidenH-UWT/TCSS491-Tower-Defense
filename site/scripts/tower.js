@@ -25,8 +25,7 @@ class Tower {
       this.animations = {}; // Clear old animations
       
       let data = this.upgrades[path];
-      let key;
-      for (key of Object.getOwnPropertyNames(data.animations)) {
+      for (let key of Object.getOwnPropertyNames(data.animations)) {
           let conf = data.animations[key];
           let anim = new Animator(
               ASSET_MANAGER.getAsset("./assets/" + conf.spritesheet), 
