@@ -28,6 +28,8 @@ class TowerDefenseMap {
     
     this.assetManager = assetManager;
     this.gameEngine = gameEngine;
+    this.portal = null;
+    this.portalOpened = false;
   }
 
   update(clockTick) {
@@ -37,24 +39,31 @@ class TowerDefenseMap {
     }
     
     if (this.isSpawning && this.waves.length > 0) {
+      // Wave just started → ensure portal exists
+      if (!this.portalOpened) {
+        this.spawnPortal();
+        this.portalOpened = true;
+      }
       this.spawnTimer += clockTick;
       if (this.spawnTimer >= SPAWN_DELAY) {
-          if (PARAMS.debug) console.log("spawning enemy");
+        if (DEBUG.wave) console.log("spawning enemy");
           this.gameEngine.addEntity(new Enemy(this.assetManager.getAsset(`./data/${this.waves[0].shift()}.json`), this));
           this.spawnTimer = 0;
-          if (PARAMS.debug) console.log("wave left: " + this.waves[0].length);
+          if (DEBUG.wave) console.log("wave left: " + this.waves[0].length);
           if (this.waves[0].length == 0) {
-            if (PARAMS.debug) console.log("wave done");
+            if (DEBUG.wave) console.log("wave done");
             // we've finished a wave
             this.waves.shift();
-            if (PARAMS.debug) console.log(this.waves);
-            
+            if (DEBUG.wave) console.log(this.waves);
             // TODO: For now, this just starts the next wave after 5 seconds.
             // for future, implement a "play" button and toggle this.isSpawning when necessary
             // this.isSpawning = false;
             this.spawnTimer -= 5;
           }
       }
+    }
+    if (this.portalOpened && this.waves.length === 0 && this.portal) {
+      this.removePortal();
     }
   }
 
@@ -169,5 +178,22 @@ class TowerDefenseMap {
       case "G": return null;
       default: return null;
     }
+  }
+
+  spawnPortal() {
+  if (this.portal) return;
+    const start = this.getStartCell();
+    const x = start.col * CELL_SIZE + CELL_SIZE / 2;
+    const y = start.row * CELL_SIZE + CELL_SIZE / 2;
+
+    this.portal = new Portal(x, y);
+    this.gameEngine.addEntity(this.portal);
+  }
+
+  removePortal() {
+    if (!this.portal) return;
+
+    this.portal.close();
+    this.portal = null;
   }
 }

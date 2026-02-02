@@ -1,5 +1,7 @@
-/** Global Parameters Object */
-const PARAMS = { };
+/**
+ * Frames per second of the game
+ */
+let framerate = 60;
 
 /**
  * @param {Number} n
@@ -45,7 +47,7 @@ window.requestAnimFrame = (() => {
          * @param {DOM} element DOM ELEMENT
          */
         ((callback, element) => {
-            window.setTimeout(callback, 1000 / 60);
+            window.setTimeout(callback, 1000 / framerate);
         });
 })();
 

@@ -1,10 +1,46 @@
 {
     "name": "Basic Enemy",
-    "sprite": "basic_enemy.png",
+    "animations": {
+        "idle": {
+            "spritesheet": "basic_enemy.png",
+            "xStart": 0,
+            "yStart": 0,
+            "width": 64,
+            "height": 64,
+            "frameCount": 3,
+            "frameDuration": 0.2,
+            "framePadding": 0,
+            "reverse": false,
+            "loop": true
+        },
+        "attack": {
+            "spritesheet": "basic_enemy.png",
+            "xStart": 0,
+            "yStart": 0,
+            "width": 64,
+            "height": 64,
+            "frameCount": 3,
+            "frameDuration": 0.2,
+            "framePadding": 0,
+            "reverse": false,
+            "loop": true
+        }
+    },
     "health": 5,
     "speed": 1,
     "attack": {
-        "sprite": "arrow.png",
+        "animation": {
+            "spritesheet": "arrow.png",
+            "xStart": 0,
+            "yStart": 0,
+            "width": 32,
+            "height": 32,
+            "frameCount": 1,
+            "frameDuration": 1,
+            "framePadding": 0,
+            "reverse": false,
+            "loop": true
+        },
         "damage": 1,
         "range": 1,
         "rate": 1

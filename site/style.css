@@ -23,3 +23,15 @@ main {
     padding: 8px;
     margin-top: 0px;
 }
+
+#debugBox {
+    background: #b6b6b6
+}
+
+#debugBox * {
+    padding: 8px;
+}
+
+.debug {
+    visibility: hidden;
+}

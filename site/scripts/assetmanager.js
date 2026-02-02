@@ -7,7 +7,7 @@ class AssetManager {
     };
 
     queueDownload(path) {
-        console.log("Queueing " + path);
+        if (DEBUG.load) console.log("Queueing " + path);
         this.downloadQueue.push(path);
     };
 
@@ -19,7 +19,7 @@ class AssetManager {
         if (this.downloadQueue.length === 0) setTimeout(callback, 10);
         for (let i = 0; i < this.downloadQueue.length; i++) {
             const path = this.downloadQueue[i];
-            console.log(path);
+            if (DEBUG.load) console.log(path);
             
             // different logic if the asset is JSON data or an image
             if (path.slice(-5) == ".json") {
@@ -28,7 +28,7 @@ class AssetManager {
                     .then((json) => {
                         this.cache[path] = json;
                         this.successCount++;
-                        console.log("Loaded " + json.name);
+                        if (DEBUG.load) console.log("Loaded " + json.name);
                         if (this.isDone()) callback();
                     });
             } else {
@@ -36,13 +36,13 @@ class AssetManager {
                 
                 
                 img.addEventListener("load", () => {
-                    console.log("Loaded " + img.src);
+                    if (DEBUG.load) console.log("Loaded " + img.src);
                     this.successCount++;
                     if (this.isDone()) callback();
                 });
                     
                 img.addEventListener("error", () => {
-                    console.log("Error loading " + img.src);
+                    if (DEBUG.error) console.log("Error loading " + img.src);
                     this.errorCount++;
                     if (this.isDone()) callback();
                 });

@@ -16,8 +16,8 @@ class GameEngine {
         this.entities = [];
 
         // Information on the input
-        this.click = null;
-        this.mouse = null;
+        this.click = {x: 0, y: 0};
+        this.mouse = {x: 0, y: 0};
         this.wheel = null;
         this.keys = {};
 
@@ -50,21 +50,21 @@ class GameEngine {
         
         this.ctx.canvas.addEventListener("mousemove", e => {
             if (this.options.debugging) {
-                console.log("MOUSE_MOVE", getXandY(e));
+                if (DEBUG.io) console.log("MOUSE_MOVE", getXandY(e));
             }
             this.mouse = getXandY(e);
         });
 
         this.ctx.canvas.addEventListener("click", e => {
             if (this.options.debugging) {
-                console.log("CLICK", getXandY(e));
+                if (DEBUG.io) console.log("CLICK", getXandY(e));
             }
             this.click = getXandY(e);
         });
 
         this.ctx.canvas.addEventListener("wheel", e => {
             if (this.options.debugging) {
-                console.log("WHEEL", getXandY(e), e.wheelDelta);
+                if (DEBUG.io) console.log("WHEEL", getXandY(e), e.wheelDelta);
             }
             e.preventDefault(); // Prevent Scrolling
             this.wheel = e;
@@ -72,7 +72,7 @@ class GameEngine {
 
         this.ctx.canvas.addEventListener("contextmenu", e => {
             if (this.options.debugging) {
-                console.log("RIGHT_CLICK", getXandY(e));
+                if (DEBUG.io) console.log("RIGHT_CLICK", getXandY(e));
             }
             e.preventDefault(); // Prevent Context Menu
             this.rightclick = getXandY(e);
@@ -87,6 +87,13 @@ class GameEngine {
     };
 
     draw() {
+        if (DEBUG.tools) {
+            let elem;
+            for (elem of DEBUG_ELEMENTS) {
+                elem.style.visibility = "visible";
+            }
+        }
+        
         // Clear the whole canvas with transparent color (rgba(0, 0, 0, 0))
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 
@@ -98,6 +105,12 @@ class GameEngine {
         // not do that actually
         for (let i = 0; i < this.entities.length; i++) {
             this.entities[i].draw(this.ctx);
+        }
+        
+        if (DEBUG.other) {
+            this.ctx.fillStyle = "white";
+            this.ctx.font = "12pt serif";
+            this.ctx.fillText(`(${this.mouse.x}, ${this.mouse.y})`, this.mouse.x, this.mouse.y);
         }
     };
 

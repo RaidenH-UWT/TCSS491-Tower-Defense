@@ -1,21 +1,31 @@
 <!DOCTYPE html>
 <html lang="en-US">
-    <head>
-        <meta charset="utf-8">
-        <title>TCSS491 Tower Defense</title>
-        <link rel="icon" type="image/png" href="./icon.png"/> <!-- sets tab icon -->
-        <link href="./style.css" rel="stylesheet" type="text/css" media="all"> <!-- stylesheet import -->
-    </head>
-    <body>
-    <main>            
-      <canvas id="gameCanvas" width="1024" height="1024" tabindex="0" autofocus></canvas>
+  <head>
+    <meta charset="utf-8" />
+    <title>TCSS491 Tower Defense</title>
+    <link rel="icon" type="image/png" href="./icon.png" />
+    <link href="./style.css" rel="stylesheet" type="text/css" media="all" />
+  </head>
+  <body>
+    <main>
+      <canvas
+        id="gameCanvas"
+        width="1024"
+        height="1024"
+        tabindex="0"
+        autofocus
+      ></canvas>
 
       <div id="infoBox">
         <h2>Tower Defense</h2>
         <h3>
-          Made by Raiden H, Kevin Hoang, Edward Wang, and Pham Nguyen, for
+          Made by Raiden H, Kevin Hoang, Edward Wang, and Yeni Nguyen, for
           TCSS491 Game and Simulation Design at UWT
         </h3>
+      </div>
+      <div id="debugBox" class="debug">
+        <h3 class="debug">DEBUG TOOLS</h3>
+        <button id="debugSpawnWave" class="debug">Spawn Wave</button>
       </div>
     </main>
 
@@ -24,7 +34,9 @@
     <script src="./scripts/enemy.js"></script>
     <script src="./scripts/map.js"></script>
     <script src="./scripts/hud.js"></script>
+    <script src="./scripts/portal.js"></script>
 
+    <script src="./scripts/animator.js"></script>
     <script src="./scripts/assetmanager.js"></script>
     <script src="./scripts/timer.js"></script>
     <script src="./scripts/util.js"></script>

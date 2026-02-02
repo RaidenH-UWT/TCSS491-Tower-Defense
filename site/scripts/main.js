@@ -1,6 +1,10 @@
+const DEBUG = {error: true, warn: false, tools: false, load: false, tower: false, enemy: false, wave: false, io: false, other: false};
+
 const gameEngine = new GameEngine();
 const ASSET_MANAGER = new AssetManager();
 const MAPS = ["test_map.json"];
+
+const DEBUG_ELEMENTS = document.getElementsByClassName("debug");
 
 // queue up all the image assets
 ASSET_MANAGER.queueDownload("./assets/path_north.png");
@@ -10,6 +14,7 @@ ASSET_MANAGER.queueDownload("./assets/path_west.png");
 
 ASSET_MANAGER.queueDownload("./assets/arrow_tower.png");
 ASSET_MANAGER.queueDownload("./assets/arrow.png");
+ASSET_MANAGER.queueDownload("./assets/basic_enemy.png");
 
 // queue up all the data assets
 ASSET_MANAGER.queueDownload("./data/ArrowTower.json");
@@ -17,7 +22,6 @@ ASSET_MANAGER.queueDownload("./data/BasicEnemy.json");
 ASSET_MANAGER.queueDownload("./data/test_map.json");
 
 ASSET_MANAGER.downloadAll(() => {
-	PARAMS.debug = false;
 	const canvas = document.getElementById("gameCanvas");
 	const ctx = canvas.getContext("2d");
 
@@ -37,4 +41,15 @@ ASSET_MANAGER.downloadAll(() => {
     });
 
 	gameEngine.start();
+	
+	// debug tools
+	const debugSpawnWave = document.getElementById("debugSpawnWave");
+	debugSpawnWave.addEventListener("click", (event) => spawnWave());
+	
+	
+	function spawnWave() {
+		gameEngine.entities[0].waves.push(["BasicEnemy", "BasicEnemy", "BasicEnemy"]);
+		gameEngine.entities[0].spawnTimer = 0;
+		console.log("Spawning wave");
+	}
 });
