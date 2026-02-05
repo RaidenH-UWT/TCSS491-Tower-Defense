@@ -131,6 +131,16 @@ class GameEngine {
             }
         }
     };
+    
+    upgradeTower(x, y) {
+        // TODO: this will break if the map isn't in position 0, need to work around that or rework this
+        for (let entity of this.entities[0].placedTowers) {
+            if (Math.floor(entity.x / CELL_SIZE) == x && Math.floor(entity.y / CELL_SIZE) == y) {
+                // TODO: swap out "1" for a value the user selects in the UI
+                entity.upgrade("1");
+            }
+        }
+    }
 
     loop() {
         this.clockTick = this.timer.tick();

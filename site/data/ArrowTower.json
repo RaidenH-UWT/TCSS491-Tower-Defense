@@ -67,7 +67,7 @@
                 },
                 "damage": 2,
                 "range": 3,
-                "rate": 1,
+                "rate": 2,
                 "speed": 4
             },
             "animations": {

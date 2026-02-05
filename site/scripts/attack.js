@@ -9,7 +9,7 @@ class Attack {
   constructor(damage, range, rate, speed, animation, origin) {
     this.damage = damage;
     this.range = range;
-    this.rate = rate;
+    this.rate = 1 / rate;
     this.speed = speed;
     this.animation = animation;
     this.origin = origin;
