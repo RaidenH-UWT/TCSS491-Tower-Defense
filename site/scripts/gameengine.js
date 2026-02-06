@@ -20,6 +20,9 @@ class GameEngine {
 
         // HUD
         this.hud = new HUD(this);
+
+        //Menu
+        this.state = "MENU";
     }
 
     init(ctx, map) {
@@ -38,6 +41,11 @@ class GameEngine {
         gameLoop();
     }
 
+    startGame() {
+        this.state = "PLAYING";
+        this.gameOver = false;
+    }
+
     startInput() {
         const getXandY = e => ({
             x: e.clientX - this.ctx.canvas.getBoundingClientRect().left,
@@ -51,6 +59,10 @@ class GameEngine {
         this.ctx.canvas.addEventListener("click", e => {
             this.click = getXandY(e);
             if (DEBUG.io) console.log("CLICK: ", this.click);
+            if (this.state == "MENU") {
+                this.menu.handleClick(this.click);
+                return;
+            }
             this.map.handleClick(this.click);
         });
         this.ctx.canvas.addEventListener("wheel", e => {
@@ -83,6 +95,7 @@ class GameEngine {
 
     // --- Combined update method that works with win/lose screens ---
     update() {
+        if (this.state !== "PLAYING") return;
         if (!this.gameOver) {
             // Update map
             this.map.update(this.clockTick);
@@ -133,6 +146,12 @@ class GameEngine {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
         
         this.map.draw(this.ctx);
+
+        if (this.state === "MENU") {
+            this.menu.draw(this.ctx);
+            return;
+        }
+        
         for (let entity of this.entities) entity.draw(this.ctx);
 
         this.hud.draw(this.ctx);

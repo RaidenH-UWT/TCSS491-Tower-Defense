@@ -37,6 +37,7 @@ class AttackEntity {
     this.attack = attack;
     this.target = target;
     this.animation = animation;
+    this.origin = attack.origin;
     this.coords = {x: attack.origin.x, y: attack.origin.y};
     this.velocity = {x: (this.target.x - this.coords.x) / getDistance(this.coords, this.target) * (this.attack.speed * CELL_SIZE), y: (this.target.y - this.coords.y) / getDistance(this.coords, this.target) * (this.attack.speed * CELL_SIZE)};
     this.homing = attack.homing;
@@ -66,8 +67,13 @@ class AttackEntity {
       };
     }
     
+    // TODO: check for any enemy, not just our target. if we miss we can still hit something!
     if (getDistance(this.coords, this.target) <= 16) {
       this.explode();
+    }
+    
+    if (getDistance(this.coords, this.origin) > this.attack.range * CELL_SIZE) {
+      this.removeFromWorld = true;
     }
   }
   
