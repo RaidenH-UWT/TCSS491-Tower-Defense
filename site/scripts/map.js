@@ -15,6 +15,7 @@ const CELL_DESIGN = {
 class TowerDefenseMap {
   constructor(json, assetManager, gameEngine) {
     this.name = json.name;
+    this.cost = json.cost;
     this.waves = json.waves;
     this.cells = json.cells;
     this.rows = this.cells.length;
@@ -90,10 +91,21 @@ class TowerDefenseMap {
       const towerX = col * CELL_SIZE + CELL_SIZE / 2;
       const towerY = row * CELL_SIZE + CELL_SIZE / 2;
 
+      // get tower data
+      const towerData = this.assetManager.getAsset("./data/ArrowTower.json");
+      const cost = towerData.upgrades[0].cost;
+
+      // check money
+      if (!this.gameEngine.spendMoney(cost)) {
+        if (DEBUG.io) console.log("Not enough money to place tower. Cost: ", cost);
+        return;
+      }
+
       // create a real tower object
       const tower = new Tower(this.assetManager.getAsset("./data/ArrowTower.json"), towerX, towerY, this.gameEngine);
 
       this.placedTowers.push(tower);
+      if (DEBUG.io) console.log("Tower placed. Cost: ", cost, "Money left: ", this.gameEngine.playerMoney);
     }
 
     this.selectedCell = { row, col };

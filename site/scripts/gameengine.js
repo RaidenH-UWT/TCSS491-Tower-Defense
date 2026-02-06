@@ -13,7 +13,7 @@ class GameEngine {
         this.gameOver = false;
 
         // Game state
-        this.baseHealth = 3;
+        this.baseHealth = 20;
         this.playerMoney = 500;
 
         // HUD
@@ -112,5 +112,15 @@ class GameEngine {
         this.clockTick = this.timer.tick();
         this.update();
         this.draw();
+    }
+
+    addMoney(amount) {
+        this.playerMoney += amount;
+    }
+
+    spendMoney(amount) {
+        if (this.playerMoney < amount) return false;
+        this.playerMoney -= amount;
+        return true;
     }
 }

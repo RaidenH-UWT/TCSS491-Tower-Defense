@@ -34,6 +34,7 @@ class Enemy {
     this.targetCell = map.getNextCell(this.row, this.col);
     
     this.attack = new Attack(data.attack.damage, data.attack.range, data.attack.rate, data.attack.sprite, {x: this.x, y: this.y});
+    this.bounty = data.bounty || 0;
     
     for (let key of Object.getOwnPropertyNames(data.animations)) {
       let conf = data.animations[key];
@@ -65,8 +66,13 @@ class Enemy {
       this.removeFromWorld = true;
       
       // ✅ FIXED: Only notify ONCE when enemy dies
-      if (this.gameEngine && this.gameEngine.winScreen) {
-        this.gameEngine.winScreen.enemyKilled();
+      if (this.gameEngine) {
+        if (this.gameEngine.winScreen) this.gameEngine.winScreen.enemyKilled();
+        // Award bounty for killing this enemy
+        if (this.bounty && this.gameEngine.addMoney) {
+          this.gameEngine.addMoney(this.bounty);
+          if (DEBUG.enemy) console.log("Awarded bounty:", this.bounty, "New money:", this.gameEngine.playerMoney);
+        }
       }
       
       if (DEBUG.enemy) console.log("Enemy died!");
