@@ -56,30 +56,53 @@ class GameEngine {
 
     addEntity(entity) { this.entities.push(entity); }
 
+    // --- Combined update method that works with win/lose screens ---
     update() {
         if (!this.gameOver) {
+            // Update all entities
             for (let entity of this.entities) {
                 if (!entity.removeFromWorld) entity.update(this.clockTick);
             }
+
+            // Remove entities marked for removal
             for (let i = this.entities.length - 1; i >= 0; --i) {
                 if (this.entities[i].removeFromWorld) this.entities.splice(i, 1);
             }
 
+            // Check win condition
             this.winScreen.checkWinCondition();
 
+            // Check lose condition
             if (this.baseHealth <= 0) this.loseScreen.show();
 
+            // If either screen is visible, game is over
             if (this.winScreen.visible || this.loseScreen.visible) this.gameOver = true;
         }
 
+        // Always update HUD and screens so they draw even after gameOver
+        this.hud.update();
         this.winScreen.update(this.clockTick);
         this.loseScreen.update(this.clockTick);
+    }
+
+    // --- Add upgradeTower method back ---
+    upgradeTower(x, y) {
+        for (let entity of this.entities[0].placedTowers) {
+            if (Math.floor(entity.x / CELL_SIZE) == x && Math.floor(entity.y / CELL_SIZE) == y) {
+                entity.upgrade("1");
+            }
+        }
+
         this.hud.update();
+        this.winScreen.update(this.clockTick);
+        this.loseScreen.update(this.clockTick);
     }
 
     draw() {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+
         for (let entity of this.entities) entity.draw(this.ctx);
+
         this.hud.draw(this.ctx);
         this.winScreen.draw(this.ctx);
         this.loseScreen.draw(this.ctx);
