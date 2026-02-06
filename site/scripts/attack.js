@@ -6,11 +6,12 @@
  * @author Raiden H
  */
 class Attack {
-  constructor(damage, range, rate, speed, animation, origin) {
+  constructor(damage, range, rate, speed, homing, animation, origin) {
     this.damage = damage;
     this.range = range;
     this.rate = 1 / rate;
     this.speed = speed;
+    this.homing = homing;
     this.animation = animation;
     this.origin = origin;
     this.targetMode = "weak";
@@ -38,6 +39,7 @@ class AttackEntity {
     this.animation = animation;
     this.coords = {x: attack.origin.x, y: attack.origin.y};
     this.velocity = {x: (this.target.x - this.coords.x) / getDistance(this.coords, this.target) * (this.attack.speed * CELL_SIZE), y: (this.target.y - this.coords.y) / getDistance(this.coords, this.target) * (this.attack.speed * CELL_SIZE)};
+    this.homing = attack.homing;
     this.removeFromWorld = false;
     this.clockTick = 0;
   }
@@ -56,7 +58,13 @@ class AttackEntity {
     this.coords.x += this.velocity.x * clockTick;
     this.coords.y += this.velocity.y * clockTick;
     
-    this.velocity = {x: (this.target.x - this.coords.x) / getDistance(this.coords, this.target) * (this.attack.speed * CELL_SIZE), y: (this.target.y - this.coords.y) / getDistance(this.coords, this.target) * (this.attack.speed * CELL_SIZE)};
+    // track the target if a homing projectile
+    if (this.homing) {
+      this.velocity = {
+        x: (this.target.x - this.coords.x) / getDistance(this.coords, this.target) * (this.attack.speed * CELL_SIZE),
+        y: (this.target.y - this.coords.y) / getDistance(this.coords, this.target) * (this.attack.speed * CELL_SIZE)
+      };
+    }
     
     if (getDistance(this.coords, this.target) <= 16) {
       this.explode();
