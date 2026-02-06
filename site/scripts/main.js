@@ -14,6 +14,9 @@ ASSET_MANAGER.queueDownload("./assets/path_west.png");
 ASSET_MANAGER.queueDownload("./assets/arrow_tower.png");
 ASSET_MANAGER.queueDownload("./assets/arrow.png");
 ASSET_MANAGER.queueDownload("./assets/basic_enemy.png");
+ASSET_MANAGER.queueDownload("./assets/mainMenu.png");
+ASSET_MANAGER.queueDownload("./assets/startButton.png");
+ASSET_MANAGER.queueDownload("./assets/aboutButton.png");
 
 // queue up all the data assets
 ASSET_MANAGER.queueDownload("./data/ArrowTower.json");
@@ -25,6 +28,7 @@ ASSET_MANAGER.downloadAll(() => {
 	const ctx = canvas.getContext("2d");
 
 	gameEngine.init(ctx);
+	gameEngine.menu = new mainMenu(gameEngine);
 	
 	const testMap = new TowerDefenseMap(ASSET_MANAGER.getAsset(`./data/${MAPS[0]}`), ASSET_MANAGER, gameEngine);
 	const hud = new HUD(gameEngine);
@@ -36,6 +40,11 @@ ASSET_MANAGER.downloadAll(() => {
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
+		if (gameEngine.state === "MENU") {
+			gameEngine.menu.handleClick({ x, y });
+			return;
+		}
+		
         testMap.handleClick({ x, y });
     });
 
