@@ -2,6 +2,7 @@ const DEBUG = {error: true, warn: false, tools: false, load: false, tower: false
 
 const gameEngine = new GameEngine();
 const ASSET_MANAGER = new AssetManager();
+const music = new MusicManager();
 const MAPS = ["test_map.json"];
 
 const DEBUG_ELEMENTS = document.getElementsByClassName("debug");
