@@ -5,6 +5,7 @@
  */
 class Enemy {
   constructor(data, map, gameEngine) {
+    this.game = gameEngine;
     this.name = data.name;
     this.animations = {};
     this.maxHealth = data.health;
@@ -17,6 +18,9 @@ class Enemy {
     this.clockTick = 0;
     this.gameEngine = gameEngine;
     this.isDead = false; // ✅ NEW: Track if enemy is already dead
+
+    this.atGoal = false;
+    this.attackCooldown = 0;
 
     // Debug log
     if (DEBUG.enemy) console.log("Enemy created with health:", this.health);
@@ -79,14 +83,32 @@ class Enemy {
   update(clockTick) {
     this.clockTick = clockTick;
 
-    if (!this.targetCell) {
-        // Enemy reached the goal
-        if (!this.isDead && this.gameEngine) {
-            this.gameEngine.baseHealth -= 1; // Reduce base health
-            if (DEBUG.enemy) console.log("Enemy reached goal! Base health:", this.gameEngine.baseHealth);
+    if (this.isDead) return;
+
+    if (this.atGoal) {
+      this.attackCooldown += clockTick;
+
+      if (this.attackCooldown >= this.attack.rate) {
+        this.attackCooldown = 0;
+
+        this.gameEngine.baseHealth -= this.attack.damage;
+
+        if (DEBUG.enemy) {
+          console.log(
+            "Enemy attacking base.",
+            "Damage:", this.attack.damage,
+            "Base HP:", this.gameEngine.baseHealth
+          );
         }
-        this.removeFromWorld = true; // Remove enemy from world
-        return; // Stop updating this enemy
+      }
+      return;
+    }
+
+    if (!this.targetCell) {
+        this.atGoal = true;
+        this.attackCooldown = 0;
+        this.animState = "attack";
+        return;
     }
 
     const targetX = this.targetCell.col * CELL_SIZE + CELL_SIZE / 2;
