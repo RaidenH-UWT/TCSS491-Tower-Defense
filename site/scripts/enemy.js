@@ -4,7 +4,7 @@
  * @author Raiden H
  */
 class Enemy {
-  constructor(data, map) {
+  constructor(data, map, gameEngine) {
     this.name = data.name;
     this.animations = {};
     this.maxHealth = data.health;
@@ -15,6 +15,8 @@ class Enemy {
     this.animState = "idle";
     this.removeFromWorld = false;
     this.clockTick = 0;
+    this.gameEngine = gameEngine;
+    this.isDead = false; // ✅ NEW: Track if enemy is already dead
 
     // Debug log
     if (DEBUG.enemy) console.log("Enemy created with health:", this.health);
@@ -35,9 +37,17 @@ class Enemy {
                               conf.frameCount, conf.frameDuration, conf.framePadding, conf.reverse, conf.loop, conf.rotation, conf.loopStart, conf.loopEnd);
       this.animations[key] = anim;
     }
+    
+    // Notify win screen that enemy was spawned
+    if (this.gameEngine && this.gameEngine.winScreen) {
+      this.gameEngine.winScreen.enemySpawned();
+    }
   }
 
   takeDamage(damage) {
+    // ✅ NEW: Don't take damage if already dead
+    if (this.isDead) return;
+    
     if (DEBUG.enemy) console.log("takeDamage called! Damage:", damage, "Current health:", this.health);
     
     this.health -= damage;
@@ -45,9 +55,16 @@ class Enemy {
     if (DEBUG.enemy) console.log("After damage, health:", this.health);
     
     // Remove enemy if health drops to 0 or below
-    if (this.health <= 0) {
+    if (this.health <= 0 && !this.isDead) {  // ✅ FIXED: Check !this.isDead
       this.health = 0;
+      this.isDead = true;  // ✅ NEW: Mark as dead
       this.removeFromWorld = true;
+      
+      // ✅ FIXED: Only notify ONCE when enemy dies
+      if (this.gameEngine && this.gameEngine.winScreen) {
+        this.gameEngine.winScreen.enemyKilled();
+      }
+      
       if (DEBUG.enemy) console.log("Enemy died!");
     }
   }
@@ -61,10 +78,15 @@ class Enemy {
   
   update(clockTick) {
     this.clockTick = clockTick;
+
     if (!this.targetCell) {
-      // reached goal
-      this.removeFromWorld = true;
-      return;
+        // Enemy reached the goal
+        if (!this.isDead && this.gameEngine) {
+            this.gameEngine.baseHealth -= 1; // Reduce base health
+            if (DEBUG.enemy) console.log("Enemy reached goal! Base health:", this.gameEngine.baseHealth);
+        }
+        this.removeFromWorld = true; // Remove enemy from world
+        return; // Stop updating this enemy
     }
 
     const targetX = this.targetCell.col * CELL_SIZE + CELL_SIZE / 2;
@@ -74,19 +96,20 @@ class Enemy {
     const dist = Math.hypot(dx, dy);
 
     if (dist < 2) {
-      // snap to grid
-      this.row = this.targetCell.row;
-      this.col = this.targetCell.col;
-      this.x = targetX;
-      this.y = targetY;
-      this.targetCell = this.map.getNextCell(this.row, this.col);
-      return;
+        // Snap to grid
+        this.row = this.targetCell.row;
+        this.col = this.targetCell.col;
+        this.x = targetX;
+        this.y = targetY;
+        this.targetCell = this.map.getNextCell(this.row, this.col);
+        return;
     }
 
     const step = this.speed * clockTick;
     this.x += (dx / dist) * step;
     this.y += (dy / dist) * step;
-  }
+}
+
 
   draw(ctx) {
     this.animations[this.animState].drawFrame(this.clockTick, ctx, this.x - CELL_SIZE / 2, this.y - CELL_SIZE / 2, 1);

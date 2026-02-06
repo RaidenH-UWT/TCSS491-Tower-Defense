@@ -47,7 +47,8 @@ class TowerDefenseMap {
       this.spawnTimer += clockTick;
       if (this.spawnTimer >= SPAWN_DELAY) {
         if (DEBUG.wave) console.log("spawning enemy");
-          this.gameEngine.addEntity(new Enemy(this.assetManager.getAsset(`./data/${this.waves[0].shift()}.json`), this));
+          // ✅ FIXED: Added this.gameEngine as third parameter
+          this.gameEngine.addEntity(new Enemy(this.assetManager.getAsset(`./data/${this.waves[0].shift()}.json`), this, this.gameEngine));
           this.spawnTimer = 0;
           if (DEBUG.wave) console.log("wave left: " + this.waves[0].length);
           if (this.waves[0].length == 0) {
