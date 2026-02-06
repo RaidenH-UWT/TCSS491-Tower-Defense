@@ -18,6 +18,9 @@ class GameEngine {
 
         // HUD
         this.hud = new HUD(this);
+
+        //Menu
+        this.state = "MENU";
     }
 
     init(ctx) {
@@ -33,6 +36,11 @@ class GameEngine {
             requestAnimFrame(gameLoop, this.ctx.canvas);
         };
         gameLoop();
+    }
+
+    startGame() {
+        this.state = "PLAYING";
+        this.gameOver = false;
     }
 
     startInput() {
@@ -58,6 +66,7 @@ class GameEngine {
 
     // --- Combined update method that works with win/lose screens ---
     update() {
+        if (this.state !== "PLAYING") return;
         if (!this.gameOver) {
             // Update all entities
             for (let entity of this.entities) {
@@ -101,6 +110,10 @@ class GameEngine {
     draw() {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 
+        if (this.state === "MENU") {
+            this.menu.draw(this.ctx);
+            return;
+        }
         for (let entity of this.entities) entity.draw(this.ctx);
 
         this.hud.draw(this.ctx);
