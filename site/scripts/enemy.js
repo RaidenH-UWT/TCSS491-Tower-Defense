@@ -30,7 +30,17 @@ class Enemy {
     this.y = this.row * CELL_SIZE + CELL_SIZE / 2;
     this.targetCell = map.getNextCell(this.row, this.col);
     
-    this.attack = new Attack(data.attack.damage, data.attack.range, data.attack.rate, data.attack.sprite, {x: this.x, y: this.y});
+    let anim = new Animator(
+      ASSET_MANAGER.getAsset("./assets/" + data.attack.animation.spritesheet), 
+                            data.attack.animation.xStart, data.attack.animation.yStart,
+                            data.attack.animation.width, data.attack.animation.height, 
+                            data.attack.animation.frameCount, data.attack.animation.frameDuration, 
+                            data.attack.animation.framePadding,
+                            data.attack.animation.reverse, data.attack.animation.loop, 
+                            data.attack.animation.rotation, data.attack.animation.loopStart, 
+                            data.attack.animation.loopEnd
+    );
+    this.attack = new Attack(data.attack.damage, data.attack.range, data.attack.area, data.attack.rate, data.attack.speed, data.attack.homing, anim, {x: this.x, y: this.y});
     this.bounty = data.bounty;
     
     for (let key of Object.getOwnPropertyNames(data.animations)) {
@@ -92,8 +102,10 @@ class Enemy {
       }
       return;
     }
-
+    
+    // TODO: set this.atGoal = true when within range (this.attack.range) of the base, not when on top of it
     if (!this.targetCell) {
+        if (DEBUG.enemy) console.log("Enemy reached goal");
         this.atGoal = true;
         this.attackCooldown = 0;
         this.animState = "attack";

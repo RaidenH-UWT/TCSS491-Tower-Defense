@@ -48,7 +48,7 @@ class Tower {
       );
       
       this.attack = new Attack(
-          data.attack.damage, data.attack.range, data.attack.rate, 
+          data.attack.damage, data.attack.range, data.attack.area, data.attack.rate,
           data.attack.speed, data.attack.homing, anim, {x: this.x, y: this.y}
       );
   }

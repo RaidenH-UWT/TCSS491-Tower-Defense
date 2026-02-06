@@ -131,17 +131,6 @@ class GameEngine {
         this.loseScreen.update(this.clockTick);
     }
 
-    upgradeTower(x, y) {
-        for (let tower of this.map.placedTowers) {
-            if (Math.floor(tower.x / CELL_SIZE) == x && Math.floor(tower.y / CELL_SIZE) == y) {
-                // TODO: replace "1" with a value from the user, via the UI
-                tower.upgrade("1");
-            }
-        }
-
-        this.hud.update();
-    }
-
     draw() {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
         
@@ -163,6 +152,23 @@ class GameEngine {
         this.clockTick = this.timer.tick();
         this.update();
         this.draw();
+    }
+    
+    upgradeTower(x, y) {
+        for (let tower of this.map.placedTowers) {
+            if (Math.floor(tower.x / CELL_SIZE) == x && Math.floor(tower.y / CELL_SIZE) == y) {
+                // TODO: replace "1" with a value from the user, via the UI
+                tower.upgrade("1");
+            }
+        }
+        
+        this.hud.update();
+    }
+    
+    getEnemiesInRadius(x, y, radius) {
+        let inRange = this.entities.filter((a) => a instanceof Enemy && getDistance({x, y}, a) <= radius);
+        inRange.sort((a, b) => getDistance({x, y}, a) - getDistance({x, y}, b));
+        return inRange;
     }
 
     addMoney(amount) {

@@ -6,9 +6,10 @@
  * @author Raiden H
  */
 class Attack {
-  constructor(damage, range, rate, speed, homing, animation, origin) {
+  constructor(damage, range, area, rate, speed, homing, animation, origin) {
     this.damage = damage;
     this.range = range;
+    this.area = area;
     this.rate = 1 / rate;
     this.speed = speed;
     this.homing = homing;
@@ -38,15 +39,26 @@ class AttackEntity {
     this.target = target;
     this.animation = animation;
     this.origin = attack.origin;
-    this.coords = {x: attack.origin.x, y: attack.origin.y};
-    this.velocity = {x: (this.target.x - this.coords.x) / getDistance(this.coords, this.target) * (this.attack.speed * CELL_SIZE), y: (this.target.y - this.coords.y) / getDistance(this.coords, this.target) * (this.attack.speed * CELL_SIZE)};
+    this.x = this.origin.x;
+    this.y = this.origin.y;
+    this.velocity = {
+      x: (this.target.x - this.x) / getDistance(this, this.target) * (this.attack.speed * CELL_SIZE),
+      y: (this.target.y - this.y) / getDistance(this, this.target) * (this.attack.speed * CELL_SIZE)
+    };
     this.homing = attack.homing;
     this.removeFromWorld = false;
     this.clockTick = 0;
   }
   
   explode() {
-    this.target.takeDamage(this.attack.damage);
+    const targets = gameEngine.getEnemiesInRadius(this.x, this.y, this.attack.area * CELL_SIZE + 16);
+    if (this.attack.area == 0) {
+      targets[0].takeDamage(this.attack.damage);
+    } else {
+      for (let target of targets.filter((a) => getDistance(this, a) <= this.attack.area)) {
+        target.takeDamage(this.attack.damage);
+      }
+    }
     this.removeFromWorld = true;
   }
   // TODO: the projectiles look like they're targeting the bottom-right corner of enemies
@@ -56,23 +68,23 @@ class AttackEntity {
   // corner. so when that corner reaches the center of enemies that's when it triggers.
   update(clockTick) {
     this.clockTick = clockTick;
-    this.coords.x += this.velocity.x * clockTick;
-    this.coords.y += this.velocity.y * clockTick;
+    this.x += this.velocity.x * clockTick;
+    this.y += this.velocity.y * clockTick;
     
     // track the target if a homing projectile
     if (this.homing) {
       this.velocity = {
-        x: (this.target.x - this.coords.x) / getDistance(this.coords, this.target) * (this.attack.speed * CELL_SIZE),
-        y: (this.target.y - this.coords.y) / getDistance(this.coords, this.target) * (this.attack.speed * CELL_SIZE)
+        x: (this.target.x - this.x) / getDistance(this, this.target) * (this.attack.speed * CELL_SIZE),
+        y: (this.target.y - this.y) / getDistance(this, this.target) * (this.attack.speed * CELL_SIZE)
       };
     }
     
-    // TODO: check for any enemy, not just our target. if we miss we can still hit something!
-    if (getDistance(this.coords, this.target) <= 16) {
+    // TODO: rework to function with enemies attacking the goal as well as towers attacking enemies (check type of this.target?)
+    if (gameEngine.getEnemiesInRadius(this.x, this.y, 16).length > 0) {
       this.explode();
     }
     
-    if (getDistance(this.coords, this.origin) > this.attack.range * CELL_SIZE) {
+    if (getDistance(this, this.origin) > this.attack.range * CELL_SIZE) {
       this.removeFromWorld = true;
     }
   }
@@ -80,6 +92,6 @@ class AttackEntity {
   draw(context) {
     let angle = Math.atan2(this.velocity.y, this.velocity.x);
     
-    this.animation.drawFrame(this.clockTick, context, this.coords.x, this.coords.y, 1, angle);
+    this.animation.drawFrame(this.clockTick, context, this.x, this.y, 1, angle);
   }
 }

@@ -42,8 +42,11 @@
             "loop": true
         },
         "damage": 1,
-        "range": 1,
-        "rate": 1
+        "range": 0.5,
+        "area": 0,
+        "rate": 1,
+        "speed": 1,
+        "homing": false
     },
     "bounty": 50
 }

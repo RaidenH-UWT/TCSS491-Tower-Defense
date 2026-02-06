@@ -1,4 +1,4 @@
-const DEBUG = {error: true, warn: false, tools: false, load: false, tower: false, enemy: false, wave: false, io: false, other: false};
+const DEBUG = {error: true, warn: false, tools: false, load: false, tower: false, enemy: true, wave: false, io: false, other: false};
 
 const gameEngine = new GameEngine();
 const ASSET_MANAGER = new AssetManager();
