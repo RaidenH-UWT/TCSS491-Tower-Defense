@@ -44,6 +44,7 @@ class GameEngine {
     startGame() {
         this.state = "PLAYING";
         this.gameOver = false;
+        music.play();
     }
 
     startInput() {
