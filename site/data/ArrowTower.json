@@ -19,7 +19,8 @@
                 "damage": 1,
                 "range": 3,
                 "rate": 1,
-                "speed": 4
+                "speed": 3,
+                "homing": false
             },
             "animations": {
                 "idle": {
@@ -68,7 +69,8 @@
                 "damage": 2,
                 "range": 3,
                 "rate": 2,
-                "speed": 4
+                "speed": 3,
+                "homing": true
             },
             "animations": {
                 "idle": {

@@ -29,42 +29,51 @@ class TowerDefenseMap {
     
     this.assetManager = assetManager;
     this.gameEngine = gameEngine;
-    this.portal = null;
+    this.portal;
     this.portalOpened = false;
   }
 
   update(clockTick) {
-    // update all towers - FIXED: now passing clockTick!
+    // update all towers
     for (const tower of this.placedTowers) {
       tower.update(clockTick);
     }
     
-    if (this.isSpawning && this.waves.length > 0) {
+    if (this.portal) {
+      this.portal.update(clockTick);
+    }
+    
+    if (this.isSpawning && this.waves.length > 0) {      
       // Wave just started → ensure portal exists
-      if (!this.portalOpened) {
+      if (!this.portal) {
         this.spawnPortal();
         this.portalOpened = true;
       }
+      
       this.spawnTimer += clockTick;
       if (this.spawnTimer >= SPAWN_DELAY) {
         if (DEBUG.wave) console.log("spawning enemy");
-          // ✅ FIXED: Added this.gameEngine as third parameter
-          this.gameEngine.addEntity(new Enemy(this.assetManager.getAsset(`./data/${this.waves[0].shift()}.json`), this, this.gameEngine));
-          this.spawnTimer = 0;
-          if (DEBUG.wave) console.log("wave left: " + this.waves[0].length);
-          if (this.waves[0].length == 0) {
-            if (DEBUG.wave) console.log("wave done");
-            // we've finished a wave
-            this.waves.shift();
-            if (DEBUG.wave) console.log(this.waves);
-            // TODO: For now, this just starts the next wave after 5 seconds.
-            // for future, implement a "play" button and toggle this.isSpawning when necessary
-            // this.isSpawning = false;
-            this.spawnTimer -= 5;
-          }
+        
+        this.gameEngine.addEntity(new Enemy(this.assetManager.getAsset(`./data/${this.waves[0].shift()}.json`), this, this.gameEngine));
+        this.spawnTimer = 0;
+        
+        if (DEBUG.wave) console.log("waves left: " + this.waves[0].length);
+        
+        if (this.waves[0].length == 0) {
+          // we've finished a wave
+          this.waves.shift();
+          if (DEBUG.wave) console.log("wave done");
+          if (DEBUG.wave) console.log(this.waves);
+          
+          // TODO: For now, this just starts the next wave after 5 seconds.
+          // for future, implement a "play" button and toggle `this.isSpawning` when necessary
+          // this.isSpawning = false;
+          this.spawnTimer -= 5;
+        }
       }
     }
-    if (this.portalOpened && this.waves.length === 0 && this.portal) {
+    
+    if (this.portalOpened && this.waves.length == 0 && this.portal) {
       this.removePortal();
     }
   }
@@ -139,6 +148,10 @@ class TowerDefenseMap {
       // reset the lineWidth
       ctx.lineWidth = 1;
     }
+    
+    if (this.portal) {
+      this.portal.draw(ctx);
+    }
   }
 
   drawCell(ctx, row, col, design, isSprite) {
@@ -194,13 +207,12 @@ class TowerDefenseMap {
   }
 
   spawnPortal() {
-  if (this.portal) return;
+    if (this.portal) return;
     const start = this.getStartCell();
     const x = start.col * CELL_SIZE + CELL_SIZE / 2;
     const y = start.row * CELL_SIZE + CELL_SIZE / 2;
 
     this.portal = new Portal(x, y);
-    this.gameEngine.addEntity(this.portal);
   }
 
   removePortal() {

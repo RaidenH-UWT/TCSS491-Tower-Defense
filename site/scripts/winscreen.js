@@ -16,7 +16,6 @@ class WinScreen {
       this.bounceTime = 0;
   
       // Enemy tracking
-      this.enemiesSpawned = false;
       this.totalEnemiesSpawned = 0;
       this.enemiesKilled = 0;
     }
@@ -26,9 +25,8 @@ class WinScreen {
      */
     enemySpawned() {
       this.totalEnemiesSpawned++;
-      this.enemiesSpawned = true;
   
-      if (DEBUG && DEBUG.enemy) {
+      if (DEBUG.enemy) {
         console.log("Enemy spawned. Total spawned:", this.totalEnemiesSpawned);
       }
     }
@@ -39,7 +37,7 @@ class WinScreen {
     enemyKilled() {
       this.enemiesKilled++;
   
-      if (DEBUG && DEBUG.enemy) {
+      if (DEBUG.enemy) {
         console.log(
           "Enemy killed!",
           this.enemiesKilled,
@@ -55,27 +53,8 @@ class WinScreen {
     checkWinCondition() {
       if (this.visible) return;
   
-      const enemiesRemaining = this.gameEngine.entities.filter(
-        (entity) => entity instanceof Enemy
-      ).length;
-  
-      if (DEBUG && DEBUG.enemy) {
-        console.log(
-          "Win check - Remaining:",
-          enemiesRemaining,
-          "Killed:",
-          this.enemiesKilled,
-          "Spawned:",
-          this.totalEnemiesSpawned
-        );
-      }
-  
-      if (
-        this.enemiesSpawned &&
-        enemiesRemaining === 0 &&
-        this.enemiesKilled === this.totalEnemiesSpawned &&
-        this.totalEnemiesSpawned > 0
-      ) {
+      // check if there are any waves/enemies left
+      if (this.gameEngine.enemyCount == 0 && this.gameEngine.map.waves.length == 0) {
         this.show();
       }
     }
@@ -86,12 +65,8 @@ class WinScreen {
       this.scale = 0.6;
       this.bounceTime = 0;
   
-      if (DEBUG && DEBUG.enemy) {
-        console.log(
-          "🎉 VICTORY! All",
-          this.totalEnemiesSpawned,
-          "enemies defeated!"
-        );
+      if (DEBUG.enemy) {
+        console.log("🎉 VICTORY! All enemies defeated!");
       }
     }
   
@@ -101,7 +76,6 @@ class WinScreen {
       this.scale = 0.6;
       this.bounceTime = 0;
   
-      this.enemiesSpawned = false;
       this.totalEnemiesSpawned = 0;
       this.enemiesKilled = 0;
     }

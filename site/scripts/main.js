@@ -23,21 +23,10 @@ ASSET_MANAGER.queueDownload("./data/test_map.json");
 ASSET_MANAGER.downloadAll(() => {
 	const canvas = document.getElementById("gameCanvas");
 	const ctx = canvas.getContext("2d");
-
-	gameEngine.init(ctx);
 	
 	const testMap = new TowerDefenseMap(ASSET_MANAGER.getAsset(`./data/${MAPS[0]}`), ASSET_MANAGER, gameEngine);
-	const hud = new HUD(gameEngine);
 
-	gameEngine.addEntity(testMap);
-	gameEngine.addEntity(hud);
-	canvas.addEventListener("click", (e) => {
-        const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        testMap.handleClick({ x, y });
-    });
+	gameEngine.init(ctx, testMap);
 
 	gameEngine.start();
 	
@@ -47,8 +36,8 @@ ASSET_MANAGER.downloadAll(() => {
 	
 	
 	function spawnWave() {
-		gameEngine.entities[0].waves.push(["BasicEnemy", "BasicEnemy", "BasicEnemy"]);
-		gameEngine.entities[0].spawnTimer = 0;
+		gameEngine.map.waves.push(["BasicEnemy", "BasicEnemy", "BasicEnemy"]);
+		gameEngine.map.spawnTimer = 0;
 		console.log("Spawning wave");
 	}
 });

@@ -5,19 +5,16 @@
  */
 class Enemy {
   constructor(data, map, gameEngine) {
-    this.game = gameEngine;
     this.name = data.name;
     this.animations = {};
     this.maxHealth = data.health;
     this.health = data.health;
     this.speed = data.speed * 60;
     this.map = map;
-    this.size = 40;
     this.animState = "idle";
     this.removeFromWorld = false;
     this.clockTick = 0;
     this.gameEngine = gameEngine;
-    this.isDead = false; // ✅ NEW: Track if enemy is already dead
 
     this.atGoal = false;
     this.attackCooldown = 0;
@@ -34,7 +31,7 @@ class Enemy {
     this.targetCell = map.getNextCell(this.row, this.col);
     
     this.attack = new Attack(data.attack.damage, data.attack.range, data.attack.rate, data.attack.sprite, {x: this.x, y: this.y});
-    this.bounty = data.bounty || 0;
+    this.bounty = data.bounty;
     
     for (let key of Object.getOwnPropertyNames(data.animations)) {
       let conf = data.animations[key];
@@ -50,8 +47,7 @@ class Enemy {
   }
 
   takeDamage(damage) {
-    // ✅ NEW: Don't take damage if already dead
-    if (this.isDead) return;
+    if (this.removeFromWorld) return;
     
     if (DEBUG.enemy) console.log("takeDamage called! Damage:", damage, "Current health:", this.health);
     
@@ -60,20 +56,9 @@ class Enemy {
     if (DEBUG.enemy) console.log("After damage, health:", this.health);
     
     // Remove enemy if health drops to 0 or below
-    if (this.health <= 0 && !this.isDead) {  // ✅ FIXED: Check !this.isDead
+    if (this.health <= 0 && !this.removeFromWorld) {
       this.health = 0;
-      this.isDead = true;  // ✅ NEW: Mark as dead
       this.removeFromWorld = true;
-      
-      // ✅ FIXED: Only notify ONCE when enemy dies
-      if (this.gameEngine) {
-        if (this.gameEngine.winScreen) this.gameEngine.winScreen.enemyKilled();
-        // Award bounty for killing this enemy
-        if (this.bounty && this.gameEngine.addMoney) {
-          this.gameEngine.addMoney(this.bounty);
-          if (DEBUG.enemy) console.log("Awarded bounty:", this.bounty, "New money:", this.gameEngine.playerMoney);
-        }
-      }
       
       if (DEBUG.enemy) console.log("Enemy died!");
     }
@@ -88,8 +73,6 @@ class Enemy {
   
   update(clockTick) {
     this.clockTick = clockTick;
-
-    if (this.isDead) return;
 
     if (this.atGoal) {
       this.attackCooldown += clockTick;
@@ -152,10 +135,10 @@ class Enemy {
     // only draw it if it's actually changed
     if (healthPercentage != 1) {
       // Draw health bar background (gray)
-      const healthBarWidth = this.size;
+      const healthBarWidth = 40;
       const healthBarHeight = 6;
-      const healthBarX = this.x - this.size / 2;
-      const healthBarY = this.y - this.size / 2 - 10;
+      const healthBarX = this.x - healthBarWidth / 2;
+      const healthBarY = this.y - healthBarWidth / 2 - 10;
       
       ctx.fillStyle = "gray";
       ctx.fillRect(healthBarX, healthBarY, healthBarWidth, healthBarHeight);

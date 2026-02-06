@@ -22,7 +22,6 @@ class Tower {
   }
 
   upgrade(path) {
-      console.log("upgradin");
       this.animations = {}; // Clear old animations
       
       let data = this.upgrades[path];
@@ -50,7 +49,7 @@ class Tower {
       
       this.attack = new Attack(
           data.attack.damage, data.attack.range, data.attack.rate, 
-          data.attack.speed, anim, {x: this.x, y: this.y}
+          data.attack.speed, data.attack.homing, anim, {x: this.x, y: this.y}
       );
   }
 
@@ -92,7 +91,6 @@ class Tower {
         this.x - CELL_SIZE / 2,  // Center the sprite
         this.y - CELL_SIZE / 2, 
         1,                       // scale
-        0                        // NO rotation - always 0
     );
     
     // Reset animState if attack anim is done
