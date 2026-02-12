@@ -47,3 +47,16 @@ ASSET_MANAGER.downloadAll(() => {
 		console.log("Spawning wave");
 	}
 });
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    
+    const backBtn = document.getElementById("backBtn");
+    
+    const aboutScreen = document.getElementById("aboutScreen");
+
+    if(backBtn && aboutScreen) {
+        backBtn.onclick = function() {
+            aboutScreen.style.display = "none";
+        }
+    }
+});
