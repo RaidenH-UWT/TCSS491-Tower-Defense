@@ -38,6 +38,7 @@ class mainMenu {
 
     handleClick(pos) {
         if (this.isInside(pos, this.startBtn)) {
+            music.playLoop();
             this.game.startGame();
         }
 

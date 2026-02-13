@@ -11,37 +11,53 @@ class MusicManager {
     this.intro.preload = "auto";
     this.loop.preload = "auto";
 
+    this.intro.loop = true; 
+    this.loop.loop = true;
+
     this.intro.volume = 0.6;
     this.loop.volume = 0.6;
 
     this.started = false;
-
-    this.loop.addEventListener("timeupdate", () => {
-        if (this.loop.currentTime >= this.loop.duration - 0.02) {
-            this.loop.currentTime = 0;
-            this.loop.play();
-        }
-    });
-
-    this.intro.addEventListener("ended", () => {
-        this.loop.currentTime = 0;
-        this.loop.play();
-    });
+    this.isPaused = false;
+    this.currentTrack = this.intro;
   }
 
-  play() {
-    if (this.started) return;
-    this.started = true;
-    this.intro.currentTime = 0;
-    this.intro.play();
-    if (DEBUG.other) console.log("Music started");
+  playIntro() {
+    this.stopAll();
+    this.currentTrack = this.intro;
+    if (!this.isPausedByUser) {
+        this.intro.play().catch(e => console.log("Waiting for user click..."));
+    }
   }
 
-  stop() {
-    this.started = false;
+  playLoop(){
+    this.stopAll();
+    this.currentTrack = this.loop;
+    if (!this.isPausedByUser) {
+        this.loop.play().catch(e => console.log("Waiting for user click..."));
+    }
+  }
+
+  toggle() {
+    this.isPausedByUser = !this.isPausedByUser; 
+
+    if (this.isPausedByUser) {
+        this.currentTrack.pause();
+    } else {
+        this.currentTrack.play().catch(e => console.log(e));
+    }
+    
+    return this.isPausedByUser;
+  }
+
+  stopAll() {
     this.intro.pause();
     this.loop.pause();
     this.intro.currentTime = 0;
     this.loop.currentTime = 0;
+  }
+  stop() {
+    this.started = false;
+    this.stopAll();
   }
 }
