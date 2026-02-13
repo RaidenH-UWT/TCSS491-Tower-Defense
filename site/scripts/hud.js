@@ -39,53 +39,78 @@ class HUD {
     }
 
     drawTowerPanel(ctx) {
-        const panelWidth = 200;
-        const panelX = ctx.canvas.width - panelWidth - 20;
-        const panelY = 20;
+        const panelHeight = 150;
 
-        ctx.fillStyle = "rgba(0,0,0,0.7)";
-        ctx.fillRect(panelX, panelY, panelWidth, 200);
+        // Move panel slightly up
+        const bottomMargin = 105;
+        const panelY = ctx.canvas.height - panelHeight - bottomMargin;
+
+        // Panel background
+        ctx.fillStyle = "rgba(0,0,0,0.85)";
+        ctx.fillRect(0, panelY, ctx.canvas.width, panelHeight);
 
         ctx.strokeStyle = "white";
-        ctx.strokeRect(panelX, panelY, panelWidth, 200);
+        ctx.strokeRect(0, panelY, ctx.canvas.width, panelHeight);
 
         ctx.fillStyle = "white";
-        ctx.font = "18px Arial";
-        ctx.fillText("Towers", panelX + 60, panelY + 30);
+        ctx.font = "22px Arial";
+        ctx.fillText("Towers", 20, panelY + 30);
 
         this.towerButtons = [];
 
-        let offsetY = 60;
+        const buttonWidth = 180;
+        const buttonHeight = 65;
+        const spacing = 50;
+        const startX = 40;
 
-        for (let tower of this.towers) {
+        // Center buttons vertically inside panel
+        const y = panelY + (panelHeight - buttonHeight) / 2 + 10;
+
+        for (let i = 0; i < this.towers.length; i++) {
+            const tower = this.towers[i];
 
             const towerData = ASSET_MANAGER.getAsset(tower.dataFile);
             const cost = towerData.upgrades[0].cost;
 
+            const x = startX + i * (buttonWidth + spacing);
+
             const btn = {
-                x: panelX + 20,
-                y: panelY + offsetY,
-                width: 160,
-                height: 50,
+                x: x,
+                y: y,
+                width: buttonWidth,
+                height: buttonHeight,
                 tower: tower
             };
 
             this.towerButtons.push(btn);
 
-            // Highlight selected tower
-            if (this.game.selectedTower === tower.name) {
-                ctx.fillStyle = "#555";
-            } else {
-                ctx.fillStyle = "#333";
-            }
+            // Better selection color
+            ctx.fillStyle =
+                this.game.selectedTower === tower.name
+                    ? "#666"
+                    : "#444";
 
             ctx.fillRect(btn.x, btn.y, btn.width, btn.height);
 
-            ctx.fillStyle = "white";
-            ctx.fillText(`${tower.name} ($${cost})`, btn.x + 10, btn.y + 30);
+            ctx.strokeStyle = "white";
+            ctx.strokeRect(btn.x, btn.y, btn.width, btn.height);
 
-            offsetY += 70;
+            // Properly centered text
+            ctx.fillStyle = "white";
+            ctx.font = "18px Arial";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+
+            ctx.fillText(
+                `${tower.name} ($${cost})`,
+                btn.x + buttonWidth / 2,
+                btn.y + buttonHeight / 2
+            );
         }
+
+        // Reset alignment so it doesn't affect other drawings
+        ctx.textAlign = "start";
+        ctx.textBaseline = "alphabetic";
     }
 
     handleClick(pos) {
