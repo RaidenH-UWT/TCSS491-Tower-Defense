@@ -106,7 +106,7 @@ class TowerDefenseMap {
       const towerY = row * CELL_SIZE + CELL_SIZE / 2;
 
       // get tower data
-      const towerData = this.assetManager.getAsset("./data/BombTower.json");
+      const towerData = ASSET_MANAGER.getAsset(`./data/${this.gameEngine.selectedTower}.json`);
       const cost = towerData.upgrades[0].cost;
 
       // check money

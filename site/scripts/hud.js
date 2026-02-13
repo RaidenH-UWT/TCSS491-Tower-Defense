@@ -7,6 +7,10 @@ class HUD {
         {
             name: "ArrowTower",
             dataFile: "./data/ArrowTower.json"
+        },
+        {
+            name: "BombTower",
+            dataFile: "./data/BombTower.json"
         }
         ];
         this.towerButtons = [];
@@ -55,7 +59,7 @@ class HUD {
 
         for (let tower of this.towers) {
 
-            const towerData = this.game.map.assetManager.getAsset(tower.dataFile);
+            const towerData = ASSET_MANAGER.getAsset(tower.dataFile);
             const cost = towerData.upgrades[0].cost;
 
             const btn = {
@@ -93,7 +97,6 @@ class HUD {
                 pos.y < btn.y + btn.height
             ) {
                 this.game.selectedTower = btn.tower.name;
-                console.log("Selected tower:", btn.tower.name);
                 return true; // VERY IMPORTANT
             }
         }
