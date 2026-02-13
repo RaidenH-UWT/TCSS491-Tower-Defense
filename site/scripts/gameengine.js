@@ -17,6 +17,7 @@ class GameEngine {
         this.baseHealth = 20;
         this.playerMoney = 500;
         this.enemyCount = 0;
+        this.selectedTower = null;
 
         // HUD
         this.hud = new HUD(this);
@@ -62,6 +63,9 @@ class GameEngine {
             if (DEBUG.io) console.log("CLICK: ", this.click);
             if (this.state == "MENU") {
                 this.menu.handleClick(this.click);
+                return;
+            }
+            if (this.hud.handleClick(this.click)) {
                 return;
             }
             this.map.handleClick(this.click);

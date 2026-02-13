@@ -93,6 +93,11 @@ class TowerDefenseMap {
 
     const cellType = this.cells[row][col];
 
+    // No tower selected → do nothing
+    if (!this.gameEngine.selectedTower) {
+      return;
+    }
+
     // Only allow towers on buildable tiles
     if (cellType === "B") {
 
@@ -115,6 +120,9 @@ class TowerDefenseMap {
 
       this.placedTowers.push(tower);
       if (DEBUG.io) console.log("Tower placed. Cost: ", cost, "Money left: ", this.gameEngine.playerMoney);
+
+      // Clear selection after placing
+      this.gameEngine.selectedTower = null;
     }
 
     this.selectedCell = { row, col };
