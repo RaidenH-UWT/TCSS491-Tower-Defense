@@ -17,6 +17,7 @@ class GameEngine {
         this.baseHealth = 20;
         this.playerMoney = 500;
         this.enemyCount = 0;
+        this.selectedTower = null;
 
         // HUD
         this.hud = new HUD(this);
@@ -62,6 +63,9 @@ class GameEngine {
             if (DEBUG.io) console.log("CLICK: ", this.click);
             if (this.state == "MENU") {
                 this.menu.handleClick(this.click);
+                return;
+            }
+            if (this.hud.handleClick(this.click)) {
                 return;
             }
             this.map.handleClick(this.click);
@@ -147,6 +151,19 @@ class GameEngine {
         this.hud.draw(this.ctx);
         this.winScreen.draw(this.ctx);
         this.loseScreen.draw(this.ctx);
+        
+        if (DEBUG.tools) {
+            let elem;
+            for (elem of DEBUG_ELEMENTS) {
+                elem.style.visibility = "visible";
+            }
+        }
+        
+        if (DEBUG.tools) {
+            this.ctx.fillStyle = "white";
+            this.ctx.font = "12pt serif";
+            this.ctx.fillText(`(${this.mouse.x}, ${this.mouse.y})`, this.mouse.x, this.mouse.y);
+        }
     }
 
     loop() {
@@ -166,6 +183,12 @@ class GameEngine {
         this.hud.update();
     }
     
+    /**
+     * @param x coordinate in pixels of the center of the circle
+     * @param y coordinate in pixels of the center of the circle
+     * @param radius of the circle in pixels
+     * @return array of enemies inside the circle defined by x, y, and the radius, sorted nearest first
+     */
     getEnemiesInRadius(x, y, radius) {
         let inRange = this.entities.filter((a) => a instanceof Enemy && getDistance({x, y}, a) <= radius);
         inRange.sort((a, b) => getDistance({x, y}, a) - getDistance({x, y}, b));
@@ -180,5 +203,9 @@ class GameEngine {
         if (this.playerMoney < amount) return false;
         this.playerMoney -= amount;
         return true;
+    }
+    
+    takeDamage(damage) {
+        this.baseHealth -= damage;
     }
 }

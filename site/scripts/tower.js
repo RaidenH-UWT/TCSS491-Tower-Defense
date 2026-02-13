@@ -47,10 +47,7 @@ class Tower {
           data.attack.animation.loopEnd
       );
       
-      this.attack = new Attack(
-          data.attack.damage, data.attack.range, data.attack.area, data.attack.rate,
-          data.attack.speed, data.attack.homing, anim, {x: this.x, y: this.y}
-      );
+      this.attack = new Attack(data.attack, anim, {x: this.x, y: this.y});
   }
 
   update(clockTick) {
@@ -58,10 +55,7 @@ class Tower {
     this.attackTimer += clockTick;
     
     // Find targets in range
-    let targets = this.gameEngine.entities.filter(entity => entity instanceof Enemy);
-    targets = targets.filter((enemy) => 
-        getDistance({x: enemy.x, y: enemy.y}, {x: this.x, y: this.y}) <= (this.attack.range * CELL_SIZE)
-    );
+    let targets = this.gameEngine.getEnemiesInRadius(this.x, this.y, this.attack.range * CELL_SIZE);
     
     if (targets.length > 0) {
         // Keep same target if still in range, otherwise pick new one

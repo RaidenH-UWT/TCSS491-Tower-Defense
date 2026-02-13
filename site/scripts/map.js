@@ -93,6 +93,11 @@ class TowerDefenseMap {
 
     const cellType = this.cells[row][col];
 
+    // No tower selected → do nothing
+    if (!this.gameEngine.selectedTower) {
+      return;
+    }
+
     // Only allow towers on buildable tiles
     if (cellType === "B") {
 
@@ -101,7 +106,7 @@ class TowerDefenseMap {
       const towerY = row * CELL_SIZE + CELL_SIZE / 2;
 
       // get tower data
-      const towerData = this.assetManager.getAsset("./data/ArrowTower.json");
+      const towerData = ASSET_MANAGER.getAsset(`./data/${this.gameEngine.selectedTower}.json`);
       const cost = towerData.upgrades[0].cost;
 
       // check money
@@ -111,10 +116,13 @@ class TowerDefenseMap {
       }
 
       // create a real tower object
-      const tower = new Tower(this.assetManager.getAsset("./data/ArrowTower.json"), towerX, towerY, this.gameEngine);
+      const tower = new Tower(towerData, towerX, towerY, this.gameEngine);
 
       this.placedTowers.push(tower);
       if (DEBUG.io) console.log("Tower placed. Cost: ", cost, "Money left: ", this.gameEngine.playerMoney);
+
+      // Clear selection after placing
+      this.gameEngine.selectedTower = null;
     }
 
     this.selectedCell = { row, col };

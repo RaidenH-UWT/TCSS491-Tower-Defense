@@ -1,9 +1,7 @@
 {
     "name": "Test map",
     "waves": [
-        ["BasicEnemy"],
-        ["BasicEnemy", "BasicEnemy"],
-        ["BasicEnemy", "BasicEnemy", "BasicEnemy"]
+        ["BasicEnemy"]
     ],
     "cells": [
         ["O", "O", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "O", "O"],

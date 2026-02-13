@@ -27,7 +27,7 @@
         }
     },
     "health": 5,
-    "speed": 1,
+    "speed": 3,
     "attack": {
         "animation": {
             "spritesheet": "arrow.png",
@@ -36,17 +36,18 @@
             "width": 32,
             "height": 32,
             "frameCount": 1,
-            "frameDuration": 1,
+            "frameDuration": 0.2,
             "framePadding": 0,
             "reverse": false,
             "loop": true
         },
         "damage": 1,
-        "range": 0.5,
+        "range": 3,
         "area": 0,
         "rate": 1,
-        "speed": 1,
-        "homing": false
+        "speed": 5,
+        "homing": false,
+        "team": "attack"
     },
     "bounty": 50
 }
