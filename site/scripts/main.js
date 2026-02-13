@@ -1,4 +1,14 @@
-const DEBUG = {error: true, warn: false, tools: false, load: false, tower: false, enemy: true, wave: false, io: false, other: false};
+const DEBUG = {
+	error: true,
+	warn: false,
+	tools: false,
+	load: false,
+	tower: false,
+	enemy: false,
+	wave: false,
+	io: false,
+	other: false
+};
 
 const gameEngine = new GameEngine();
 const ASSET_MANAGER = new AssetManager();
@@ -14,6 +24,8 @@ ASSET_MANAGER.queueDownload("./assets/path_east.png");
 ASSET_MANAGER.queueDownload("./assets/path_west.png");
 ASSET_MANAGER.queueDownload("./assets/arrow_tower.png");
 ASSET_MANAGER.queueDownload("./assets/arrow.png");
+ASSET_MANAGER.queueDownload("./assets/bomb_tower.png");
+ASSET_MANAGER.queueDownload("./assets/bomb.png");
 ASSET_MANAGER.queueDownload("./assets/basic_enemy.png");
 ASSET_MANAGER.queueDownload("./assets/mainMenu.png");
 ASSET_MANAGER.queueDownload("./assets/startButton.png");
@@ -21,6 +33,7 @@ ASSET_MANAGER.queueDownload("./assets/aboutButton.png");
 
 // queue up all the data assets
 ASSET_MANAGER.queueDownload("./data/ArrowTower.json");
+ASSET_MANAGER.queueDownload("./data/BombTower.json");
 ASSET_MANAGER.queueDownload("./data/BasicEnemy.json");
 ASSET_MANAGER.queueDownload("./data/test_map.json");
 

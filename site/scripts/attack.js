@@ -55,7 +55,7 @@ class AttackEntity {
     if (this.attack.area == 0) {
       targets[0].takeDamage(this.attack.damage);
     } else {
-      for (let target of targets.filter((a) => getDistance(this, a) <= this.attack.area)) {
+      for (let target of targets.filter((a) => getDistance(this, a) <= this.attack.area * CELL_SIZE)) {
         target.takeDamage(this.attack.damage);
       }
     }
