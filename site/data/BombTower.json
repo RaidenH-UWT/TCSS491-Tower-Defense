@@ -21,7 +21,8 @@
                 "area": 2,
                 "rate": 0.5,
                 "speed": 3,
-                "homing": false
+                "homing": false,
+                "team": "defend"
             },
             "animations": {
                 "idle": {
@@ -74,7 +75,8 @@
                 "area": 2,
                 "rate": 0.5,
                 "speed": 4,
-                "homing": false
+                "homing": false,
+                "team": "defend"
             },
             "animations": {
                 "idle": {

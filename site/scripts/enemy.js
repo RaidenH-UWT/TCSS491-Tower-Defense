@@ -20,7 +20,7 @@ class Enemy {
     this.attackCooldown = 0;
 
     // Debug log
-    if (DEBUG.enemy) console.log("Enemy created with health:", this.health);
+    if (DEBUG.enemy) console.log("Enemy created", this);
 
     // Spawn at start cell
     const start = map.getStartCell();
@@ -40,7 +40,7 @@ class Enemy {
                             data.attack.animation.rotation, data.attack.animation.loopStart, 
                             data.attack.animation.loopEnd
     );
-    this.attack = new Attack(data.attack.damage, data.attack.range, data.attack.area, data.attack.rate, data.attack.speed, data.attack.homing, anim, {x: this.x, y: this.y});
+    this.attack = new Attack(data.attack, anim, {x: this.x, y: this.y});
     this.bounty = data.bounty;
     
     for (let key of Object.getOwnPropertyNames(data.animations)) {
@@ -89,8 +89,10 @@ class Enemy {
 
       if (this.attackCooldown >= this.attack.rate) {
         this.attackCooldown = 0;
-
-        this.gameEngine.baseHealth -= this.attack.damage;
+        
+        this.attack.origin = {x: this.x, y: this.y};
+        const coords = cellToCoords(this.map.getGoalCell());
+        this.gameEngine.addEntity(this.attack.attack([{x: coords.x, y: coords.y, takeDamage: (damage) => this.gameEngine.takeDamage(damage)}]));
 
         if (DEBUG.enemy) {
           console.log(
@@ -104,7 +106,7 @@ class Enemy {
     }
     
     // TODO: set this.atGoal = true when within range (this.attack.range) of the base, not when on top of it
-    if (!this.targetCell) {
+    if (getDistance(this, cellToCoords(this.map.getGoalCell())) < this.attack.range * CELL_SIZE) {
         if (DEBUG.enemy) console.log("Enemy reached goal");
         this.atGoal = true;
         this.attackCooldown = 0;

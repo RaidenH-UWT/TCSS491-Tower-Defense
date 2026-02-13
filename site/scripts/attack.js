@@ -1,18 +1,19 @@
 /**
  * Attack class, which is used in any entity that attacks other entities.
- * @param damage damage per attack
- * @param range cell distance this attack can target
- * @param rate how frequently this attack triggers (in seconds)
+ * @param data data from JSON
+ * @param animation Animator object
+ * @param origin where this attack was created
  * @author Raiden H
  */
 class Attack {
-  constructor(damage, range, area, rate, speed, homing, animation, origin) {
-    this.damage = damage;
-    this.range = range;
-    this.area = area;
-    this.rate = 1 / rate;
-    this.speed = speed;
-    this.homing = homing;
+  constructor(data, animation, origin) {
+    this.damage = data.damage;
+    this.range = data.range;
+    this.area = data.area;
+    this.rate = 1 / data.rate;
+    this.speed = data.speed;
+    this.homing = data.homing;
+    this.team = data.team;
     this.animation = animation;
     this.origin = origin;
     this.targetMode = "weak";
@@ -28,7 +29,7 @@ class Attack {
 
   // Attack a target entity
   attack(targets) {
-    let target = this.targetingModes[this.targetMode](targets)[0];
+    let target = targets.length > 1 ? this.targetingModes[this.targetMode](targets)[0] : targets[0];
     return new AttackEntity(this, target, this.animation);
   }
 }
@@ -51,10 +52,11 @@ class AttackEntity {
   }
   
   explode() {
-    const targets = gameEngine.getEnemiesInRadius(this.x, this.y, this.attack.area * CELL_SIZE + 16);
-    if (this.attack.area == 0) {
+    // TODO: add the option for an explode() triggered animation (like an... explosion)
+    const targets = this.attack.team == "attack" ? [this.target] : gameEngine.getEnemiesInRadius(this.x, this.y, this.attack.area * CELL_SIZE + 16);
+    if (targets.length > 0 && this.attack.area == 0) {
       targets[0].takeDamage(this.attack.damage);
-    } else {
+    } else if (targets.length > 0) {
       for (let target of targets.filter((a) => getDistance(this, a) <= this.attack.area * CELL_SIZE)) {
         target.takeDamage(this.attack.damage);
       }
@@ -79,13 +81,19 @@ class AttackEntity {
       };
     }
     
-    // TODO: rework to function with enemies attacking the goal as well as towers attacking enemies (check type of this.target?)
-    if (gameEngine.getEnemiesInRadius(this.x, this.y, 16).length > 0) {
-      this.explode();
+    if (this.attack.team == "defend") {
+      if (gameEngine.getEnemiesInRadius(this.x, this.y, 16).length > 0) {
+        this.explode();
+      }
+    } else if (this.attack.team == "attack") {
+      if (getDistance(this, this.target) < 16) {
+        this.explode();
+      }
     }
     
+    
     if (getDistance(this, this.origin) > this.attack.range * CELL_SIZE) {
-      this.removeFromWorld = true;
+      this.explode();
     }
   }
   
