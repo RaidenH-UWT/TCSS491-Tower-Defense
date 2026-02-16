@@ -1,37 +1,37 @@
-// This game shell was happily modified from Googler Seth Ladd's "Bad Aliens" game and his Google IO talk in 2011
-/**
- * Driver of the game
- * @author Raiden H
- * @author Kevin Hoang
- * @author Edward Wang
- * @author Pham Nguyen
- */
 class GameEngine {
     constructor(options) {
-        // What you will use to draw
-        // Documentation: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
         this.ctx = null;
-
-        // Everything that will be updated and drawn each frame
+        this.map;
         this.entities = [];
-
-        // Information on the input
-        this.click = {x: 0, y: 0};
-        this.mouse = {x: 0, y: 0};
-        this.wheel = null;
+        this.click = { x: 0, y: 0 };
+        this.mouse = { x: 0, y: 0 };
         this.keys = {};
+        this.options = options || { debugging: false };
 
-        // Options and the Details
-        this.options = options || {
-            debugging: false,
-        };
-    };
+        // Screens
+        this.winScreen = new WinScreen(this);
+        this.loseScreen = new LoseScreen(this);
+        this.gameOver = false;
 
-    init(ctx) {
+        // Game state
+        this.baseHealth = 20;
+        this.playerMoney = 500;
+        this.enemyCount = 0;
+        this.selectedTower = null;
+
+        // HUD
+        this.hud = new HUD(this);
+
+        //Menu
+        this.state = "MENU";
+    }
+
+    init(ctx, map) {
         this.ctx = ctx;
+        this.map = map;
         this.startInput();
         this.timer = new Timer();
-    };
+    }
 
     start() {
         this.running = true;
@@ -40,53 +40,120 @@ class GameEngine {
             requestAnimFrame(gameLoop, this.ctx.canvas);
         };
         gameLoop();
-    };
+    }
+
+    startGame() {
+        this.state = "PLAYING";
+        this.gameOver = false;
+        music.playIntro();
+    }
 
     startInput() {
         const getXandY = e => ({
             x: e.clientX - this.ctx.canvas.getBoundingClientRect().left,
             y: e.clientY - this.ctx.canvas.getBoundingClientRect().top
         });
-        
+
         this.ctx.canvas.addEventListener("mousemove", e => {
-            if (this.options.debugging) {
-                if (DEBUG.io) console.log("MOUSE_MOVE", getXandY(e));
-            }
             this.mouse = getXandY(e);
+            if (DEBUG.io) console.log("MOUSE MOVED: ", this.mouse);
         });
-
         this.ctx.canvas.addEventListener("click", e => {
-            if (this.options.debugging) {
-                if (DEBUG.io) console.log("CLICK", getXandY(e));
-            }
             this.click = getXandY(e);
+            if (DEBUG.io) console.log("CLICK: ", this.click);
+            if (this.state == "MENU") {
+                this.menu.handleClick(this.click);
+                return;
+            }
+            
+            if (insideBox(this.click, {x: 0, y: 768, width: 1024, height: 256})) {
+                this.hud.handleClick(this.click);
+            } else {
+                this.map.handleClick(this.click);
+            }
         });
-
         this.ctx.canvas.addEventListener("wheel", e => {
-            if (this.options.debugging) {
-                if (DEBUG.io) console.log("WHEEL", getXandY(e), e.wheelDelta);
-            }
-            e.preventDefault(); // Prevent Scrolling
-            this.wheel = e;
+            e.preventDefault()
+            if (DEBUG.io) console.log("WHEEL: ", e);
+        });
+        this.ctx.canvas.addEventListener("contextmenu", e =>{
+            e.preventDefault()
+            if (DEBUG.io) console.log("RIGHT CLICK: ", e);
         });
 
-        this.ctx.canvas.addEventListener("contextmenu", e => {
-            if (this.options.debugging) {
-                if (DEBUG.io) console.log("RIGHT_CLICK", getXandY(e));
-            }
-            e.preventDefault(); // Prevent Context Menu
-            this.rightclick = getXandY(e);
+        this.ctx.canvas.addEventListener("keydown", e => {
+            if (this.winScreen.handleInput(e.key)) return;
+            if (this.loseScreen.handleInput(e.key)) return;
+            this.keys[e.key] = true;
+            if (DEBUG.io) console.log("KEY DOWN: ", e,key);
         });
-
-        this.ctx.canvas.addEventListener("keydown", event => this.keys[event.key] = true);
-        this.ctx.canvas.addEventListener("keyup", event => this.keys[event.key] = false);
-    };
+        this.ctx.canvas.addEventListener("keyup", e => {
+            this.keys[e.key] = false;
+            if (DEBUG.io) console.log("KEY UP: ", e,key);
+        });
+    }
 
     addEntity(entity) {
+        if (entity instanceof Enemy) {
+            this.enemyCount++;
+        }
         this.entities.push(entity);
-    };
+    }
+
+    // --- Combined update method that works with win/lose screens ---
+    update() {
+        if (this.state !== "PLAYING") return;
+        if (!this.gameOver) {
+            // Update map
+            this.map.update(this.clockTick);
+            // Update all enemies
+            for (let entity of this.entities) {
+                if (!entity.removeFromWorld) entity.update(this.clockTick);
+            }
+
+            // Remove enemies marked for removal
+            for (let i = this.entities.length - 1; i >= 0; --i) {
+                if (this.entities[i].removeFromWorld) {
+                    if (this.entities[i] instanceof Enemy) {
+                        this.addMoney(this.entities[i].bounty);
+                        this.enemyCount--;
+                    }
+                    this.entities.splice(i, 1);
+                }
+            }
+
+            // Check win condition
+            this.winScreen.checkWinCondition();
+
+            // Check lose condition
+            if (this.baseHealth <= 0) this.loseScreen.show();
+
+            // If either screen is visible, game is over
+            if (this.winScreen.visible || this.loseScreen.visible) this.gameOver = true;
+        }
+
+        // Always update HUD and screens so they draw even after gameOver
+        this.hud.update(this.clockTick);
+        this.winScreen.update(this.clockTick);
+        this.loseScreen.update(this.clockTick);
+    }
 
     draw() {
+        this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+        
+        this.map.draw(this.ctx);
+
+        if (this.state === "MENU") {
+            this.menu.draw(this.ctx);
+            return;
+        }
+        
+        for (let entity of this.entities) entity.draw(this.ctx);
+
+        this.hud.draw(this.ctx);
+        this.winScreen.draw(this.ctx);
+        this.loseScreen.draw(this.ctx);
+        
         if (DEBUG.tools) {
             let elem;
             for (elem of DEBUG_ELEMENTS) {
@@ -94,50 +161,53 @@ class GameEngine {
             }
         }
         
-        // Clear the whole canvas with transparent color (rgba(0, 0, 0, 0))
-        this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-
-        // Draw latest things first
-        // for (let i = this.entities.length - 1; i >= 0; i--) {
-        //     this.entities[i].draw(this.ctx);
-        // }
-        
-        // not do that actually
-        for (let i = 0; i < this.entities.length; i++) {
-            this.entities[i].draw(this.ctx);
-        }
-        
-        if (DEBUG.other) {
+        if (DEBUG.tools) {
             this.ctx.fillStyle = "white";
             this.ctx.font = "12pt serif";
             this.ctx.fillText(`(${this.mouse.x}, ${this.mouse.y})`, this.mouse.x, this.mouse.y);
         }
-    };
-
-    update() {
-        let entitiesCount = this.entities.length;
-
-        for (let i = 0; i < entitiesCount; i++) {
-            let entity = this.entities[i];
-
-            if (!entity.removeFromWorld) {
-                entity.update(this.clockTick);
-            }
-        }
-
-        for (let i = this.entities.length - 1; i >= 0; --i) {
-            if (this.entities[i].removeFromWorld) {
-                this.entities.splice(i, 1);
-            }
-        }
-    };
+    }
 
     loop() {
         this.clockTick = this.timer.tick();
         this.update();
         this.draw();
-    };
+    }
+    
+    upgradeTower(x, y) {
+        for (let tower of this.map.placedTowers) {
+            if (Math.floor(tower.x / CELL_SIZE) == x && Math.floor(tower.y / CELL_SIZE) == y) {
+                // TODO: replace "1" with a value from the user, via the UI
+                tower.upgrade("1");
+            }
+        }
+        
+        this.hud.update();
+    }
+    
+    /**
+     * @param x coordinate in pixels of the center of the circle
+     * @param y coordinate in pixels of the center of the circle
+     * @param radius of the circle in pixels
+     * @return array of enemies inside the circle defined by x, y, and the radius, sorted nearest first
+     */
+    getEnemiesInRadius(x, y, radius) {
+        let inRange = this.entities.filter((a) => a instanceof Enemy && getDistance({x, y}, a) <= radius);
+        inRange.sort((a, b) => getDistance({x, y}, a) - getDistance({x, y}, b));
+        return inRange;
+    }
 
-};
+    addMoney(amount) {
+        this.playerMoney += amount;
+    }
 
-// KV Le was here :)
+    spendMoney(amount) {
+        if (this.playerMoney < amount) return false;
+        this.playerMoney -= amount;
+        return true;
+    }
+    
+    takeDamage(damage) {
+        this.baseHealth -= damage;
+    }
+}

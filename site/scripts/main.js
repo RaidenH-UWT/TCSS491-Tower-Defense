@@ -1,7 +1,18 @@
-const DEBUG = {error: true, warn: false, tools: false, load: false, tower: false, enemy: false, wave: false, io: false, other: false};
+const DEBUG = {
+	error: true,
+	warn: false,
+	tools: false,
+	load: false,
+	tower: true,
+	enemy: false,
+	wave: false,
+	io: false,
+	other: false
+};
 
 const gameEngine = new GameEngine();
 const ASSET_MANAGER = new AssetManager();
+const music = new MusicManager();
 const MAPS = ["test_map.json"];
 
 const DEBUG_ELEMENTS = document.getElementsByClassName("debug");
@@ -14,31 +25,28 @@ ASSET_MANAGER.queueDownload("./assets/path_west.png");
 
 ASSET_MANAGER.queueDownload("./assets/arrow_tower.png");
 ASSET_MANAGER.queueDownload("./assets/arrow.png");
+ASSET_MANAGER.queueDownload("./assets/bomb_tower.png");
+ASSET_MANAGER.queueDownload("./assets/bomb.png");
 ASSET_MANAGER.queueDownload("./assets/basic_enemy.png");
+ASSET_MANAGER.queueDownload("./assets/mainMenu.png");
+ASSET_MANAGER.queueDownload("./assets/startButton.png");
+ASSET_MANAGER.queueDownload("./assets/aboutButton.png");
 
 // queue up all the data assets
 ASSET_MANAGER.queueDownload("./data/ArrowTower.json");
+ASSET_MANAGER.queueDownload("./data/BombTower.json");
 ASSET_MANAGER.queueDownload("./data/BasicEnemy.json");
 ASSET_MANAGER.queueDownload("./data/test_map.json");
 
 ASSET_MANAGER.downloadAll(() => {
 	const canvas = document.getElementById("gameCanvas");
 	const ctx = canvas.getContext("2d");
-
-	gameEngine.init(ctx);
 	
 	const testMap = new TowerDefenseMap(ASSET_MANAGER.getAsset(`./data/${MAPS[0]}`), ASSET_MANAGER, gameEngine);
-	const hud = new HUD(gameEngine);
-
-	gameEngine.addEntity(testMap);
-	gameEngine.addEntity(hud);
-	canvas.addEventListener("click", (e) => {
-        const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        testMap.handleClick({ x, y });
-    });
+	
+	gameEngine.init(ctx, testMap);
+	
+	gameEngine.menu = new mainMenu(gameEngine);
 
 	gameEngine.start();
 	
@@ -48,8 +56,53 @@ ASSET_MANAGER.downloadAll(() => {
 	
 	
 	function spawnWave() {
-		gameEngine.entities[0].waves.push(["BasicEnemy", "BasicEnemy", "BasicEnemy"]);
-		gameEngine.entities[0].spawnTimer = 0;
+		gameEngine.map.waves.push(["BasicEnemy", "BasicEnemy", "BasicEnemy"]);
+		gameEngine.map.spawnTimer = 0;
 		console.log("Spawning wave");
 	}
+});
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    
+    const backBtn = document.getElementById("backBtn");
+    
+    const aboutScreen = document.getElementById("aboutScreen");
+
+    if(backBtn && aboutScreen) {
+        backBtn.onclick = function() {
+            aboutScreen.style.display = "none";
+        }
+    }
+
+	const musicBtn = document.getElementById("musicToggleBtn");
+
+    if (musicBtn) {
+
+        musicBtn.innerHTML = "🔇";
+        musicBtn.style.backgroundColor = "#ff4444"; 
+
+        music.playIntro();
+
+        document.body.addEventListener("click", function startAudioOnFirstClick() {
+            if (!music.isPausedByUser && music.currentTrack.paused) {
+                music.currentTrack.play();
+            }
+            document.body.removeEventListener("click", startAudioOnFirstClick);
+        }, { once: true });
+
+        musicBtn.addEventListener("click", (event) => {
+            event.stopPropagation();
+            
+            const isPaused = music.toggle(); 
+
+            if (isPaused) {
+                musicBtn.innerHTML = "🔊";
+                musicBtn.style.backgroundColor = "rgba(0, 0, 0, 0.7) "; 
+            } else {
+                musicBtn.innerHTML = "🔇";
+                musicBtn.style.backgroundColor = "#ff4444"; 
+            }
+        });
+    }
+
 });

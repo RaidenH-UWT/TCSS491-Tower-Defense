@@ -73,3 +73,29 @@ function getFacing(point) {
     if (-0.875 > angle || angle < 0.875) return 6;
     if (-0.875 < angle && angle < -0.625) return 7;
 }
+
+/**
+ * @param row either an int row or a cell with properties "r" and "c"
+ * @param col an int column (optional if row has "r" and "c")
+ * @return {x, y} pair in pixel coordinates
+ */
+const cellToCoords = (row, col) => {
+    if ('r' in row && 'c' in row) {
+        return {x: row.c * CELL_SIZE + CELL_SIZE / 2, y: row.r * CELL_SIZE + CELL_SIZE / 2};
+    } else if ('row' in row && 'col' in row) {
+        return {x: row.col * CELL_SIZE + CELL_SIZE / 2, y: row.row * CELL_SIZE + CELL_SIZE / 2};
+    }
+    return {x: col * CELL_SIZE, y: row * CELL_SIZE};
+}
+
+/**
+ * @param pos {x, y} pair in pixels. may be null or undefined.
+ * @param box {x, y, width, height} in pixels. may be null or undefined.
+ * @return true if pos is inside box, false otherwise.
+ */
+const insideBox = (pos, box) => {
+    if (pos == null || box == null || pos == undefined || box == undefined) {
+        return false;
+    }
+    return pos.x >= box.x && pos.x <= box.x + box.width && pos.y >= box.y && pos.y <= box.y + box.height;
+}
