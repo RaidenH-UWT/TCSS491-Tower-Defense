@@ -155,6 +155,7 @@ class TowerDefenseMap {
       const tower = this.placedTowers.filter((a) => insideBox(pos, {x: a.x - CELL_SIZE / 2, y: a.y - CELL_SIZE / 2, width: 64, height: 64}))[0]
       this.popup = new Popup(tower);
     } else {
+      this.popup = null;
       // No tower selected → do nothing
       if (!this.gameEngine.selectedTower) {
         return;
