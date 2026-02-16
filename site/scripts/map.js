@@ -83,38 +83,34 @@ class TowerDefenseMap {
   }
 
   draw(ctx) {
-    // draw the map cells
+    const bgImg = this.assetManager.getAsset("./assets/map_bg.png");
+    if (bgImg) {
+        ctx.drawImage(bgImg, 0, 0, 1024, 768); 
+    }
     for (let r = 0; r < this.rows; r++) {
-      for (let c = 0; c < this.cols; c++) {
-        let design = this.cells[r][c];
-        // draw the cell with the specified design either as a sprite or solid colour
-        this.drawCell(ctx, r, c, CELL_DESIGN[design], "NSEW".indexOf(design) > -1);
-      }
-    }
+            for (let c = 0; c < this.cols; c++) {
+                const cell = this.cells[r][c];
+                const x = c * CELL_SIZE;
+                const y = r * CELL_SIZE;
 
-    // draw placed towers
-    for (const tower of this.placedTowers) {
-      tower.draw(ctx);
-    }
+                if (cell === "B" || cell === "O") {
+                    continue; 
+                }
 
-    // highlight selected cell
-    if (this.selectedCell) {
-      ctx.strokeStyle = "yellow";
-      ctx.lineWidth = 2;
-      ctx.strokeRect(
-        this.selectedCell.col * CELL_SIZE,
-        this.selectedCell.row * CELL_SIZE,
-        CELL_SIZE,
-        CELL_SIZE
-      );
-      // reset the lineWidth
-      ctx.lineWidth = 1;
+                if (DEBUG.tools) {
+                    if (cell === "E") ctx.drawImage(this.assetManager.getAsset("./assets/path_east.png"), x, y, CELL_SIZE, CELL_SIZE);
+                    else if (cell === "W") ctx.drawImage(this.assetManager.getAsset("./assets/path_west.png"), x, y, CELL_SIZE, CELL_SIZE);
+                    else if (cell === "N") ctx.drawImage(this.assetManager.getAsset("./assets/path_north.png"), x, y, CELL_SIZE, CELL_SIZE);
+                    else if (cell === "S") ctx.drawImage(this.assetManager.getAsset("./assets/path_south.png"), x, y, CELL_SIZE, CELL_SIZE);
+                }
+            }
     }
-    
+    for (let tower of this.placedTowers) {
+            tower.draw(ctx);
+        }
     if (this.portal) {
       this.portal.draw(ctx);
     }
-    
     if (this.popup != null) {
       this.popup.draw(ctx);
     }

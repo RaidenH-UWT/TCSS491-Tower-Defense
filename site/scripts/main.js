@@ -30,6 +30,7 @@ ASSET_MANAGER.queueDownload("./assets/basic_enemy.png");
 ASSET_MANAGER.queueDownload("./assets/mainMenu.png");
 ASSET_MANAGER.queueDownload("./assets/startButton.png");
 ASSET_MANAGER.queueDownload("./assets/aboutButton.png");
+ASSET_MANAGER.queueDownload("./assets/map_bg.png");
 
 // queue up all the data assets
 ASSET_MANAGER.queueDownload("./data/ArrowTower.json");
