@@ -3,7 +3,7 @@ const DEBUG = {
 	warn: false,
 	tools: false,
 	load: false,
-	tower: true,
+	tower: false,
 	enemy: false,
 	wave: false,
 	io: false,
