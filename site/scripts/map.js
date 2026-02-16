@@ -76,56 +76,10 @@ class TowerDefenseMap {
     if (this.portalOpened && this.waves.length == 0 && this.portal) {
       this.removePortal();
     }
-  }
-
-  handleClick(pos) {
-    // convert pixel coordinates to cell coordinates
-    const col = Math.floor(pos.x / CELL_SIZE);
-    const row = Math.floor(pos.y / CELL_SIZE);
-
-    // error checking for out of bounds coordinates
-    if (
-      row < 0 ||
-      row >= this.rows ||
-      col < 0 ||
-      col >= this.cols
-    ) return;
-
-    const cellType = this.cells[row][col];
-
-    // No tower selected → do nothing
-    if (!this.gameEngine.selectedTower) {
-      return;
+    
+    if (this.popup != null) {
+      this.popup.update(clockTick);
     }
-
-    // Only allow towers on buildable tiles
-    if (cellType === "B") {
-
-      // center of the cell
-      const towerX = col * CELL_SIZE + CELL_SIZE / 2;
-      const towerY = row * CELL_SIZE + CELL_SIZE / 2;
-
-      // get tower data
-      const towerData = ASSET_MANAGER.getAsset(`./data/${this.gameEngine.selectedTower}.json`);
-      const cost = towerData.upgrades[0].cost;
-
-      // check money
-      if (!this.gameEngine.spendMoney(cost)) {
-        if (DEBUG.io) console.log("Not enough money to place tower. Cost: ", cost);
-        return;
-      }
-
-      // create a real tower object
-      const tower = new Tower(towerData, towerX, towerY, this.gameEngine);
-
-      this.placedTowers.push(tower);
-      if (DEBUG.io) console.log("Tower placed. Cost: ", cost, "Money left: ", this.gameEngine.playerMoney);
-
-      // Clear selection after placing
-      this.gameEngine.selectedTower = null;
-    }
-
-    this.selectedCell = { row, col };
   }
 
   draw(ctx) {
@@ -160,6 +114,10 @@ class TowerDefenseMap {
     if (this.portal) {
       this.portal.draw(ctx);
     }
+    
+    if (this.popup != null) {
+      this.popup.draw(ctx);
+    }
   }
 
   drawCell(ctx, row, col, design, isSprite) {
@@ -177,6 +135,63 @@ class TowerDefenseMap {
     ctx.strokeRect(x, y, CELL_SIZE, CELL_SIZE);
   }
 
+  handleClick(pos) {
+    // convert pixel coordinates to cell coordinates
+    const col = Math.floor(pos.x / CELL_SIZE);
+    const row = Math.floor(pos.y / CELL_SIZE);
+    
+    // error checking for out of bounds coordinates
+    if (
+      row < 0 ||
+      row >= this.rows ||
+      col < 0 ||
+      col >= this.cols
+    ) return;
+    
+    const cellType = this.cells[row][col];
+    
+    if (this.placedTowers.filter((a) => insideBox(pos, {x: a.x - CELL_SIZE / 2, y: a.y - CELL_SIZE / 2, width: 64, height: 64})).length > 0) {
+      // There's already a tower in that position
+      const tower = this.placedTowers.filter((a) => insideBox(pos, {x: a.x - CELL_SIZE / 2, y: a.y - CELL_SIZE / 2, width: 64, height: 64}))[0]
+      this.popup = new Popup(tower);
+    } else {
+      // No tower selected → do nothing
+      if (!this.gameEngine.selectedTower) {
+        return;
+      }
+      
+      // Only allow towers on buildable tiles
+      if (cellType === "B") {
+        
+        // center of the cell
+        const towerX = col * CELL_SIZE + CELL_SIZE / 2;
+        const towerY = row * CELL_SIZE + CELL_SIZE / 2;
+        
+        // get tower data
+        const towerData = ASSET_MANAGER.getAsset(`./data/${this.gameEngine.selectedTower}.json`);
+        const cost = towerData.upgrades[0].cost;
+        
+        // check money
+        if (!this.gameEngine.spendMoney(cost)) {
+          if (DEBUG.io) console.log("Not enough money to place tower. Cost: ", cost);
+          return;
+        }
+        
+        // create a real tower object
+        const tower = new Tower(towerData, towerX, towerY, this.gameEngine);
+        
+        this.placedTowers.push(tower);
+        if (DEBUG.io) console.log("Tower placed. Cost: ", cost, "Money left: ", this.gameEngine.playerMoney);
+        
+        // TODO: maybe remove this bit, and let the user toggle it off if they'd like?
+        // Clear selection after placing
+        this.gameEngine.selectedTower = null;
+      }
+    }
+    
+    this.selectedCell = { row, col };
+  }
+  
   getStartCell() {
     for (let r = 0; r < this.rows; r++) {
       for (let c = 0; c < this.cols; c++) {

@@ -45,7 +45,7 @@ class GameEngine {
     startGame() {
         this.state = "PLAYING";
         this.gameOver = false;
-        music.play();
+        music.playIntro();
     }
 
     startInput() {
@@ -65,10 +65,12 @@ class GameEngine {
                 this.menu.handleClick(this.click);
                 return;
             }
-            if (this.hud.handleClick(this.click)) {
-                return;
+            
+            if (insideBox(this.click, {x: 0, y: 768, width: 1024, height: 256})) {
+                this.hud.handleClick(this.click);
+            } else {
+                this.map.handleClick(this.click);
             }
-            this.map.handleClick(this.click);
         });
         this.ctx.canvas.addEventListener("wheel", e => {
             e.preventDefault()

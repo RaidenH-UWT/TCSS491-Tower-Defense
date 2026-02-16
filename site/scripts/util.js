@@ -87,3 +87,15 @@ const cellToCoords = (row, col) => {
     }
     return {x: col * CELL_SIZE, y: row * CELL_SIZE};
 }
+
+/**
+ * @param pos {x, y} pair in pixels. may be null or undefined.
+ * @param box {x, y, width, height} in pixels. may be null or undefined.
+ * @return true if pos is inside box, false otherwise.
+ */
+const insideBox = (pos, box) => {
+    if (pos == null || box == null || pos == undefined || box == undefined) {
+        return false;
+    }
+    return pos.x >= box.x && pos.x <= box.x + box.width && pos.y >= box.y && pos.y <= box.y + box.height;
+}

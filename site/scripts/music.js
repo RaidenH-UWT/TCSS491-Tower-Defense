@@ -25,6 +25,7 @@ class MusicManager {
   playIntro() {
     this.stopAll();
     this.currentTrack = this.intro;
+    // TODO: make these logs conditional, probably on a DEBUG variable
     if (!this.isPausedByUser) {
         this.intro.play().catch(e => console.log("Waiting for user click..."));
     }

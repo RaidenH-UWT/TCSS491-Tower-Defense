@@ -114,17 +114,11 @@ class HUD {
     }
 
     handleClick(pos) {
+        // check tower buttons
         for (let btn of this.towerButtons) {
-            if (
-                pos.x > btn.x &&
-                pos.x < btn.x + btn.width &&
-                pos.y > btn.y &&
-                pos.y < btn.y + btn.height
-            ) {
+            if (insideBox(pos, btn)) {
                 this.game.selectedTower = btn.tower.name;
-                return true; // VERY IMPORTANT
             }
         }
-    return false;
     }
 }
