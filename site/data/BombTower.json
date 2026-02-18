@@ -2,6 +2,7 @@
     "name": "Bomb Tower",
     "upgrades": {
         "0": {
+            "description": "Attacks slowly but deals damage in a large area",
             "cost": 150,
             "attack": {
                 "animation": {
@@ -68,6 +69,7 @@
             }
         },
         "1": {
+            "description": "Bombs explode for more damage in a larger area",
             "cost": 150,
             "attack": {
                 "animation": {

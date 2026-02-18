@@ -149,6 +149,8 @@ class GameEngine {
         }
         
         for (let entity of this.entities) entity.draw(this.ctx);
+        
+        this.map.popup?.draw(this.ctx);
 
         this.hud.draw(this.ctx);
         this.winScreen.draw(this.ctx);

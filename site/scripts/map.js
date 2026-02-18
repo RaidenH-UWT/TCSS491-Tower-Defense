@@ -35,12 +35,20 @@ class TowerDefenseMap {
 
   update(clockTick) {
     // update all towers
-    for (const tower of this.placedTowers) {
-      tower.update(clockTick);
+    for (let i = 0; i < this.placedTowers.length; i++) {
+      if (this.placedTowers[i].removeFromWorld) {
+        this.placedTowers.splice(i, 1);
+      } else {
+        this.placedTowers[i].update(clockTick);
+      }
     }
     
     if (this.portal) {
       this.portal.update(clockTick);
+    }
+    
+    if (this.popup?.removeFromWorld) {
+      this.popup = null;
     }
     
     if (this.isSpawning && this.waves.length > 0) {      
@@ -111,9 +119,6 @@ class TowerDefenseMap {
     if (this.portal) {
       this.portal.draw(ctx);
     }
-    if (this.popup != null) {
-      this.popup.draw(ctx);
-    }
   }
 
   drawCell(ctx, row, col, design, isSprite) {
@@ -151,7 +156,7 @@ class TowerDefenseMap {
       const tower = this.placedTowers.filter((a) => insideBox(pos, {x: a.x - CELL_SIZE / 2, y: a.y - CELL_SIZE / 2, width: 64, height: 64}))[0]
       this.popup = new Popup(tower);
     } else if (insideBox(pos, this.popup)) {
-      // TODO: implement popup behaviour in here. maybe even just pass the click to the popup
+      this.popup.handleClick(pos);
     } else {
       this.popup = null;
       // No tower selected → do nothing
