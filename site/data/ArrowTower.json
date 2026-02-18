@@ -73,7 +73,7 @@
                 "damage": 2,
                 "range": 3,
                 "area": 0,
-                "rate": 2,
+                "rate": 1,
                 "speed": 4,
                 "homing": true,
                 "team": "defend"

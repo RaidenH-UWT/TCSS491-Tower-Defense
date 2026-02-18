@@ -56,11 +56,11 @@ class Popup {
         }
         
         ctx.fillStyle = "#BB0000";
-        ctx.fillRect(this.x + 8, this.y + this.height - 32, 80, 24);
+        ctx.fillRect(this.x + 8, this.y + this.height - 32, 128, 24);
         ctx.strokeStyle = "#550000";
-        ctx.strokeRect(this.x + 8, this.y + this.height - 32, 80, 24);
+        ctx.strokeRect(this.x + 8, this.y + this.height - 32, 128, 24);
         ctx.fillStyle = "white";
-        ctx.fillText("Sell: $" + this.tower.upgrades[this.tower.currentLevel].cost * 0.75, this.x + 10, this.y + this.height - 12);
+        ctx.fillText("Sell: $" + Math.round(this.tower.upgrades[this.tower.currentLevel].cost * 0.75), this.x + 10, this.y + this.height - 12);
     }
     
     handleClick(pos) {
