@@ -16,6 +16,18 @@
                     "reverse": false,
                     "loop": true
                 },
+                "deathAnimation": {
+                    "spritesheet": "explosion.png",
+                    "xStart": 0,
+                    "yStart": 0,
+                    "width": 128,
+                    "height": 128,
+                    "frameCount": 5,
+                    "frameDuration": 0.1,
+                    "framePadding": 0,
+                    "reverse": false,
+                    "loop": false
+                },
                 "damage": 2,
                 "range": 2,
                 "area": 2,
@@ -69,6 +81,18 @@
                     "framePadding": 0,
                     "reverse": false,
                     "loop": true
+                },
+                "deathAnimation": {
+                    "spritesheet": "explosion.png",
+                    "xStart": 0,
+                    "yStart": 0,
+                    "width": 128,
+                    "height": 128,
+                    "frameCount": 5,
+                    "frameDuration": 0.1,
+                    "framePadding": 0,
+                    "reverse": false,
+                    "loop": false
                 },
                 "damage": 3,
                 "range": 3,

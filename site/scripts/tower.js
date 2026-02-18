@@ -47,7 +47,21 @@ class Tower {
           data.attack.animation.loopEnd
       );
       
-      this.attack = new Attack(data.attack, anim, {x: this.x, y: this.y});
+      let deathAnim;
+      if ('deathAnimation' in data.attack) {
+          deathAnim = new Animator(
+              ASSET_MANAGER.getAsset("./assets/" + data.attack.deathAnimation.spritesheet), 
+                                       data.attack.deathAnimation.xStart, data.attack.deathAnimation.yStart,
+                                       data.attack.deathAnimation.width, data.attack.deathAnimation.height, 
+                                       data.attack.deathAnimation.frameCount, data.attack.deathAnimation.frameDuration, 
+                                       data.attack.deathAnimation.framePadding,
+                                       data.attack.deathAnimation.reverse, data.attack.deathAnimation.loop, 
+                                       data.attack.deathAnimation.rotation, data.attack.deathAnimation.loopStart, 
+                                       data.attack.deathAnimation.loopEnd
+          );
+      }
+      
+      this.attack = new Attack(data.attack, anim, {x: this.x, y: this.y}, deathAnim);
   }
 
   update(clockTick) {

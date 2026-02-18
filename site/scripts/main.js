@@ -26,6 +26,7 @@ ASSET_MANAGER.queueDownload("./assets/arrow_tower.png");
 ASSET_MANAGER.queueDownload("./assets/arrow.png");
 ASSET_MANAGER.queueDownload("./assets/bomb_tower.png");
 ASSET_MANAGER.queueDownload("./assets/bomb.png");
+ASSET_MANAGER.queueDownload("./assets/explosion.png");
 ASSET_MANAGER.queueDownload("./assets/basic_enemy.png");
 ASSET_MANAGER.queueDownload("./assets/mainMenu.png");
 ASSET_MANAGER.queueDownload("./assets/startButton.png");
