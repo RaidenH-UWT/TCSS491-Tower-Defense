@@ -27,7 +27,6 @@ class Popup {
                 this.upgradeBounds[key] = {start: this.y + 44 + currY, end: height + this.y + currY + 48};
                 currY += height + 8;
             }
-            console.log(this.upgradeBounds);
         }
         
         ctx.font = "18px Arial";

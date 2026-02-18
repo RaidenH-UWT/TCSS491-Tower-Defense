@@ -1,9 +1,9 @@
 {
     "name": "Test map",
     "waves": [
-        ["BasicEnemy"],
-        ["BasicEnemy", "BasicEnemy"],
-        ["BasicEnemy", "BasicEnemy", "BasicEnemy"]
+        [{"enemy": "BasicEnemy", "delay": 1}],
+        [{"enemy": "BasicEnemy", "delay": 1}, {"enemy": "BasicEnemy", "delay": 0.25}],
+        [{"enemy": "BasicEnemy", "delay": 1}, {"enemy": "BasicEnemy", "delay": 1}, {"enemy": "BasicEnemy", "delay": 0.5}]
     ],
     "cells": [
         ["O", "O", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "O", "O"],

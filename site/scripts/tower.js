@@ -22,7 +22,6 @@ class Tower {
   }
 
   upgrade(path) {
-      console.log("upgrading", this, path);
       this.animations = {}; // Clear old animations
       
       let data = this.upgrades[path];

@@ -1,6 +1,4 @@
 const CELL_SIZE = 64;
-// delay between spawns, in seconds
-const SPAWN_DELAY = 1;
 const CELL_DESIGN = {
   O: "white", // empty cell
   B: "green", // buildable cell
@@ -59,10 +57,10 @@ class TowerDefenseMap {
       }
       
       this.spawnTimer += clockTick;
-      if (this.spawnTimer >= SPAWN_DELAY) {
+      if (this.spawnTimer >= this.waves[0][0].delay) {
         if (DEBUG.wave) console.log("spawning enemy");
         
-        this.gameEngine.addEntity(new Enemy(this.assetManager.getAsset(`./data/${this.waves[0].shift()}.json`), this, this.gameEngine));
+        this.gameEngine.addEntity(new Enemy(this.assetManager.getAsset(`./data/${this.waves[0].shift().enemy}.json`), this, this.gameEngine));
         this.spawnTimer = 0;
         
         if (DEBUG.wave) console.log("waves left: " + this.waves[0].length);
