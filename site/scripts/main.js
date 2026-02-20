@@ -7,6 +7,7 @@ const DEBUG = {
 	enemy: false,
 	wave: false,
 	io: false,
+    music: false,
 	other: false
 };
 
@@ -74,36 +75,4 @@ document.addEventListener('DOMContentLoaded', (event) => {
             aboutScreen.style.display = "none";
         }
     }
-
-	const musicBtn = document.getElementById("musicToggleBtn");
-
-    if (musicBtn) {
-
-        musicBtn.innerHTML = "🔇";
-        musicBtn.style.backgroundColor = "#ff4444"; 
-
-        music.playIntro();
-
-        document.body.addEventListener("click", function startAudioOnFirstClick() {
-            if (!music.isPausedByUser && music.currentTrack.paused) {
-                music.currentTrack.play();
-            }
-            document.body.removeEventListener("click", startAudioOnFirstClick);
-        }, { once: true });
-
-        musicBtn.addEventListener("click", (event) => {
-            event.stopPropagation();
-            
-            const isPaused = music.toggle(); 
-
-            if (isPaused) {
-                musicBtn.innerHTML = "🔊";
-                musicBtn.style.backgroundColor = "rgba(0, 0, 0, 0.7) "; 
-            } else {
-                musicBtn.innerHTML = "🔇";
-                musicBtn.style.backgroundColor = "#ff4444"; 
-            }
-        });
-    }
-
 });
