@@ -235,10 +235,6 @@ class GameEngine {
             this.ctx.fillRect(x + 15, y + 12, 6, 25);
             this.ctx.fillRect(x + 29, y + 12, 6, 25);
         }
-
-        this.hud.draw(this.ctx);
-        this.winScreen.draw(this.ctx);
-        this.loseScreen.draw(this.ctx);
         
         // draw the next wave button
         this.ctx.fillStyle = "rgba(0,0,0,0.6)";
@@ -251,6 +247,11 @@ class GameEngine {
         this.ctx.lineTo(1024 - 60, 768 - 20);
         this.ctx.lineTo(1024 - 20, 768 - 40);
         this.ctx.fill();
+
+        this.hud.draw(this.ctx);
+        this.winScreen.draw(this.ctx);
+        this.loseScreen.draw(this.ctx);
+        
         
         if (DEBUG.tools) {
             let elem;
