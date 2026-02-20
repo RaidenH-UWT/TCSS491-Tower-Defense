@@ -1,7 +1,7 @@
 {
     "name": "Arrow Tower",
-    "upgrades": {
-        "0": {
+    "upgrades": [
+        {
             "description": "Attacks an enemy at a time, and hardly ever misses",
             "cost": 100,
             "attack": {
@@ -54,7 +54,7 @@
                 }
             }
         },
-        "1": {
+        {
             "description": "Attacks deal more damage and never miss",
             "cost": 150,
             "attack": {
@@ -107,5 +107,5 @@
                 }
             }
         }
-    }
+    ]
 }

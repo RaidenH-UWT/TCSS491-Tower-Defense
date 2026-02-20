@@ -24,6 +24,8 @@ class Tower {
   upgrade(path) {
       this.animations = {}; // Clear old animations
       
+      this.currentLevel = path;
+      
       let data = this.upgrades[path];
       for (let key of Object.getOwnPropertyNames(data.animations)) {
           let conf = data.animations[key];

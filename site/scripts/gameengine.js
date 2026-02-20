@@ -91,6 +91,10 @@ class GameEngine {
                     this.isPaused = true;
                     return;
                 }
+                if (insideBox(this.click, {x: 1024 - 65, y: 768 - 65, width: 50, height: 50})) {
+                    this.map.isSpawning = true;
+                    console.log("spawnin");
+                }
             }
 
             // Pause Menu Buttons
@@ -236,6 +240,18 @@ class GameEngine {
         this.winScreen.draw(this.ctx);
         this.loseScreen.draw(this.ctx);
         
+        // draw the next wave button
+        this.ctx.fillStyle = "rgba(0,0,0,0.6)";
+        this.ctx.fillRect(1024 - 65, 768 - 65, 50, 50);
+        this.ctx.strokeRect(1024 - 65, 768 - 65, 50, 50);
+        
+        this.ctx.fillStyle = "white";
+        this.ctx.beginPath();
+        this.ctx.moveTo(1024 - 60, 768 - 60);
+        this.ctx.lineTo(1024 - 60, 768 - 20);
+        this.ctx.lineTo(1024 - 20, 768 - 40);
+        this.ctx.fill();
+        
         if (DEBUG.tools) {
             let elem;
             for (elem of DEBUG_ELEMENTS) {
@@ -246,7 +262,7 @@ class GameEngine {
         if (DEBUG.tools) {
             this.ctx.fillStyle = "white";
             this.ctx.font = "12pt serif";
-            this.ctx.fillText(`(${this.mouse.x}, ${this.mouse.y})`, this.mouse.x, this.mouse.y);
+            this.ctx.fillText(`(${Math.round(this.mouse.x)}, ${Math.round(this.mouse.y)})`, this.mouse.x, this.mouse.y);
         }
 
         if (this.isPaused && this.state === "PLAYING" && !this.gameOver) {

@@ -73,8 +73,7 @@ class TowerDefenseMap {
           
           // TODO: For now, this just starts the next wave after 5 seconds.
           // for future, implement a "play" button and toggle `this.isSpawning` when necessary
-          // this.isSpawning = false;
-          this.spawnTimer -= 5;
+          this.isSpawning = false;
         }
       }
     }
