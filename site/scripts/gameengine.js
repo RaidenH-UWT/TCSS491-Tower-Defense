@@ -93,7 +93,6 @@ class GameEngine {
                 }
                 if (insideBox(this.click, {x: 1024 - 65, y: 768 - 65, width: 50, height: 50})) {
                     this.map.isSpawning = true;
-                    console.log("spawnin");
                 }
             }
 

@@ -13,6 +13,15 @@ class Popup {
     }
     
     draw(ctx) {
+        // draw tower range
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(this.tower.x, this.tower.y, this.tower.attack.range * CELL_SIZE, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.fillStyle = "#00000022";
+        ctx.fill();
+        
         if (this.x == undefined) {
             // define all our dimensions by measuring text
             ctx.font = "18px Arial";

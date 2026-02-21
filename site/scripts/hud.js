@@ -37,11 +37,9 @@ class HUD {
     }
 
     drawTowerPanel(ctx) {
-        const panelHeight = 150;
+        const panelHeight = 256;
 
-        // Move panel slightly up
-        const bottomMargin = 105;
-        const panelY = ctx.canvas.height - panelHeight - bottomMargin;
+        const panelY = ctx.canvas.height - panelHeight;
 
         // Panel background
         ctx.fillStyle = "rgba(0,0,0,0.85)";

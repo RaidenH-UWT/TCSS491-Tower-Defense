@@ -10,6 +10,7 @@ class Attack {
     this.damage = data.damage;
     this.range = data.range;
     this.area = data.area;
+    this.triggerRange = data.triggerRange;
     this.rate = 1 / data.rate;
     this.speed = data.speed;
     this.homing = data.homing;
@@ -85,17 +86,17 @@ class AttackEntity {
     }
     
     if (this.attack.team == "defend") {
-      if (gameEngine.getEnemiesInRadius(this.x, this.y, 16).length > 0) {
+      if (gameEngine.getEnemiesInRadius(this.x, this.y, this.attack.triggerRange * CELL_SIZE).length > 0) {
         this.explode();
       }
     } else if (this.attack.team == "attack") {
-      if (getDistance(this, this.target) < 16) {
+      if (getDistance(this, this.target) < this.attack.triggerRange * CELL_SIZE) {
         this.explode();
       }
     }
     
-    
-    if (getDistance(this, this.origin) > this.attack.range * CELL_SIZE) {
+    // remove projectiles that fly past their targets
+    if (getDistance(this, this.origin) > this.attack.range * CELL_SIZE * 1.5) {
       this.explode();
     }
   }
@@ -113,7 +114,6 @@ class Effect {
     this.x = x - this.animation.width / 2;
     this.y = y - this.animation.height / 2;
     this.clockTick = 0;
-    console.log("new effect", this);
   }
   
   update(clockTick) {

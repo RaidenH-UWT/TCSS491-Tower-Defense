@@ -22,7 +22,7 @@ class TowerDefenseMap {
     this.placedTowers = [];
     this.selectedCell = null;
     
-    this.isSpawning = true;
+    this.isSpawning = false;
     this.spawnTimer = 0;
     
     this.assetManager = assetManager;
