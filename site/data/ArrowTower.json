@@ -126,7 +126,7 @@
                     "loop": true
                 },
                 "damage": 1,
-                "range": 3,
+                "range": 5,
                 "area": 0,
                 "triggerRange": 0.25,
                 "rate": 1,

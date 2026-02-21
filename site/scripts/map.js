@@ -13,6 +13,7 @@ const CELL_DESIGN = {
 class TowerDefenseMap {
   constructor(json, assetManager, gameEngine) {
     this.name = json.name;
+    this.background = "./assets/" + json.background;
     this.cost = json.cost;
     this.waves = json.waves;
     this.cells = json.cells;
@@ -88,7 +89,7 @@ class TowerDefenseMap {
   }
 
   draw(ctx) {
-    const bgImg = this.assetManager.getAsset("./assets/map_bg.png");
+    const bgImg = this.assetManager.getAsset(this.background);
     if (bgImg) {
         ctx.drawImage(bgImg, 0, 0, 1024, 768); 
     }
