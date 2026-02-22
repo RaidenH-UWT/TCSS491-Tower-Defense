@@ -6,6 +6,7 @@
         [{"enemy": "BasicEnemy", "delay": 1}, {"enemy": "BasicEnemy", "delay": 0.25}],
         [{"enemy": "BasicEnemy", "delay": 1}, {"enemy": "BasicEnemy", "delay": 1}, {"enemy": "BasicEnemy", "delay": 0.5}],
         [{"enemy": "BasicEnemy", "delay": 0.25}, {"enemy": "BasicEnemy", "delay": 0.25}, {"enemy": "BasicEnemy", "delay": 0.25}, {"enemy": "BasicEnemy", "delay": 0.25}],
+        [{"enemy": "BasicEnemy", "delay": 2}, {"enemy": "BasicEnemy", "delay": 2}, {"enemy": "BasicEnemy", "delay": 0.75}, {"enemy": "BasicEnemy", "delay": 0.75}, {"enemy": "BasicEnemy", "delay": 0.75}],
         [{"enemy": "BasicEnemy", "delay": 0.1}, {"enemy": "BasicEnemy", "delay": 0.1}, {"enemy": "BasicEnemy", "delay": 1}, {"enemy": "BasicEnemy", "delay": 0.25}, {"enemy": "BasicEnemy", "delay": 0.25}]
     ],
     "cells": [

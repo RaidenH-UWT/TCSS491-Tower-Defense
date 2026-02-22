@@ -57,7 +57,7 @@
         },
         {
             "description": "Increases the range of the tower",
-            "cost": 150,
+            "cost": 200,
             "attack": {
                 "animation": {
                     "spritesheet": "arrow.png",
@@ -111,7 +111,7 @@
         },
         {
             "description": "Attacks never miss",
-            "cost": 200,
+            "cost": 300,
             "attack": {
                 "animation": {
                     "spritesheet": "arrow.png",
