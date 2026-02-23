@@ -23,7 +23,6 @@ class HUD {
     }
 
     draw(ctx) {
-        ctx.save();
         ctx.fillStyle = "rgba(0,0,0,0.6)";
         ctx.fillRect(10, 10, 220, 70);
         ctx.strokeStyle = "white";
@@ -33,17 +32,14 @@ class HUD {
         ctx.font = "20px Arial";
         ctx.fillText(`Money: $${this.money}`, 20, 40);
         ctx.fillText(`Lives: ${this.lives}`, 20, 70);
-        ctx.restore();
 
         this.drawTowerPanel(ctx);
     }
 
     drawTowerPanel(ctx) {
-        const panelHeight = 150;
+        const panelHeight = 256;
 
-        // Move panel slightly up
-        const bottomMargin = 105;
-        const panelY = ctx.canvas.height - panelHeight - bottomMargin;
+        const panelY = ctx.canvas.height - panelHeight;
 
         // Panel background
         ctx.fillStyle = "rgba(0,0,0,0.85)";

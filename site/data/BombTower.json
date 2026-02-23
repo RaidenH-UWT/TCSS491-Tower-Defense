@@ -1,8 +1,9 @@
 {
     "name": "Bomb Tower",
-    "upgrades": {
-        "0": {
-            "cost": 150,
+    "upgrades": [
+        {
+            "description": "Attacks slowly but deals damage in a large area",
+            "cost": 300,
             "attack": {
                 "animation": {
                     "spritesheet": "bomb.png",
@@ -16,10 +17,23 @@
                     "reverse": false,
                     "loop": true
                 },
+                "deathAnimation": {
+                    "spritesheet": "explosion.png",
+                    "xStart": 0,
+                    "yStart": 0,
+                    "width": 128,
+                    "height": 128,
+                    "frameCount": 5,
+                    "frameDuration": 0.1,
+                    "framePadding": 0,
+                    "reverse": false,
+                    "loop": false
+                },
                 "damage": 2,
                 "range": 2,
-                "area": 2,
-                "rate": 0.5,
+                "area": 1.25,
+                "triggerRange": 0.5,
+                "rate": 0.25,
                 "speed": 3,
                 "homing": false,
                 "team": "defend"
@@ -55,8 +69,9 @@
                 }
             }
         },
-        "1": {
-            "cost": 150,
+        {
+            "description": "Attacks faster and gains more range",
+            "cost": 250,
             "attack": {
                 "animation": {
                     "spritesheet": "bomb.png",
@@ -70,9 +85,90 @@
                     "reverse": false,
                     "loop": true
                 },
-                "damage": 3,
+                "deathAnimation": {
+                    "spritesheet": "explosion.png",
+                    "xStart": 0,
+                    "yStart": 0,
+                    "width": 128,
+                    "height": 128,
+                    "frameCount": 5,
+                    "frameDuration": 0.1,
+                    "framePadding": 0,
+                    "reverse": false,
+                    "loop": false
+                },
+                "damage": 2,
                 "range": 3,
-                "area": 2,
+                "area": 1.25,
+                "triggerRange": 0.5,
+                "rate": 0.5,
+                "speed": 4,
+                "homing": false,
+                "team": "defend"
+            },
+            "animations": {
+                "idle": {
+                    "spritesheet": "bomb_tower.png",
+                    "xStart": 0,
+                    "yStart": 0,
+                    "width": 64,
+                    "height": 64,
+                    "frameCount": 3,
+                    "frameDuration": 0.3,
+                    "framePadding": 0,
+                    "reverse": false,
+                    "loop": true,
+                    "loopStart": 2,
+                    "loopEnd": 3
+                },
+                "attack": {
+                    "spritesheet": "bomb_tower.png",
+                    "xStart": 0,
+                    "yStart": 0,
+                    "width": 64,
+                    "height": 64,
+                    "frameCount": 3,
+                    "frameDuration": 0.3,
+                    "framePadding": 0,
+                    "reverse": false,
+                    "loop": false,
+                    "loopStart": 0,
+                    "loopEnd": 3
+                }
+            }
+        },
+        {
+            "description": "Bombs deal damage in a bigger area",
+            "cost": 200,
+            "attack": {
+                "animation": {
+                    "spritesheet": "bomb.png",
+                    "xStart": 0,
+                    "yStart": 0,
+                    "width": 32,
+                    "height": 32,
+                    "frameCount": 1,
+                    "frameDuration": 0.2,
+                    "framePadding": 0,
+                    "reverse": false,
+                    "loop": true
+                },
+                "deathAnimation": {
+                    "spritesheet": "explosion.png",
+                    "xStart": 0,
+                    "yStart": 0,
+                    "width": 128,
+                    "height": 128,
+                    "frameCount": 5,
+                    "frameDuration": 0.1,
+                    "framePadding": 0,
+                    "reverse": false,
+                    "loop": false
+                },
+                "damage": 2,
+                "range": 3,
+                "area": 1.75,
+                "triggerRange": 0.5,
                 "rate": 0.5,
                 "speed": 4,
                 "homing": false,
@@ -109,5 +205,5 @@
                 }
             }
         }
-    }
+    ]
 }

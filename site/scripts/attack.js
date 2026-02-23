@@ -6,15 +6,17 @@
  * @author Raiden H
  */
 class Attack {
-  constructor(data, animation, origin) {
+  constructor(data, animation, origin, deathAnimation) {
     this.damage = data.damage;
     this.range = data.range;
     this.area = data.area;
+    this.triggerRange = data.triggerRange;
     this.rate = 1 / data.rate;
     this.speed = data.speed;
     this.homing = data.homing;
     this.team = data.team;
     this.animation = animation;
+    this.deathAnimation = deathAnimation;
     this.origin = origin;
     this.targetMode = "weak";
     this.targetingModes = {
@@ -52,7 +54,6 @@ class AttackEntity {
   }
   
   explode() {
-    // TODO: add the option for an explode() triggered animation (like an... explosion)
     const targets = this.attack.team == "attack" ? [this.target] : gameEngine.getEnemiesInRadius(this.x, this.y, this.attack.area * CELL_SIZE + 16);
     if (targets.length > 0 && this.attack.area == 0) {
       targets[0].takeDamage(this.attack.damage);
@@ -60,6 +61,9 @@ class AttackEntity {
       for (let target of targets.filter((a) => getDistance(this, a) <= this.attack.area * CELL_SIZE)) {
         target.takeDamage(this.attack.damage);
       }
+    }
+    if (this.attack.deathAnimation != undefined) {
+      gameEngine.addEntity(new Effect(this.x, this.y, this.attack.deathAnimation));
     }
     this.removeFromWorld = true;
   }
@@ -82,17 +86,17 @@ class AttackEntity {
     }
     
     if (this.attack.team == "defend") {
-      if (gameEngine.getEnemiesInRadius(this.x, this.y, 16).length > 0) {
+      if (gameEngine.getEnemiesInRadius(this.x, this.y, this.attack.triggerRange * CELL_SIZE).length > 0) {
         this.explode();
       }
     } else if (this.attack.team == "attack") {
-      if (getDistance(this, this.target) < 16) {
+      if (getDistance(this, this.target) < this.attack.triggerRange * CELL_SIZE) {
         this.explode();
       }
     }
     
-    
-    if (getDistance(this, this.origin) > this.attack.range * CELL_SIZE) {
+    // remove projectiles that fly past their targets
+    if (getDistance(this, this.origin) > this.attack.range * CELL_SIZE * 1.5) {
       this.explode();
     }
   }
@@ -101,5 +105,26 @@ class AttackEntity {
     let angle = Math.atan2(this.velocity.y, this.velocity.x);
     
     this.animation.drawFrame(this.clockTick, context, this.x, this.y, 1, angle);
+  }
+}
+
+class Effect {
+  constructor(x, y, animation) {
+    this.animation = animation;
+    this.x = x - this.animation.width / 2;
+    this.y = y - this.animation.height / 2;
+    this.clockTick = 0;
+  }
+  
+  update(clockTick) {
+    this.clockTick = clockTick;
+  }
+  
+  draw(ctx) {
+    this.animation.drawFrame(this.clockTick, ctx, this.x, this.y, 1);
+    if (this.animation.isDone()) {
+      this.animation.reset();
+      this.removeFromWorld = true;
+    }
   }
 }

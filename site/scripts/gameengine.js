@@ -22,8 +22,16 @@ class GameEngine {
         // HUD
         this.hud = new HUD(this);
 
-        //Menu
+        // Menu
         this.state = "MENU";
+
+        // Pause
+        this.isPaused = false;
+        this.pauseButton = {
+            width: 50,
+            height: 50,
+            padding: 15
+        };
     }
 
     init(ctx, map) {
@@ -31,6 +39,16 @@ class GameEngine {
         this.map = map;
         this.startInput();
         this.timer = new Timer();
+
+        // Start music on first interaction
+        const startMusicOnce = () => {
+            music.playMenuMusic();
+            window.removeEventListener("click", startMusicOnce);
+            window.removeEventListener("keydown", startMusicOnce);
+        };
+
+        window.addEventListener("click", startMusicOnce);
+        window.addEventListener("keydown", startMusicOnce);
     }
 
     start() {
@@ -44,8 +62,8 @@ class GameEngine {
 
     startGame() {
         this.state = "PLAYING";
+        music.playMapMusic();
         this.gameOver = false;
-        music.playIntro();
     }
 
     startInput() {
@@ -61,10 +79,48 @@ class GameEngine {
         this.ctx.canvas.addEventListener("click", e => {
             this.click = getXandY(e);
             if (DEBUG.io) console.log("CLICK: ", this.click);
+            // Menu
             if (this.state == "MENU") {
                 this.menu.handleClick(this.click);
                 return;
             }
+
+            // Pause Button
+            if (this.state === "PLAYING" && !this.gameOver) {
+                if (insideBox(this.click, this.pauseButton)) {
+                    this.isPaused = true;
+                    return;
+                }
+                if (insideBox(this.click, {x: 1024 - 65, y: 768 - 65, width: 50, height: 50})) {
+                    this.map.isSpawning = true;
+                }
+            }
+
+            // Pause Menu Buttons
+            if (this.isPaused && this.pauseButtons) {
+                for (let btn of this.pauseButtons) {
+                    if (insideBox(this.click, btn)) {
+                        switch (btn.action) {
+                            case "resume":
+                                this.isPaused = false;
+                                break;
+                            case "restart":
+                                location.reload(); // quick restart
+                                break;
+                            case "music":
+                                music.toggle();
+                                break;
+                            case "exit":
+                                this.isPaused = false;
+                                this.state = "MENU";
+                                music.playMenuMusic();
+                                break;
+                        }
+                        return;
+                    }
+                }
+            }
+            if (this.isPaused) return;
             
             if (insideBox(this.click, {x: 0, y: 768, width: 1024, height: 256})) {
                 this.hud.handleClick(this.click);
@@ -84,6 +140,12 @@ class GameEngine {
         this.ctx.canvas.addEventListener("keydown", e => {
             if (this.winScreen.handleInput(e.key)) return;
             if (this.loseScreen.handleInput(e.key)) return;
+            
+            if ((e.key === "p" || e.key === "P") && this.state === "PLAYING" && !this.gameOver) {
+                this.isPaused = !this.isPaused;
+                return;
+            }
+            
             this.keys[e.key] = true;
             if (DEBUG.io) console.log("KEY DOWN: ", e,key);
         });
@@ -149,10 +211,46 @@ class GameEngine {
         }
         
         for (let entity of this.entities) entity.draw(this.ctx);
+        
+        this.map.popup?.draw(this.ctx);
+
+        // Draw pause button (only while playing)
+        if (this.state === "PLAYING" && !this.gameOver) {
+            const btn = this.pauseButton;
+            const x = this.ctx.canvas.width - btn.width - btn.padding;
+            const y = btn.padding;
+
+            btn.x = x;
+            btn.y = y;
+
+            this.ctx.fillStyle = "#222";
+            this.ctx.fillRect(x, y, btn.width, btn.height);
+
+            this.ctx.strokeStyle = "white";
+            this.ctx.strokeRect(x, y, btn.width, btn.height);
+
+            // Pause icon (two bars)
+            this.ctx.fillStyle = "white";
+            this.ctx.fillRect(x + 15, y + 12, 6, 25);
+            this.ctx.fillRect(x + 29, y + 12, 6, 25);
+        }
+        
+        // draw the next wave button
+        this.ctx.fillStyle = "rgba(0,0,0,0.6)";
+        this.ctx.fillRect(1024 - 65, 768 - 65, 50, 50);
+        this.ctx.strokeRect(1024 - 65, 768 - 65, 50, 50);
+        
+        this.ctx.fillStyle = "white";
+        this.ctx.beginPath();
+        this.ctx.moveTo(1024 - 60, 768 - 60);
+        this.ctx.lineTo(1024 - 60, 768 - 20);
+        this.ctx.lineTo(1024 - 20, 768 - 40);
+        this.ctx.fill();
 
         this.hud.draw(this.ctx);
         this.winScreen.draw(this.ctx);
         this.loseScreen.draw(this.ctx);
+        
         
         if (DEBUG.tools) {
             let elem;
@@ -164,12 +262,83 @@ class GameEngine {
         if (DEBUG.tools) {
             this.ctx.fillStyle = "white";
             this.ctx.font = "12pt serif";
-            this.ctx.fillText(`(${this.mouse.x}, ${this.mouse.y})`, this.mouse.x, this.mouse.y);
+            this.ctx.fillText(`(${Math.round(this.mouse.x)}, ${Math.round(this.mouse.y)})`, this.mouse.x, this.mouse.y);
+        }
+
+        if (this.isPaused && this.state === "PLAYING" && !this.gameOver) {
+            const ctx = this.ctx;
+            ctx.save();
+
+            this.ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
+            this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+
+            const boxWidth = 400;
+            const boxHeight = 350;
+            const boxX = ctx.canvas.width / 2 - boxWidth / 2;
+            const boxY = ctx.canvas.height / 2 - boxHeight / 2 - 125;
+            
+            this.pauseMenu = {
+                x: boxX,
+                y: boxY,
+                width: boxWidth,
+                height: boxHeight
+            };
+
+            // Box
+            ctx.fillStyle = "#222";
+            ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+            ctx.strokeStyle = "white";
+            ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+
+            ctx.fillStyle = "white";
+            ctx.font = "32px Arial";
+            ctx.textAlign = "center";
+            ctx.fillText("Game Paused", ctx.canvas.width / 2, boxY + 50);
+
+            // Buttons
+            const buttonWidth = 250;
+            const buttonHeight = 50;
+            const spacing = 20;
+            const startY = boxY + 90;
+
+            const buttons = [
+                { label: "Resume", action: "resume" },
+                { label: "Restart", action: "restart" },
+                { label: music.currentTrack.paused ? "Play Music 🔊" : "Pause Music 🔇", action: "music" },
+                { label: "Exit to Menu", action: "exit" }
+            ];
+
+            this.pauseButtons = [];
+
+            for (let i = 0; i < buttons.length; i++) {
+                const x = ctx.canvas.width / 2 - buttonWidth / 2;
+                const y = startY + i * (buttonHeight + spacing);
+
+                const btn = {
+                    x,
+                    y,
+                    width: buttonWidth,
+                    height: buttonHeight,
+                    action: buttons[i].action
+                };
+
+                this.pauseButtons.push(btn);
+
+                ctx.fillStyle = "#444";
+                ctx.fillRect(x, y, buttonWidth, buttonHeight);
+                ctx.strokeStyle = "white";
+                ctx.strokeRect(x, y, buttonWidth, buttonHeight);
+
+                ctx.fillStyle = "white";
+                ctx.font = "20px Arial";
+                ctx.fillText(buttons[i].label, ctx.canvas.width / 2, y + 32);
+            }
+            this.ctx.restore();
         }
     }
 
     loop() {
-        this.clockTick = this.timer.tick();
+        this.clockTick = this.isPaused ? 0 : this.timer.tick();
         this.update();
         this.draw();
     }

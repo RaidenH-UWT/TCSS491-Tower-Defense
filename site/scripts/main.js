@@ -3,10 +3,11 @@ const DEBUG = {
 	warn: false,
 	tools: false,
 	load: false,
-	tower: true,
+	tower: false,
 	enemy: false,
 	wave: false,
 	io: false,
+    music: false,
 	other: false
 };
 
@@ -27,10 +28,12 @@ ASSET_MANAGER.queueDownload("./assets/arrow_tower.png");
 ASSET_MANAGER.queueDownload("./assets/arrow.png");
 ASSET_MANAGER.queueDownload("./assets/bomb_tower.png");
 ASSET_MANAGER.queueDownload("./assets/bomb.png");
+ASSET_MANAGER.queueDownload("./assets/explosion.png");
 ASSET_MANAGER.queueDownload("./assets/basic_enemy.png");
 ASSET_MANAGER.queueDownload("./assets/mainMenu.png");
 ASSET_MANAGER.queueDownload("./assets/startButton.png");
 ASSET_MANAGER.queueDownload("./assets/aboutButton.png");
+ASSET_MANAGER.queueDownload("./assets/map_bg.png");
 
 // queue up all the data assets
 ASSET_MANAGER.queueDownload("./data/ArrowTower.json");
@@ -73,36 +76,4 @@ document.addEventListener('DOMContentLoaded', (event) => {
             aboutScreen.style.display = "none";
         }
     }
-
-	const musicBtn = document.getElementById("musicToggleBtn");
-
-    if (musicBtn) {
-
-        musicBtn.innerHTML = "🔇";
-        musicBtn.style.backgroundColor = "#ff4444"; 
-
-        music.playIntro();
-
-        document.body.addEventListener("click", function startAudioOnFirstClick() {
-            if (!music.isPausedByUser && music.currentTrack.paused) {
-                music.currentTrack.play();
-            }
-            document.body.removeEventListener("click", startAudioOnFirstClick);
-        }, { once: true });
-
-        musicBtn.addEventListener("click", (event) => {
-            event.stopPropagation();
-            
-            const isPaused = music.toggle(); 
-
-            if (isPaused) {
-                musicBtn.innerHTML = "🔊";
-                musicBtn.style.backgroundColor = "rgba(0, 0, 0, 0.7) "; 
-            } else {
-                musicBtn.innerHTML = "🔇";
-                musicBtn.style.backgroundColor = "#ff4444"; 
-            }
-        });
-    }
-
 });
