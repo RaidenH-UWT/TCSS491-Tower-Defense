@@ -130,7 +130,7 @@
                 "area": 0,
                 "triggerRange": 0.25,
                 "rate": 1,
-                "speed": 4,
+                "speed": 6,
                 "homing": true,
                 "team": "defend"
             },

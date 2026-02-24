@@ -52,18 +52,20 @@ class Tower {
       let deathAnim;
       if ('deathAnimation' in data.attack) {
           deathAnim = new Animator(
-              ASSET_MANAGER.getAsset("./assets/" + data.attack.deathAnimation.spritesheet), 
-                                       data.attack.deathAnimation.xStart, data.attack.deathAnimation.yStart,
-                                       data.attack.deathAnimation.width, data.attack.deathAnimation.height, 
-                                       data.attack.deathAnimation.frameCount, data.attack.deathAnimation.frameDuration, 
-                                       data.attack.deathAnimation.framePadding,
-                                       data.attack.deathAnimation.reverse, data.attack.deathAnimation.loop, 
-                                       data.attack.deathAnimation.rotation, data.attack.deathAnimation.loopStart, 
-                                       data.attack.deathAnimation.loopEnd
+            ASSET_MANAGER.getAsset("./assets/" + data.attack.deathAnimation.spritesheet), 
+            data.attack.deathAnimation.xStart, data.attack.deathAnimation.yStart,
+            data.attack.deathAnimation.width, data.attack.deathAnimation.height, 
+            data.attack.deathAnimation.frameCount, data.attack.deathAnimation.frameDuration, 
+            data.attack.deathAnimation.framePadding,
+            data.attack.deathAnimation.reverse, data.attack.deathAnimation.loop, 
+            data.attack.deathAnimation.rotation, data.attack.deathAnimation.loopStart, 
+            data.attack.deathAnimation.loopEnd
           );
       }
-      
+      // save the previous targetMode to set the new one
+      let tarMode = this.attack?.targetMode;
       this.attack = new Attack(data.attack, anim, {x: this.x, y: this.y}, deathAnim);
+      if (tarMode != undefined) this.attack.targetMode = tarMode;
   }
 
   update(clockTick) {

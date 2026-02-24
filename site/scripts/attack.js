@@ -18,7 +18,7 @@ class Attack {
     this.animation = animation;
     this.deathAnimation = deathAnimation;
     this.origin = origin;
-    this.targetMode = "weak";
+    this.targetMode = "close";
     this.targetingModes = {
       close: (arr) => arr.sort((a, b) => getDistance({x: a.x, y: a.y}, origin) - getDistance({x: b.x, y: b.y}, origin)),
       far: (arr) => arr.sort((a, b) => getDistance({x: b.x, y: b.y}, origin) - getDistance({x: a.x, y: a.y}, origin)),
