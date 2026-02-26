@@ -29,6 +29,8 @@ ASSET_MANAGER.queueDownload("./assets/bomb_tower.png");
 ASSET_MANAGER.queueDownload("./assets/bomb.png");
 ASSET_MANAGER.queueDownload("./assets/explosion.png");
 ASSET_MANAGER.queueDownload("./assets/basic_enemy.png");
+ASSET_MANAGER.queueDownload("./assets/fast_enemy.png");
+ASSET_MANAGER.queueDownload("./assets/boss_enemy.png");
 ASSET_MANAGER.queueDownload("./assets/mainMenu.png");
 ASSET_MANAGER.queueDownload("./assets/startButton.png");
 ASSET_MANAGER.queueDownload("./assets/aboutButton.png");
@@ -37,6 +39,8 @@ ASSET_MANAGER.queueDownload("./assets/map_bg.png");
 // queue up all the data assets
 ASSET_MANAGER.queueDownload("./data/ArrowTower.json");
 ASSET_MANAGER.queueDownload("./data/BombTower.json");
+ASSET_MANAGER.queueDownload("./data/BossEnemy.json");
+ASSET_MANAGER.queueDownload("./data/FastEnemy.json");
 ASSET_MANAGER.queueDownload("./data/BasicEnemy.json");
 ASSET_MANAGER.queueDownload("./data/test_map.json");
 
@@ -58,11 +62,19 @@ ASSET_MANAGER.downloadAll(() => {
 	
 	
 	function spawnWave() {
-		gameEngine.map.waves.push(["BasicEnemy", "BasicEnemy", "BasicEnemy"]);
-		gameEngine.map.spawnTimer = 0;
-		console.log("Spawning wave");
-	}
-});
+        gameEngine.map.waves.push([
+            { enemy: "BasicEnemy", delay: 1 },
+            { enemy: "BasicEnemy", delay: 1 },
+            { enemy: "FastEnemy", delay: 0.5 },
+            { enemy: "FastEnemy", delay: 0.5 },
+            { enemy: "FastEnemy", delay: 0.5 },
+			{ enemy: "BossEnemy", delay: 2},
+			{ enemy: "BossEnemy", delay: 2}
+        ]);
+        gameEngine.map.isSpawning = true;
+        gameEngine.map.spawnTimer = 0;
+        console.log("Spawning wave");
+	}});
 
 document.addEventListener('DOMContentLoaded', (event) => {
     

@@ -2,12 +2,17 @@
     "name": "Test map",
     "background": "map_bg.png",
     "waves": [
-        [{"enemy": "BasicEnemy", "delay": 1}],
-        [{"enemy": "BasicEnemy", "delay": 1}, {"enemy": "BasicEnemy", "delay": 0.25}],
-        [{"enemy": "BasicEnemy", "delay": 1}, {"enemy": "BasicEnemy", "delay": 1}, {"enemy": "BasicEnemy", "delay": 0.5}],
-        [{"enemy": "BasicEnemy", "delay": 0.25}, {"enemy": "BasicEnemy", "delay": 0.25}, {"enemy": "BasicEnemy", "delay": 0.25}, {"enemy": "BasicEnemy", "delay": 0.25}],
-        [{"enemy": "BasicEnemy", "delay": 2}, {"enemy": "BasicEnemy", "delay": 2}, {"enemy": "BasicEnemy", "delay": 0.75}, {"enemy": "BasicEnemy", "delay": 0.75}, {"enemy": "BasicEnemy", "delay": 0.75}],
-        [{"enemy": "BasicEnemy", "delay": 0.1}, {"enemy": "BasicEnemy", "delay": 0.1}, {"enemy": "BasicEnemy", "delay": 1}, {"enemy": "BasicEnemy", "delay": 0.25}, {"enemy": "BasicEnemy", "delay": 0.25}]
+    [{"enemy": "BasicEnemy", "delay": 1}],
+    [{"enemy": "BasicEnemy", "delay": 1}, {"enemy": "BasicEnemy", "delay": 0.25}],
+    [{"enemy": "BasicEnemy", "delay": 1}, {"enemy": "BasicEnemy", "delay": 1}, {"enemy": "BasicEnemy", "delay": 0.5}],
+    [{"enemy": "BasicEnemy", "delay": 0.25}, {"enemy": "BasicEnemy", "delay": 0.25}, {"enemy": "BasicEnemy", "delay": 0.25}, {"enemy": "BasicEnemy", "delay": 0.25}],
+    [{"enemy": "BasicEnemy", "delay": 2}, {"enemy": "BasicEnemy", "delay": 2}, {"enemy": "BasicEnemy", "delay": 0.75}, {"enemy": "BasicEnemy", "delay": 0.75}, {"enemy": "BasicEnemy", "delay": 0.75}],
+    [{"enemy": "BasicEnemy", "delay": 0.1}, {"enemy": "BasicEnemy", "delay": 0.1}, {"enemy": "BasicEnemy", "delay": 1}, {"enemy": "BasicEnemy", "delay": 0.25}, {"enemy": "BasicEnemy", "delay": 0.25}],
+    [{"enemy": "FastEnemy", "delay": 1}],
+    [{"enemy": "FastEnemy", "delay": 0.5}, {"enemy": "FastEnemy", "delay": 0.5}],
+    [{"enemy": "FastEnemy", "delay": 0.25}, {"enemy": "FastEnemy", "delay": 0.25}, {"enemy": "FastEnemy", "delay": 0.25}],
+    [{"enemy": "FastEnemy", "delay": 0.1}, {"enemy": "FastEnemy", "delay": 0.1}, {"enemy": "FastEnemy", "delay": 0.1}, {"enemy": "FastEnemy", "delay": 0.1}],
+    [{"enemy": "BossEnemy", "delay": 1}]
     ],
     "cells": [
         ["O", "O", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "O", "O"],
