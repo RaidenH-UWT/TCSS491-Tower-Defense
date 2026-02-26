@@ -36,7 +36,7 @@ class HUD {
         ctx.textBaseline = "alphabetic";
         ctx.fillText(`Money: $${this.money}`, 20, 40);
         ctx.fillText(`Lives: ${this.lives}`, 20, 70);
-        ctx.fillText(`Wave: ${this.game.map.currentWave} / ${this.game.map.totalWaves}`, 20, 100);
+        ctx.fillText(`Wave: ${this.game.map.currentWave} / ${this.game.map.isEndless ? "∞" : this.game.map.totalWaves}`, 20, 100);
 
         this.drawTowerPanel(ctx);
 

@@ -69,56 +69,60 @@ class Tower {
   }
 
   update(clockTick) {
-    // Update attack timer
-    this.attackTimer += clockTick;
-    
-    // Find targets in range
-    let targets = this.gameEngine.getEnemiesInRadius(this.x, this.y, this.attack.range * CELL_SIZE);
-    
-    if (targets.length > 0) {
-        // Keep same target if still in range, otherwise pick new one
-        if (!this.currentTarget || !targets.includes(this.currentTarget)) {
-            this.currentTarget = targets[0];
-        }
+        // Update attack timer
+        this.attackTimer += clockTick;
         
-        // NO rotation calculation needed anymore
+        // Find targets in range
+        let targets = this.gameEngine.getEnemiesInRadius(this.x, this.y, this.attack.range * CELL_SIZE);
         
-        // Attack if ready
-        if (this.attackTimer >= this.attack.rate) {
-            this.animState = "attack";
-            this.gameEngine.addEntity(this.attack.attack(targets));
-            this.attackTimer = 0;
+        if (targets.length > 0) {
+            // Keep same target if still in range, otherwise pick new one
+            if (!this.currentTarget || !targets.includes(this.currentTarget)) {
+                this.currentTarget = targets[0];
+            }
+            
+            // NO rotation calculation needed anymore
+            
+            // Attack if ready
+            if (this.attackTimer >= this.attack.rate) {
+                this.animState = "attack";
+                this.gameEngine.addEntity(this.attack.attack(targets));
+                this.attackTimer = 0;
+            }
+        } else {
+            this.currentTarget = null;
         }
-    } else {
-        this.currentTarget = null;
     }
-}
 
   
   draw(ctx) {
-    // Draw sprite at tower position WITHOUT rotation
-    this.animations[this.animState].drawFrame(
-        this.gameEngine.clockTick, 
-        ctx, 
-        this.x - CELL_SIZE / 2,  // Center the sprite
-        this.y - CELL_SIZE / 2, 
-        1,                       // scale
-    );
-    
-    // Reset animState if attack anim is done
-    if (this.animState === "attack" && this.animations[this.animState].isDone()) {
-        this.animState = "idle";
-        this.animations[this.animState].reset();
+        // Draw sprite at tower position WITHOUT rotation
+        this.animations[this.animState].drawFrame(
+            this.gameEngine.clockTick, 
+            ctx, 
+            this.x - CELL_SIZE / 2,  // Center the sprite
+            this.y - CELL_SIZE / 2, 
+            1,                       // scale
+        );
+        
+        // Reset animState if attack anim is done
+        if (this.animState === "attack" && this.animations[this.animState].isDone()) {
+            this.animState = "idle";
+            this.animations[this.animState].reset();
+        }
+        
+        if (DEBUG.tower) {
+            // Draw range circle
+            ctx.strokeStyle = "rgba(255, 0, 0, 0.3)";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.attack.range * CELL_SIZE, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.lineWidth = 1;
+        }
     }
     
-    if (DEBUG.tower) {
-        // Draw range circle
-        ctx.strokeStyle = "rgba(255, 0, 0, 0.3)";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.attack.range * CELL_SIZE, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.lineWidth = 1;
+    getValue() {
+        return this.upgrades.map((a, ind) => this.currentLevel >= ind ? a.cost : 0).reduce((acc, val) => acc + val);
     }
-}
 }
