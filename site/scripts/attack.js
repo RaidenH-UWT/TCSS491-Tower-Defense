@@ -99,6 +99,10 @@ class AttackEntity {
     if (getDistance(this, this.origin) > this.attack.range * CELL_SIZE * 1.5) {
       this.explode();
     }
+    
+    if (this.target == null || this.target == undefined || this.target.removeFromWorld) {
+      this.explode();
+    }
   }
   
   draw(context) {

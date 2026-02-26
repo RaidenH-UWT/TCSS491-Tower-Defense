@@ -101,7 +101,8 @@ class GameEngine {
                     this.isPaused = true;
                     return;
                 }
-                if (insideBox(this.click, {x: 1024 - 65, y: 768 - 65, width: 50, height: 50})) {
+                // next wave button
+                if (!this.entities.reduce((acc, val) => acc || val instanceof Enemy, false) && insideBox(this.click, {x: 1024 - 65, y: 768 - 65, width: 50, height: 50})) {
                     this.map.isSpawning = true;
                 }
             }
@@ -123,6 +124,7 @@ class GameEngine {
                             case "exit":
                                 this.isPaused = false;
                                 this.state = "MENU";
+                                this.menu.menuState = "MAIN";
                                 music.playMenuMusic();
                                 break;
                         }
@@ -161,7 +163,17 @@ class GameEngine {
         this.ctx.canvas.addEventListener("keydown", e => {
             if (this.winScreen.handleInput(e.key)) return;
             if (this.loseScreen.handleInput(e.key)) return;
-            
+
+            // Shortcut for Toggle Next Wave: Cmd + P or Ctrl + P
+            if ((e.key === "p" || e.key === "P") && (e.metaKey || e.ctrlKey)) {
+                e.preventDefault();
+                if (this.state === "PLAYING" && !this.gameOver) {
+                    this.map.isSpawning = true;
+                    console.log("Next wave toggled via shortcut");
+                }
+                return;
+            }
+
             if ((e.key === "p" || e.key === "P") && this.state === "PLAYING" && !this.gameOver) {
                 this.isPaused = !this.isPaused;
                 return;
@@ -217,7 +229,10 @@ class GameEngine {
 
         // Always update HUD and screens so they draw even after gameOver
         this.hud.update(this.clockTick);
-        this.winScreen.update(this.clockTick);
+        if (!this.map.isEndless) {
+            // only win if we're not in endless mode
+            this.winScreen.update(this.clockTick);
+        }
         this.loseScreen.update(this.clockTick);
     }
 

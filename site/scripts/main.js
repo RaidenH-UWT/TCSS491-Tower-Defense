@@ -15,6 +15,7 @@ const gameEngine = new GameEngine();
 const ASSET_MANAGER = new AssetManager();
 const music = new MusicManager();
 const MAPS = ["test_map.json"];
+const ENEMIES = ["BossEnemy", "FastEnemy", "BasicEnemy"];
 
 const DEBUG_ELEMENTS = document.getElementsByClassName("debug");
 
