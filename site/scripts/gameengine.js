@@ -8,6 +8,16 @@ class GameEngine {
         this.keys = {};
         this.options = options || { debugging: false };
 
+        // Game Speed
+        this.speedLevels = [0.5, 1, 2, 3];
+        this.currentSpeed = 1;
+        this.gameSpeed = this.speedLevels[this.currentSpeed];
+        this.speedButton = {
+            width: 90,
+            height: 40,
+            padding: 15
+        };
+
         // Screens
         this.winScreen = new WinScreen(this);
         this.loseScreen = new LoseScreen(this);
@@ -121,6 +131,17 @@ class GameEngine {
                 }
             }
             if (this.isPaused) return;
+
+            if (this.state === "PLAYING" && !this.gameOver) {
+                if (insideBox(this.click, this.speedButton)) {
+                    this.currentSpeed++;
+                    if (this.currentSpeed >= this.speedLevels.length) {
+                        this.currentSpeed = 0;
+                    }
+                    this.gameSpeed = this.speedLevels[this.currentSpeed];
+                    return;
+                }
+            }
             
             if (insideBox(this.click, {x: 0, y: 768, width: 1024, height: 256})) {
                 this.hud.handleClick(this.click);
@@ -234,6 +255,28 @@ class GameEngine {
             this.ctx.fillRect(x + 15, y + 12, 6, 25);
             this.ctx.fillRect(x + 29, y + 12, 6, 25);
         }
+
+        // draw speed button
+        if (this.state === "PLAYING" && !this.gameOver) {
+            const btn = this.speedButton;
+
+            const x = this.pauseButton.x - btn.width - 10;
+            const y = this.pauseButton.y;
+
+            btn.x = x;
+            btn.y = y;
+
+            this.ctx.fillStyle = "#222";
+            this.ctx.fillRect(x, y, btn.width, btn.height);
+
+            this.ctx.strokeStyle = "white";
+            this.ctx.strokeRect(x, y, btn.width, btn.height);
+
+            this.ctx.fillStyle = "white";
+            this.ctx.font = "16px Arial";
+            this.ctx.textAlign = "center";
+            this.ctx.fillText(`${this.gameSpeed}x`, x + btn.width / 2, y + 25);
+        }
         
         // draw the next wave button
         this.ctx.fillStyle = "rgba(0,0,0,0.6)";
@@ -338,7 +381,7 @@ class GameEngine {
     }
 
     loop() {
-        this.clockTick = this.isPaused ? 0 : this.timer.tick();
+        this.clockTick = this.isPaused ? 0 : this.timer.tick() * this.gameSpeed;
         this.update();
         this.draw();
     }
