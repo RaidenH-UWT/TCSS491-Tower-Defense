@@ -13,6 +13,12 @@ class Popup {
     }
     
     draw(ctx) {        
+        ctx.save();
+
+        ctx.textAlign = "left";
+        ctx.textBaseline = "alphabetic";
+        ctx.lineWidth = 1;
+
         if (this.x == undefined) {
             // define all our dimensions by measuring text
             ctx.font = "18px Arial";
@@ -87,6 +93,8 @@ class Popup {
         ctx.strokeRect(this.x + 8, this.y + this.height - 32, 128, 24);
         ctx.fillStyle = "white";
         ctx.fillText("Sell: $" + Math.round(this.tower.upgrades.map((a, ind) => this.tower.currentLevel >= ind ? a.cost : 0).reduce((acc, val) => acc + val) * 0.75), this.x + 10, this.y + this.height - 12);
+
+        ctx.restore();
     }
     
     handleClick(pos) {

@@ -26,9 +26,9 @@ class HUD {
         ctx.save();
 
         ctx.fillStyle = "rgba(0,0,0,0.6)";
-        ctx.fillRect(10, 10, 220, 70);
+        ctx.fillRect(10, 10, 220, 100);
         ctx.strokeStyle = "white";
-        ctx.strokeRect(10, 10, 220, 70);
+        ctx.strokeRect(10, 10, 220, 100);
 
         ctx.fillStyle = "white";
         ctx.font = "20px Arial";
@@ -36,9 +36,10 @@ class HUD {
         ctx.textBaseline = "alphabetic";
         ctx.fillText(`Money: $${this.money}`, 20, 40);
         ctx.fillText(`Lives: ${this.lives}`, 20, 70);
+        ctx.fillText(`Wave: ${this.game.map.currentWave} / ${this.game.map.totalWaves}`, 20, 100);
 
         this.drawTowerPanel(ctx);
-        
+
         ctx.restore();
     }
 
