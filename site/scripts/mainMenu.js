@@ -20,7 +20,7 @@ class mainMenu {
     reset() {
         this.menuState = "MAIN";
     }
-    
+
     update() {
         if (this.game.click) {
             this.handleClick(this.game.click);
@@ -59,11 +59,11 @@ class mainMenu {
             ctx.textAlign = "center";
             ctx.fillText("EASY", centerX, this.easyBtn.y + 60);
 
-            ctx.fillStyle = "#23272a";
+            ctx.fillStyle = "#4f545c";
             ctx.fillRect(this.mediumBtn.x, this.mediumBtn.y, btnWidth, btnHeight);
-            ctx.strokeStyle = "#72767d";
+            ctx.strokeStyle = "white";
             ctx.strokeRect(this.mediumBtn.x, this.mediumBtn.y, btnWidth, btnHeight);
-            ctx.fillStyle = "#72767d";
+            ctx.fillStyle = "white";
             ctx.fillText("MEDIUM", centerX, this.mediumBtn.y + 60);
 
             ctx.fillStyle = "#23272a";
@@ -85,10 +85,20 @@ class mainMenu {
                 if (screen) screen.style.display = "block";
             }
         } else if (this.menuState === "DIFFICULTY") {
+            
+            // Easy Mode
             if (this.isInside(pos, this.easyBtn)) {
-                this.game.startGame();
+                this.game.startGame("test_map.json");
             }
-            // Medium and Hard remain untoggled
+            
+            // Medium Mode
+            if (this.isInside(pos, this.mediumBtn)) {
+                this.game.startGame("map_medium.json");
+            }
+            //Hard Mode, to do
+            if (this.hardBtn && this.isInside(pos, this.hardBtn)) {
+                // this.game.startGame("map_hard.json"); 
+            }
         }
     }
 

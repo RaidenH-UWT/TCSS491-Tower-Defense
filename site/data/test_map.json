@@ -1,6 +1,6 @@
 {
     "name": "Test map",
-    "background": "map_bg.png",
+    "background": "map_bg_easy.png",
     "waves": [
     [{"enemy": "BasicEnemy", "delay": 1}],
     [{"enemy": "BasicEnemy", "delay": 1}, {"enemy": "BasicEnemy", "delay": 0.25}],

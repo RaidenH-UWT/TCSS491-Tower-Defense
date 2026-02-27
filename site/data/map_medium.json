@@ -1,0 +1,31 @@
+{
+    "name": "Medium Map",
+    "background": "map_bg_medium.png",
+    "waves": [
+        [{"enemy": "BasicEnemy", "delay": 1}],
+        [{"enemy": "BasicEnemy", "delay": 1}, {"enemy": "BasicEnemy", "delay": 0.25}],
+        [{"enemy": "BasicEnemy", "delay": 1}, {"enemy": "BasicEnemy", "delay": 1}, {"enemy": "BasicEnemy", "delay": 0.5}],
+        [{"enemy": "BasicEnemy", "delay": 0.25}, {"enemy": "BasicEnemy", "delay": 0.25}, {"enemy": "BasicEnemy", "delay": 0.25}, {"enemy": "BasicEnemy", "delay": 0.25}],
+        [{"enemy": "BasicEnemy", "delay": 2}, {"enemy": "BasicEnemy", "delay": 2}, {"enemy": "BasicEnemy", "delay": 0.75}, {"enemy": "BasicEnemy", "delay": 0.75}, {"enemy": "BasicEnemy", "delay": 0.75}],
+        [{"enemy": "BasicEnemy", "delay": 0.1}, {"enemy": "BasicEnemy", "delay": 0.1}, {"enemy": "BasicEnemy", "delay": 1}, {"enemy": "BasicEnemy", "delay": 0.25}, {"enemy": "BasicEnemy", "delay": 0.25}],
+        [{"enemy": "FastEnemy", "delay": 1}],
+        [{"enemy": "FastEnemy", "delay": 0.5}, {"enemy": "FastEnemy", "delay": 0.5}],
+        [{"enemy": "FastEnemy", "delay": 0.25}, {"enemy": "FastEnemy", "delay": 0.25}, {"enemy": "FastEnemy", "delay": 0.25}],
+        [{"enemy": "FastEnemy", "delay": 0.1}, {"enemy": "FastEnemy", "delay": 0.1}, {"enemy": "FastEnemy", "delay": 0.1}, {"enemy": "FastEnemy", "delay": 0.1}],
+        [{"enemy": "BossEnemy", "delay": 1}]
+    ],
+    "cells": [
+        ["O", "O", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "O", "O"],
+        ["O", "B", "B", "O", "O", "B", "B", "B", "B", "B", "O", "O", "B", "B", "B", "O"],
+        ["B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B"],
+        ["B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B"],
+        ["B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B"],
+        ["F", "E", "E", "E", "S", "B", "B", "B", "B", "B", "B", "E", "E", "E", "E", "G"],
+        ["B", "B", "B", "B", "S", "B", "B", "B", "B", "B", "B", "N", "B", "B", "B", "B"],
+        ["B", "B", "O", "B", "S", "B", "B", "B", "B", "B", "B", "N", "B", "O", "B", "B"],
+        ["B", "B", "B", "B", "S", "B", "B", "B", "B", "B", "B", "N", "B", "B", "B", "B"],
+        ["B", "B", "B", "B", "E", "E", "E", "E", "E", "E", "E", "N", "B", "B", "B", "B"],
+        ["O", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "O"],
+        ["O", "O", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "B", "O", "O"]
+    ]
+}

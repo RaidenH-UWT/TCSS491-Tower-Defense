@@ -70,7 +70,19 @@ class GameEngine {
         gameLoop();
     }
 
-    startGame() {
+    startGame(mapFileName) {
+        if (mapFileName) {
+            const mapData = ASSET_MANAGER.getAsset(`./data/${mapFileName}`);
+            this.map = new TowerDefenseMap(mapData, ASSET_MANAGER, this);
+            
+            this.entities = [];
+            
+            this.baseHealth = 20;
+            this.playerMoney = 500;
+            this.enemyCount = 0;
+            this.selectedTower = null;
+        }
+
         this.state = "PLAYING";
         music.playMapMusic();
         this.gameOver = false;

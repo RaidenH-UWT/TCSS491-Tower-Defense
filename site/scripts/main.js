@@ -35,7 +35,8 @@ ASSET_MANAGER.queueDownload("./assets/boss_enemy.png");
 ASSET_MANAGER.queueDownload("./assets/mainMenu.png");
 ASSET_MANAGER.queueDownload("./assets/startButton.png");
 ASSET_MANAGER.queueDownload("./assets/aboutButton.png");
-ASSET_MANAGER.queueDownload("./assets/map_bg.png");
+ASSET_MANAGER.queueDownload("./assets/map_bg_easy.png");
+ASSET_MANAGER.queueDownload("./assets/map_bg_medium.png");
 
 // queue up all the data assets
 ASSET_MANAGER.queueDownload("./data/ArrowTower.json");
@@ -44,18 +45,17 @@ ASSET_MANAGER.queueDownload("./data/BossEnemy.json");
 ASSET_MANAGER.queueDownload("./data/FastEnemy.json");
 ASSET_MANAGER.queueDownload("./data/BasicEnemy.json");
 ASSET_MANAGER.queueDownload("./data/test_map.json");
+ASSET_MANAGER.queueDownload("./data/map_medium.json");
 
 ASSET_MANAGER.downloadAll(() => {
 	const canvas = document.getElementById("gameCanvas");
 	const ctx = canvas.getContext("2d");
-	
-	const testMap = new TowerDefenseMap(ASSET_MANAGER.getAsset(`./data/${MAPS[0]}`), ASSET_MANAGER, gameEngine);
-	
-	gameEngine.init(ctx, testMap);
-	
-	gameEngine.menu = new mainMenu(gameEngine);
+	const defaultMapData = ASSET_MANAGER.getAsset(`./data/test_map.json`);
+    const defaultMap = new TowerDefenseMap(defaultMapData, ASSET_MANAGER, gameEngine);
 
-	gameEngine.start();
+	gameEngine.init(ctx, defaultMap);
+    gameEngine.menu = new mainMenu(gameEngine);
+    gameEngine.start();
 	
 	// debug tools
 	const debugSpawnWave = document.getElementById("debugSpawnWave");
