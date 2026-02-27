@@ -155,6 +155,7 @@ class TowerDefenseMap {
   }
 
   handleClick(pos) {
+    // TODO: towers seem to be taking priority over the popup
     // convert pixel coordinates to cell coordinates
     const col = Math.floor(pos.x / CELL_SIZE);
     const row = Math.floor(pos.y / CELL_SIZE);
@@ -282,7 +283,7 @@ class TowerDefenseMap {
     if (DEBUG.wave) console.log("Value: ",totalValue, "\nEnemies:", enemies, "\nWave: ", wave, "\nWave value: ", wave.map((a) => a.bounty).reduce((acc, val) => acc + val, 0));
     
     return wave.map((a) => {
-      return {enemy: a.name, delay: Math.random() * 2};
+      return {enemy: a.name, delay: Math.random() * 2 + 0.05};
     });
   }
 }

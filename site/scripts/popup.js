@@ -99,7 +99,7 @@ class Popup {
     
     handleClick(pos) {
         if (this.tower.upgrades.length > this.tower.currentLevel
-            && pos.y >= this.y + 76 && pos.y <= this.y + 108) {
+            && pos.y >= this.y + 76 && pos.y <= this.y + 112) {
             if (gameEngine.spendMoney(this.tower.upgrades[this.tower.currentLevel + 1].cost)) {
                 this.tower.upgrade(this.tower.currentLevel + 1);
             }

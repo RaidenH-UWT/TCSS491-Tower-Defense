@@ -124,3 +124,9 @@ main {
     background-color: #4CAF50;
     color: white;
 }
+
+#difficulty-selector {
+    text-align: center;
+    margin-bottom: 20px;
+    display: none;
+}
