@@ -24,6 +24,7 @@ ASSET_MANAGER.queueDownload("./assets/path_north.png");
 ASSET_MANAGER.queueDownload("./assets/path_south.png");
 ASSET_MANAGER.queueDownload("./assets/path_east.png");
 ASSET_MANAGER.queueDownload("./assets/path_west.png");
+ASSET_MANAGER.queueDownload("./assets/magic_tower.png");
 ASSET_MANAGER.queueDownload("./assets/arrow_tower.png");
 ASSET_MANAGER.queueDownload("./assets/arrow.png");
 ASSET_MANAGER.queueDownload("./assets/bomb_tower.png");
@@ -41,6 +42,7 @@ ASSET_MANAGER.queueDownload("./assets/map_bg_medium.png");
 // queue up all the data assets
 ASSET_MANAGER.queueDownload("./data/ArrowTower.json");
 ASSET_MANAGER.queueDownload("./data/BombTower.json");
+ASSET_MANAGER.queueDownload("./data/MagicTower.json");
 ASSET_MANAGER.queueDownload("./data/BossEnemy.json");
 ASSET_MANAGER.queueDownload("./data/FastEnemy.json");
 ASSET_MANAGER.queueDownload("./data/BasicEnemy.json");

@@ -11,6 +11,10 @@ class HUD {
         {
             name: "BombTower",
             dataFile: "./data/BombTower.json"
+        },
+        {
+            name: "MagicTower",
+            dataFile: "./data/MagicTower.json"
         }
         ];
         this.towerButtons = [];
