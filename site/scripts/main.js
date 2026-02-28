@@ -25,6 +25,7 @@ ASSET_MANAGER.queueDownload("./assets/path_south.png");
 ASSET_MANAGER.queueDownload("./assets/path_east.png");
 ASSET_MANAGER.queueDownload("./assets/path_west.png");
 ASSET_MANAGER.queueDownload("./assets/magic_tower.png");
+ASSET_MANAGER.queueDownload("./assets/magic.png");
 ASSET_MANAGER.queueDownload("./assets/arrow_tower.png");
 ASSET_MANAGER.queueDownload("./assets/arrow.png");
 ASSET_MANAGER.queueDownload("./assets/bomb_tower.png");

@@ -27,7 +27,7 @@
         }
     },
     "health": 3,
-    "speed": 2,
+    "speed": 3,
     "attack": {
         "animation": {
             "spritesheet": "arrow.png",

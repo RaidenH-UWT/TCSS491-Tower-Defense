@@ -100,8 +100,12 @@ class AttackEntity {
       this.explode();
     }
     
+    // select a new target if ours is dead, or explode if there are no targets left
     if (this.target == null || this.target == undefined || this.target.removeFromWorld) {
-      this.explode();
+      this.target = gameEngine.getEnemiesInRadius(this.x, this.y, this.attack.range * CELL_SIZE)[0];
+      if (this.target == null || this.target == undefined) {
+        this.explode();
+      }
     }
   }
   

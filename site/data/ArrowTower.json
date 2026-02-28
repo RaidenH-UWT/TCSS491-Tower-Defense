@@ -2,8 +2,8 @@
     "name": "Arrow Tower",
     "upgrades": [
         {
-            "description": "Attacks an enemy at a time, and hardly ever misses",
-            "cost": 150,
+            "description": "Quickly attacks a single target",
+            "cost": 200,
             "attack": {
                 "animation": {
                     "spritesheet": "arrow.png",
@@ -110,8 +110,8 @@
             }
         },
         {
-            "description": "Attacks never miss",
-            "cost": 300,
+            "description": "Attacks faster",
+            "cost": 250,
             "attack": {
                 "animation": {
                     "spritesheet": "arrow.png",
@@ -129,9 +129,9 @@
                 "range": 5,
                 "area": 0,
                 "triggerRange": 0.25,
-                "rate": 1,
-                "speed": 6,
-                "homing": true,
+                "rate": 1.5,
+                "speed": 8,
+                "homing": false,
                 "team": "defend"
             },
             "animations": {
