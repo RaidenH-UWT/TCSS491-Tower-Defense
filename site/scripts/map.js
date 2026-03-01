@@ -15,7 +15,6 @@ class TowerDefenseMap {
     this.name = json.name;
     this.background = "./assets/" + json.background;
     this.cost = json.cost;
-    this.waves = json.waves;
     this.cells = json.cells;
     this.rows = this.cells.length;
     this.cols = this.cells[0].length;
@@ -30,6 +29,13 @@ class TowerDefenseMap {
     this.gameEngine = gameEngine;
     this.portal;
     this.portalOpened = false;
+
+    // waves
+    this.waves = json.waves;
+    this.totalWaves = json.waves.length;
+    this.currentWave = 0;
+    this.waveInProgress = false;
+    this.isEndless = false;
   }
 
   update(clockTick) {
@@ -50,7 +56,19 @@ class TowerDefenseMap {
       this.popup = null;
     }
     
-    if (this.isSpawning && this.waves.length > 0) {      
+    if (this.isEndless && this.waves.length == 0) {
+      this.waves.push(this.generateWave());
+      if (DEBUG.wave) console.log("Added new wave", this.waves);
+    }
+    
+    // wave spawning logic
+    if (this.isSpawning && this.waves.length > 0) {  
+      // detect start of a new wave
+      if (!this.waveInProgress) {
+        this.currentWave++;
+        this.waveInProgress = true;
+      }
+
       // Wave just started → ensure portal exists
       if (!this.portal) {
         this.spawnPortal();
@@ -58,10 +76,12 @@ class TowerDefenseMap {
       }
       
       this.spawnTimer += clockTick;
+
       if (this.spawnTimer >= this.waves[0][0].delay) {
         if (DEBUG.wave) console.log("spawning enemy");
-        
-        this.gameEngine.addEntity(new Enemy(this.assetManager.getAsset(`./data/${this.waves[0].shift().enemy}.json`), this, this.gameEngine));
+
+        const enemyData = this.waves[0].shift();
+        this.gameEngine.addEntity(new Enemy(this.assetManager.getAsset(`./data/${enemyData.enemy}.json`), this, this.gameEngine));
         this.spawnTimer = 0;
         
         if (DEBUG.wave) console.log("waves left: " + this.waves[0].length);
@@ -69,12 +89,11 @@ class TowerDefenseMap {
         if (this.waves[0].length == 0) {
           // we've finished a wave
           this.waves.shift();
+          this.isSpawning = false;
+          this.waveInProgress = false;
           if (DEBUG.wave) console.log("wave done");
           if (DEBUG.wave) console.log(this.waves);
-          
-          // TODO: For now, this just starts the next wave after 5 seconds.
-          // for future, implement a "play" button and toggle `this.isSpawning` when necessary
-          this.isSpawning = false;
+
           this.removePortal();
         }
       }
@@ -136,6 +155,7 @@ class TowerDefenseMap {
   }
 
   handleClick(pos) {
+    // TODO: towers seem to be taking priority over the popup
     // convert pixel coordinates to cell coordinates
     const col = Math.floor(pos.x / CELL_SIZE);
     const row = Math.floor(pos.y / CELL_SIZE);
@@ -246,5 +266,24 @@ class TowerDefenseMap {
 
     this.portal.close();
     this.portal = null;
+  }
+  
+  generateWave() {
+    // generate a wave based on the total money the player has (towers and stored)
+    const totalValue = this.gameEngine.playerMoney + this.placedTowers.map((a) => a.getValue()).reduce((acc, val) => acc + val, 0);
+    const enemies = ENEMIES.map((a) => {
+      return {name: a, bounty: ASSET_MANAGER.getAsset("./data/" + a + ".json").bounty};
+    });
+    let wave = [];
+    // add enemies to the wave based on their bounty compared to the total value on the map
+    while (wave.map((a) => a.bounty).reduce((acc, val) => acc + val, 0) < totalValue * 0.15) {
+      wave.push(enemies[Math.floor(Math.random() * enemies.length)]);
+    }
+
+    if (DEBUG.wave) console.log("Value: ",totalValue, "\nEnemies:", enemies, "\nWave: ", wave, "\nWave value: ", wave.map((a) => a.bounty).reduce((acc, val) => acc + val, 0));
+    
+    return wave.map((a) => {
+      return {enemy: a.name, delay: Math.random() * 2 + 0.05};
+    });
   }
 }

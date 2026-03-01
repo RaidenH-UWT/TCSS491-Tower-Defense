@@ -18,7 +18,7 @@ class Attack {
     this.animation = animation;
     this.deathAnimation = deathAnimation;
     this.origin = origin;
-    this.targetMode = "weak";
+    this.targetMode = "close";
     this.targetingModes = {
       close: (arr) => arr.sort((a, b) => getDistance({x: a.x, y: a.y}, origin) - getDistance({x: b.x, y: b.y}, origin)),
       far: (arr) => arr.sort((a, b) => getDistance({x: b.x, y: b.y}, origin) - getDistance({x: a.x, y: a.y}, origin)),
@@ -98,6 +98,14 @@ class AttackEntity {
     // remove projectiles that fly past their targets
     if (getDistance(this, this.origin) > this.attack.range * CELL_SIZE * 1.5) {
       this.explode();
+    }
+    
+    // select a new target if ours is dead, or explode if there are no targets left
+    if (this.target == null || this.target == undefined || this.target.removeFromWorld) {
+      this.target = gameEngine.getEnemiesInRadius(this.x, this.y, this.attack.range * CELL_SIZE)[0];
+      if (this.target == null || this.target == undefined) {
+        this.explode();
+      }
     }
   }
   

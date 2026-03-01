@@ -8,6 +8,16 @@ class GameEngine {
         this.keys = {};
         this.options = options || { debugging: false };
 
+        // Game Speed
+        this.speedLevels = [0.5, 1, 2, 3];
+        this.currentSpeed = 1;
+        this.gameSpeed = this.speedLevels[this.currentSpeed];
+        this.speedButton = {
+            width: 90,
+            height: 40,
+            padding: 15
+        };
+
         // Screens
         this.winScreen = new WinScreen(this);
         this.loseScreen = new LoseScreen(this);
@@ -60,7 +70,19 @@ class GameEngine {
         gameLoop();
     }
 
-    startGame() {
+    startGame(mapFileName) {
+        if (mapFileName) {
+            const mapData = ASSET_MANAGER.getAsset(`./data/${mapFileName}`);
+            this.map = new TowerDefenseMap(mapData, ASSET_MANAGER, this);
+            
+            this.entities = [];
+            
+            this.baseHealth = 20;
+            this.playerMoney = 500;
+            this.enemyCount = 0;
+            this.selectedTower = null;
+        }
+
         this.state = "PLAYING";
         music.playMapMusic();
         this.gameOver = false;
@@ -91,7 +113,8 @@ class GameEngine {
                     this.isPaused = true;
                     return;
                 }
-                if (insideBox(this.click, {x: 1024 - 65, y: 768 - 65, width: 50, height: 50})) {
+                // next wave button
+                if (!this.entities.reduce((acc, val) => acc || val instanceof Enemy, false) && insideBox(this.click, {x: 1024 - 65, y: 768 - 65, width: 50, height: 50})) {
                     this.map.isSpawning = true;
                 }
             }
@@ -113,6 +136,7 @@ class GameEngine {
                             case "exit":
                                 this.isPaused = false;
                                 this.state = "MENU";
+                                this.menu.menuState = "MAIN";
                                 music.playMenuMusic();
                                 break;
                         }
@@ -121,6 +145,17 @@ class GameEngine {
                 }
             }
             if (this.isPaused) return;
+
+            if (this.state === "PLAYING" && !this.gameOver) {
+                if (insideBox(this.click, this.speedButton)) {
+                    this.currentSpeed++;
+                    if (this.currentSpeed >= this.speedLevels.length) {
+                        this.currentSpeed = 0;
+                    }
+                    this.gameSpeed = this.speedLevels[this.currentSpeed];
+                    return;
+                }
+            }
             
             if (insideBox(this.click, {x: 0, y: 768, width: 1024, height: 256})) {
                 this.hud.handleClick(this.click);
@@ -140,7 +175,17 @@ class GameEngine {
         this.ctx.canvas.addEventListener("keydown", e => {
             if (this.winScreen.handleInput(e.key)) return;
             if (this.loseScreen.handleInput(e.key)) return;
-            
+
+            // Shortcut for Toggle Next Wave: Cmd + P or Ctrl + P
+            if ((e.key === "p" || e.key === "P") && (e.metaKey || e.ctrlKey)) {
+                e.preventDefault();
+                if (this.state === "PLAYING" && !this.gameOver) {
+                    this.map.isSpawning = true;
+                    console.log("Next wave toggled via shortcut");
+                }
+                return;
+            }
+
             if ((e.key === "p" || e.key === "P") && this.state === "PLAYING" && !this.gameOver) {
                 this.isPaused = !this.isPaused;
                 return;
@@ -196,7 +241,10 @@ class GameEngine {
 
         // Always update HUD and screens so they draw even after gameOver
         this.hud.update(this.clockTick);
-        this.winScreen.update(this.clockTick);
+        if (!this.map.isEndless) {
+            // only win if we're not in endless mode
+            this.winScreen.update(this.clockTick);
+        }
         this.loseScreen.update(this.clockTick);
     }
 
@@ -233,6 +281,28 @@ class GameEngine {
             this.ctx.fillStyle = "white";
             this.ctx.fillRect(x + 15, y + 12, 6, 25);
             this.ctx.fillRect(x + 29, y + 12, 6, 25);
+        }
+
+        // draw speed button
+        if (this.state === "PLAYING" && !this.gameOver) {
+            const btn = this.speedButton;
+
+            const x = this.pauseButton.x - btn.width - 10;
+            const y = this.pauseButton.y;
+
+            btn.x = x;
+            btn.y = y;
+
+            this.ctx.fillStyle = "#222";
+            this.ctx.fillRect(x, y, btn.width, btn.height);
+
+            this.ctx.strokeStyle = "white";
+            this.ctx.strokeRect(x, y, btn.width, btn.height);
+
+            this.ctx.fillStyle = "white";
+            this.ctx.font = "16px Arial";
+            this.ctx.textAlign = "center";
+            this.ctx.fillText(`${this.gameSpeed}x`, x + btn.width / 2, y + 25);
         }
         
         // draw the next wave button
@@ -338,7 +408,7 @@ class GameEngine {
     }
 
     loop() {
-        this.clockTick = this.isPaused ? 0 : this.timer.tick();
+        this.clockTick = this.isPaused ? 0 : this.timer.tick() * this.gameSpeed;
         this.update();
         this.draw();
     }

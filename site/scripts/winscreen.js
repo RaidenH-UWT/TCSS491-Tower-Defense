@@ -150,7 +150,7 @@ class WinScreen {
         ctx.font = "24px Arial";
         ctx.fillStyle = "lightgray";
         ctx.textAlign = "center";
-        ctx.fillText("Press R to Restart", centerX, centerY + 80);
+        ctx.fillText("Press R to Restart or E to enter Endless Mode", centerX, centerY + 80);
         ctx.restore();
       }
     }
@@ -160,6 +160,11 @@ class WinScreen {
   
       if (key === "r" || key === "R") {
         this.restart();
+        return true;
+      } else if (key === "e" || key === "E") {
+        this.gameEngine.map.isEndless = true;
+        this.gameEngine.gameOver = false;
+        this.hide();
         return true;
       }
       return false;
