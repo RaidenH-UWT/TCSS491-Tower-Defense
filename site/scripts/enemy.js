@@ -105,7 +105,6 @@ class Enemy {
       return;
     }
     
-    // TODO: set this.atGoal = true when within range (this.attack.range) of the base, not when on top of it
     if (getDistance(this, cellToCoords(this.map.getGoalCell())) < this.attack.range * CELL_SIZE) {
         if (DEBUG.enemy) console.log("Enemy reached goal");
         this.atGoal = true;
