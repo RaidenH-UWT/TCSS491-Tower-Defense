@@ -33,9 +33,6 @@ class GameEngine {
         this.autoStartWaves = false;
         this.waitingForAutoWave = false;
 
-        // HUD
-        this.hud = new HUD(this);
-
         // Menu
         this.state = "MENU";
 
@@ -53,6 +50,7 @@ class GameEngine {
         this.map = map;
         this.startInput();
         this.timer = new Timer();
+        this.hud = new HUD(this);
 
         // Start music on first interaction
         const startMusicOnce = () => {

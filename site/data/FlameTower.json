@@ -1,0 +1,165 @@
+{
+    "name": "Flame Tower",
+    "upgrades": [
+        {
+            "description": "Fires very quickly",
+            "cost": 300,
+            "attack": {
+                "animation": {
+                    "spritesheet": "fireball.png",
+                    "xStart": 0,
+                    "yStart": 0,
+                    "width": 32,
+                    "height": 32,
+                    "frameCount": 6,
+                    "frameDuration": 0.2,
+                    "framePadding": 0,
+                    "reverse": false,
+                    "loop": true
+                },
+                "damage": 0.5,
+                "range": 2,
+                "area": 0,
+                "triggerRange": 0.25,
+                "rate": 4,
+                "speed": 7,
+                "homing": false,
+                "team": "defend"
+            },
+            "animations": {
+                "idle": {
+                    "spritesheet": "flame_tower.png",
+                    "xStart": 0,
+                    "yStart": 0,
+                    "width": 64,
+                    "height": 64,
+                    "frameCount": 10,
+                    "frameDuration": 0.1,
+                    "framePadding": 0,
+                    "reverse": false,
+                    "loop": true,
+                    "loopStart": 4
+                },
+                "attack": {
+                    "spritesheet": "flame_tower.png",
+                    "xStart": 0,
+                    "yStart": 0,
+                    "width": 64,
+                    "height": 64,
+                    "frameCount": 10,
+                    "frameDuration": 0.1,
+                    "framePadding": 0,
+                    "reverse": false,
+                    "loop": false
+                }
+            }
+        },
+        {
+            "description": "Fires even faster",
+            "cost": 250,
+            "attack": {
+                "animation": {
+                    "spritesheet": "fireball.png",
+                    "xStart": 0,
+                    "yStart": 0,
+                    "width": 32,
+                    "height": 32,
+                    "frameCount": 6,
+                    "frameDuration": 0.2,
+                    "framePadding": 0,
+                    "reverse": false,
+                    "loop": true
+                },
+                "damage": 0.5,
+                "range": 2,
+                "area": 0,
+                "triggerRange": 0.25,
+                "rate": 6,
+                "speed": 8,
+                "homing": false,
+                "team": "defend"
+            },
+            "animations": {
+                "idle": {
+                    "spritesheet": "flame_tower.png",
+                    "xStart": 0,
+                    "yStart": 0,
+                    "width": 64,
+                    "height": 64,
+                    "frameCount": 10,
+                    "frameDuration": 0.1,
+                    "framePadding": 0,
+                    "reverse": false,
+                    "loop": true,
+                    "loopStart": 4
+                },
+                "attack": {
+                    "spritesheet": "flame_tower.png",
+                    "xStart": 0,
+                    "yStart": 0,
+                    "width": 64,
+                    "height": 64,
+                    "frameCount": 10,
+                    "frameDuration": 0.1,
+                    "framePadding": 0,
+                    "reverse": false,
+                    "loop": false
+                }
+            }
+        },
+        {
+            "description": "Increases range",
+            "cost": 250,
+            "attack": {
+                "animation": {
+                    "spritesheet": "fireball.png",
+                    "xStart": 0,
+                    "yStart": 0,
+                    "width": 32,
+                    "height": 32,
+                    "frameCount": 6,
+                    "frameDuration": 0.2,
+                    "framePadding": 0,
+                    "reverse": false,
+                    "loop": true
+                },
+                "damage": 0.5,
+                "range": 3,
+                "area": 0,
+                "triggerRange": 0.25,
+                "rate": 6,
+                "speed": 8,
+                "homing": false,
+                "team": "defend"
+            },
+            "animations": {
+                "idle": {
+                    "spritesheet": "flame_tower.png",
+                    "xStart": 0,
+                    "yStart": 0,
+                    "width": 64,
+                    "height": 64,
+                    "frameCount": 10,
+                    "frameDuration": 0.1,
+                    "framePadding": 0,
+                    "reverse": false,
+                    "loop": true,
+                    "loopStart": 4
+                },
+                "attack": {
+                    "spritesheet": "flame_tower.png",
+                    "xStart": 0,
+                    "yStart": 0,
+                    "width": 64,
+                    "height": 64,
+                    "frameCount": 10,
+                    "frameDuration": 0.1,
+                    "framePadding": 0,
+                    "reverse": false,
+                    "loop": false
+                }
+            }
+        }
+        
+    ]
+}

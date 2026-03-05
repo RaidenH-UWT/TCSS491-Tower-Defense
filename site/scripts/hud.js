@@ -6,15 +6,19 @@ class HUD {
         this.towers = [
             {
                 name: "ArrowTower",
-                dataFile: "./data/ArrowTower.json"
+                dataFile: ASSET_MANAGER.getAsset("./data/ArrowTower.json")
             },
             {
                 name: "BombTower",
-                dataFile: "./data/BombTower.json"
+                dataFile: ASSET_MANAGER.getAsset("./data/BombTower.json")
             },
             {
                 name: "MagicTower",
-                dataFile: "./data/MagicTower.json"
+                dataFile: ASSET_MANAGER.getAsset("./data/MagicTower.json")
+            },
+            {
+                name: "FlameTower",
+                dataFile: ASSET_MANAGER.getAsset("./data/FlameTower.json")
             }
         ];
         this.towerButtons = [];
@@ -63,7 +67,7 @@ class HUD {
 
         this.towerButtons = [];
 
-        const buttonWidth = 180;
+        const buttonWidth = 200;
         const buttonHeight = 65;
         const spacing = 50;
         const startX = 40;
@@ -73,7 +77,7 @@ class HUD {
 
         for (let i = 0; i < this.towers.length; i++) {
             const tower = this.towers[i];
-            const towerData = ASSET_MANAGER.getAsset(tower.dataFile);
+            const towerData = tower.dataFile;
             if (!towerData?.upgrades?.[0]) continue;
             const cost = towerData.upgrades[0].cost;
             const x = startX + i * (buttonWidth + spacing);
