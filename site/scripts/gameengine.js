@@ -196,7 +196,7 @@ class GameEngine {
             // Press N to manually start next wave
             if (e.key === "n" || e.key === "N") {
                 if (this.state === "PLAYING" && !this.gameOver) {
-                    if (!this.map.waveInProgress) {
+                    if (!this.entities.reduce((acc, val) => acc || val instanceof Enemy, false)) {
                         this.map.isSpawning = true;
                     }
                 }

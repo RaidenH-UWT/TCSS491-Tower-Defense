@@ -170,12 +170,12 @@ class TowerDefenseMap {
     
     const cellType = this.cells[row][col];
     
-    if (this.placedTowers.filter((a) => insideBox(pos, {x: a.x - CELL_SIZE / 2, y: a.y - CELL_SIZE / 2, width: 64, height: 64})).length > 0) {
+    if (insideBox(pos, this.popup)) {
+      this.popup.handleClick(pos);
+    } else if (this.placedTowers.filter((a) => insideBox(pos, {x: a.x - CELL_SIZE / 2, y: a.y - CELL_SIZE / 2, width: 64, height: 64})).length > 0) {
       // There's already a tower in that position
       const tower = this.placedTowers.filter((a) => insideBox(pos, {x: a.x - CELL_SIZE / 2, y: a.y - CELL_SIZE / 2, width: 64, height: 64}))[0]
       this.popup = new Popup(tower);
-    } else if (insideBox(pos, this.popup)) {
-      this.popup.handleClick(pos);
     } else {
       this.popup = null;
       // No tower selected → do nothing
