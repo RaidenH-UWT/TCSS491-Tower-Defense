@@ -267,9 +267,10 @@ class TowerDefenseMap {
     this.portal.close();
     this.portal = null;
   }
-  
+  /**
+   * Randomly generate and add a wave of enemies, based on the total money the player has collected
+   */
   generateWave() {
-    // generate a wave based on the total money the player has (towers and stored)
     const totalValue = this.gameEngine.playerMoney + this.placedTowers.map((a) => a.getValue()).reduce((acc, val) => acc + val, 0);
     const enemies = ENEMIES.map((a) => {
       return {name: a, bounty: ASSET_MANAGER.getAsset("./data/" + a + ".json").bounty};
@@ -277,13 +278,14 @@ class TowerDefenseMap {
     let wave = [];
     // add enemies to the wave based on their bounty compared to the total value on the map
     while (wave.map((a) => a.bounty).reduce((acc, val) => acc + val, 0) < totalValue * 0.15) {
-      wave.push(enemies[Math.floor(Math.random() * enemies.length)]);
+      // weight towards smaller enemies
+      wave.push(enemies[Math.floor(Math.sqrt(Math.random()) * enemies.length)]);
     }
 
     if (DEBUG.wave) console.log("Value: ",totalValue, "\nEnemies:", enemies, "\nWave: ", wave, "\nWave value: ", wave.map((a) => a.bounty).reduce((acc, val) => acc + val, 0));
     
     return wave.map((a) => {
-      return {enemy: a.name, delay: Math.random() * 2 + 0.05};
+      return {enemy: a.name, delay: Math.pow(Math.random() * 2 / Math.min(this.currentWave - 10, 5) + 0.025, 3)};
     });
   }
 }

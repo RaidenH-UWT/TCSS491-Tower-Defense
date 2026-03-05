@@ -103,7 +103,7 @@ class HUD {
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
             ctx.fillText(
-                `[${i + 1}] ${tower.name} ($${cost})`,
+                `[${i + 1}] ${towerData.name} ($${cost})`,
                 btn.x + buttonWidth / 2,
                 btn.y + buttonHeight / 2
             );
