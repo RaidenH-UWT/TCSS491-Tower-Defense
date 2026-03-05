@@ -29,6 +29,10 @@ class GameEngine {
         this.enemyCount = 0;
         this.selectedTower = null;
 
+        // Auto Wave
+        this.autoStartWaves = false;
+        this.waitingForAutoWave = false;
+
         // HUD
         this.hud = new HUD(this);
 
@@ -191,9 +195,29 @@ class GameEngine {
                 return;
             }
             
+            // Press N to manually start next wave
+            if (e.key === "n" || e.key === "N") {
+                if (this.state === "PLAYING" && !this.gameOver) {
+                    if (!this.map.waveInProgress) {
+                        this.map.isSpawning = true;
+                    }
+                }
+                return;
+            }
+
+            // Press M to toggle auto waves
+            if (e.key === "m" || e.key === "M") {
+                if (this.state === "PLAYING" && !this.gameOver) {
+                    this.autoStartWaves = !this.autoStartWaves;
+                    console.log("Auto Waves:", this.autoStartWaves ? "ON" : "OFF");
+                }
+                return;
+            }
+
             this.keys[e.key] = true;
             if (DEBUG.io) console.log("KEY DOWN: ", e,key);
         });
+
         this.ctx.canvas.addEventListener("keyup", e => {
             this.keys[e.key] = false;
             if (DEBUG.io) console.log("KEY UP: ", e,key);
@@ -226,6 +250,22 @@ class GameEngine {
                         this.enemyCount--;
                     }
                     this.entities.splice(i, 1);
+                }
+            }
+
+            // Auto Wave Logic
+            if (this.state === "PLAYING" && !this.gameOver) {
+                const noEnemiesAlive = !this.entities.some(e => e instanceof Enemy);
+                // Wave finished spawning AND no enemies left
+                if (!this.map.waveInProgress && !this.map.isSpawning && noEnemiesAlive) {
+                    this.waitingForAutoWave = true;
+                }
+
+                if (this.autoStartWaves && this.waitingForAutoWave) {
+                    if (this.map.waves.length > 0 || this.map.isEndless) {
+                        this.map.isSpawning = true;
+                        this.waitingForAutoWave = false;
+                    }
                 }
             }
 
@@ -316,6 +356,15 @@ class GameEngine {
         this.ctx.lineTo(1024 - 60, 768 - 20);
         this.ctx.lineTo(1024 - 20, 768 - 40);
         this.ctx.fill();
+
+        this.ctx.fillStyle = "white";
+        this.ctx.font = "16px Arial";
+        this.ctx.textAlign = "left";
+        this.ctx.fillText(
+            `Auto Waves: ${this.autoStartWaves ? "ON" : "OFF"} (M)`,
+            20,
+            30
+        );
 
         this.hud.draw(this.ctx);
         this.winScreen.draw(this.ctx);
