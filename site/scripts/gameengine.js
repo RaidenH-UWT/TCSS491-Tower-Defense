@@ -206,6 +206,18 @@ class GameEngine {
                 return;
             }
 
+            // Press F to change game speed
+            if (e.key === "f" || e.key === "F") {
+                if (this.state === "PLAYING" && !this.gameOver) {
+                    this.currentSpeed++;
+                    if (this.currentSpeed >= this.speedLevels.length) {
+                        this.currentSpeed = 0;
+                    }
+                    this.gameSpeed = this.speedLevels[this.currentSpeed];
+                }
+                return;
+            }
+
             this.keys[e.key] = true;
             if (DEBUG.io) console.log("KEY DOWN: ", e,key);
         });
