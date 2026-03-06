@@ -450,17 +450,6 @@ class GameEngine {
         this.draw();
     }
     
-    upgradeTower(x, y) {
-        for (let tower of this.map.placedTowers) {
-            if (Math.floor(tower.x / CELL_SIZE) == x && Math.floor(tower.y / CELL_SIZE) == y) {
-                // TODO: replace "1" with a value from the user, via the UI
-                tower.upgrade("1");
-            }
-        }
-        
-        this.hud.update();
-    }
-    
     /**
      * @param x coordinate in pixels of the center of the circle
      * @param y coordinate in pixels of the center of the circle

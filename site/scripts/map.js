@@ -155,7 +155,6 @@ class TowerDefenseMap {
   }
 
   handleClick(pos) {
-    // TODO: towers seem to be taking priority over the popup
     // convert pixel coordinates to cell coordinates
     const col = Math.floor(pos.x / CELL_SIZE);
     const row = Math.floor(pos.y / CELL_SIZE);
@@ -206,7 +205,6 @@ class TowerDefenseMap {
         this.placedTowers.push(tower);
         if (DEBUG.io) console.log("Tower placed. Cost: ", cost, "Money left: ", this.gameEngine.playerMoney);
         
-        // TODO: maybe remove this bit, and let the user toggle it off if they'd like?
         // Clear selection after placing
         this.gameEngine.selectedTower = null;
       }
