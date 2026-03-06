@@ -178,18 +178,13 @@ class GameEngine {
             if (this.winScreen.handleInput(e.key)) return;
             if (this.loseScreen.handleInput(e.key)) return;
 
-            // Shortcut for Toggle Next Wave: Cmd + P or Ctrl + P
-            if ((e.key === "p" || e.key === "P") && (e.metaKey || e.ctrlKey)) {
-                e.preventDefault();
-                if (this.state === "PLAYING" && !this.gameOver) {
-                    this.map.isSpawning = true;
-                    console.log("Next wave toggled via shortcut");
-                }
+            if ((e.key === "p" || e.key === "P") && this.state === "PLAYING" && !this.gameOver) {
+                this.isPaused = !this.isPaused;
                 return;
             }
 
-            if ((e.key === "p" || e.key === "P") && this.state === "PLAYING" && !this.gameOver) {
-                this.isPaused = !this.isPaused;
+            if ((e.key === "z" || e.key === "Z") && this.state === "PLAYING" && !this.gameOver) {
+                music.toggle();;
                 return;
             }
             

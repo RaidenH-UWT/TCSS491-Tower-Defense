@@ -88,7 +88,7 @@ class mainMenu {
             
             // Easy Mode
             if (this.isInside(pos, this.easyBtn)) {
-                this.game.startGame("test_map.json");
+                this.game.startGame("map_easy.json");
             }
             
             // Medium Mode
