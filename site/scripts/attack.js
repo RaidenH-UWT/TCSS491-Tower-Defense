@@ -45,8 +45,8 @@ class AttackEntity {
     this.x = this.origin.x;
     this.y = this.origin.y;
     this.velocity = {
-      x: (this.target.x - this.x) / getDistance(this, this.target) * (this.attack.speed * CELL_SIZE),
-      y: (this.target.y - this.y) / getDistance(this, this.target) * (this.attack.speed * CELL_SIZE)
+      x: (this.target.x - (this.x + this.animation.width / 2)) / getDistance(this, this.target) * (this.attack.speed * CELL_SIZE),
+      y: (this.target.y - (this.y + this.animation.height / 2)) / getDistance(this, this.target) * (this.attack.speed * CELL_SIZE)
     };
     this.homing = attack.homing;
     this.removeFromWorld = false;
@@ -54,11 +54,11 @@ class AttackEntity {
   }
   
   explode() {
-    const targets = this.attack.team == "attack" ? [this.target] : gameEngine.getEnemiesInRadius(this.x, this.y, this.attack.area * CELL_SIZE + 16);
+    const targets = this.attack.team == "attack" ? [this.target] : gameEngine.getEnemiesInRadius(this.x + this.animation.width / 2, this.y + this.animation.height / 2, this.attack.area * CELL_SIZE + this.attack.triggerRange * CELL_SIZE);
     if (targets.length > 0 && this.attack.area == 0) {
       targets[0].takeDamage(this.attack.damage);
     } else if (targets.length > 0) {
-      for (let target of targets.filter((a) => getDistance(this, a) <= this.attack.area * CELL_SIZE)) {
+      for (let target of targets.filter((a) => getDistance({x: this.x + this.animation.width / 2, y: this.y + this.animation.height / 2}, a) <= this.attack.area * CELL_SIZE + this.attack.triggerRange * CELL_SIZE)) {
         target.takeDamage(this.attack.damage);
       }
     }
@@ -80,13 +80,13 @@ class AttackEntity {
     // track the target if a homing projectile
     if (this.homing) {
       this.velocity = {
-        x: (this.target.x - this.x) / getDistance(this, this.target) * (this.attack.speed * CELL_SIZE),
-        y: (this.target.y - this.y) / getDistance(this, this.target) * (this.attack.speed * CELL_SIZE)
+        x: (this.target.x - (this.x + this.animation.width / 2)) / getDistance(this, this.target) * (this.attack.speed * CELL_SIZE),
+        y: (this.target.y - (this.y + this.animation.height / 2)) / getDistance(this, this.target) * (this.attack.speed * CELL_SIZE)
       };
     }
     
     if (this.attack.team == "defend") {
-      if (gameEngine.getEnemiesInRadius(this.x, this.y, this.attack.triggerRange * CELL_SIZE).length > 0) {
+      if (gameEngine.getEnemiesInRadius(this.x + this.animation.width / 2, this.y + this.animation.height / 2, this.attack.triggerRange * CELL_SIZE).length > 0) {
         this.explode();
       }
     } else if (this.attack.team == "attack") {

@@ -30,19 +30,19 @@
     "speed": 3,
     "attack": {
         "animation": {
-            "spritesheet": "arrow.png",
+            "spritesheet": "fireball.png",
             "xStart": 0,
             "yStart": 0,
             "width": 32,
             "height": 32,
-            "frameCount": 1,
+            "frameCount": 6,
             "frameDuration": 0.2,
             "framePadding": 0,
             "reverse": false,
             "loop": true
         },
-        "damage": 2,
-        "range": 1,
+        "damage": 1,
+        "range": 2,
         "area": 0,
         "rate": 1,
         "speed": 5,
