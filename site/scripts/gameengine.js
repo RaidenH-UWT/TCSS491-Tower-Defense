@@ -207,7 +207,6 @@ class GameEngine {
             if (e.key === "m" || e.key === "M") {
                 if (this.state === "PLAYING" && !this.gameOver) {
                     this.autoStartWaves = !this.autoStartWaves;
-                    console.log("Auto Waves:", this.autoStartWaves ? "ON" : "OFF");
                 }
                 return;
             }
@@ -354,15 +353,6 @@ class GameEngine {
         this.ctx.lineTo(1024 - 60, 768 - 20);
         this.ctx.lineTo(1024 - 20, 768 - 40);
         this.ctx.fill();
-
-        this.ctx.fillStyle = "white";
-        this.ctx.font = "16px Arial";
-        this.ctx.textAlign = "left";
-        this.ctx.fillText(
-            `Auto Waves: ${this.autoStartWaves ? "ON" : "OFF"} (M)`,
-            20,
-            30
-        );
 
         this.hud.draw(this.ctx);
         this.winScreen.draw(this.ctx);
