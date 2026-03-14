@@ -41,6 +41,7 @@ ASSET_MANAGER.queueDownload("./assets/startButton.png");
 ASSET_MANAGER.queueDownload("./assets/aboutButton.png");
 ASSET_MANAGER.queueDownload("./assets/map_bg_easy.png");
 ASSET_MANAGER.queueDownload("./assets/map_bg_medium.png");
+ASSET_MANAGER.queueDownload("./assets/map_bg_hard.png");
 
 // queue up all the data assets
 ASSET_MANAGER.queueDownload("./data/ArrowTower.json");
@@ -52,6 +53,7 @@ ASSET_MANAGER.queueDownload("./data/FastEnemy.json");
 ASSET_MANAGER.queueDownload("./data/BasicEnemy.json");
 ASSET_MANAGER.queueDownload("./data/map_easy.json");
 ASSET_MANAGER.queueDownload("./data/map_medium.json");
+ASSET_MANAGER.queueDownload("./data/map_hard.json");
 
 ASSET_MANAGER.downloadAll(() => {
 	const canvas = document.getElementById("gameCanvas");
