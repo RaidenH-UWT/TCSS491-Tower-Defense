@@ -83,7 +83,7 @@
                 "idle": {
                     "spritesheet": "flame_tower.png",
                     "xStart": 0,
-                    "yStart": 0,
+                    "yStart": 64,
                     "width": 64,
                     "height": 64,
                     "frameCount": 10,
@@ -96,7 +96,7 @@
                 "attack": {
                     "spritesheet": "flame_tower.png",
                     "xStart": 0,
-                    "yStart": 0,
+                    "yStart": 64,
                     "width": 64,
                     "height": 64,
                     "frameCount": 10,
@@ -136,7 +136,7 @@
                 "idle": {
                     "spritesheet": "flame_tower.png",
                     "xStart": 0,
-                    "yStart": 0,
+                    "yStart": 128,
                     "width": 64,
                     "height": 64,
                     "frameCount": 10,
@@ -149,7 +149,7 @@
                 "attack": {
                     "spritesheet": "flame_tower.png",
                     "xStart": 0,
-                    "yStart": 0,
+                    "yStart": 128,
                     "width": 64,
                     "height": 64,
                     "frameCount": 10,
