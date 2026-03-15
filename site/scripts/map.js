@@ -137,6 +137,83 @@ class TowerDefenseMap {
     if (this.portal) {
       this.portal.draw(ctx);
     }
+    this.drawTowerPreview(ctx);
+  }
+
+  drawTowerPreview(ctx) {
+    if (!this.gameEngine.selectedTower) return;
+
+    const mouseX = this.gameEngine.mouse.x;
+    const mouseY = this.gameEngine.mouse.y;
+
+    if (mouseY > 512) return;
+
+    const col = Math.floor(mouseX / CELL_SIZE);
+    const row = Math.floor(mouseY / CELL_SIZE);
+
+    if (row < 0 || row >= this.rows || col < 0 || col >= this.cols) return;
+
+    const cellType = this.cells[row][col];
+
+    const towerX = col * CELL_SIZE + CELL_SIZE / 2;
+    const towerY = row * CELL_SIZE + CELL_SIZE / 2;
+
+    const isValidPlacement = cellType === "B" && 
+      !this.placedTowers.some(t => insideBox({x: towerX, y: towerY}, 
+        {x: t.x - CELL_SIZE / 2, y: t.y - CELL_SIZE / 2, width: 64, height: 64}));
+
+    // Get tower data to display sprite
+    const towerData = ASSET_MANAGER.getAsset(`./data/${this.gameEngine.selectedTower}.json`);
+    if (!towerData || !towerData.upgrades?.[0]) return;
+
+    const upgradeData = towerData.upgrades[0];
+    const animConfig = upgradeData.animations.idle;
+    const attackData = upgradeData.attack;
+
+    if (!animConfig) return;
+
+    // Create a temporary animator for the preview
+    const previewAnim = new Animator(
+      ASSET_MANAGER.getAsset("./assets/" + animConfig.spritesheet),
+      animConfig.xStart, animConfig.yStart, animConfig.width, animConfig.height,
+      animConfig.frameCount, animConfig.frameDuration, animConfig.framePadding,
+      animConfig.reverse, animConfig.loop, animConfig.rotation, animConfig.loopStart, animConfig.loopEnd
+    );
+
+    ctx.save();
+    
+    ctx.strokeStyle = "rgba(235, 13, 13, 0.3)";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(towerX, towerY, attackData.range * CELL_SIZE, 0, Math.PI * 2);
+    ctx.stroke();
+    
+    // Set opacity based on validity
+    if (isValidPlacement) {
+      ctx.globalAlpha = 0.6;
+    } else {
+      ctx.globalAlpha = 0.3;
+    }
+
+    // Draw the tower sprite preview
+    previewAnim.drawFrame(
+      this.gameEngine.clockTick,
+      ctx,
+      towerX - CELL_SIZE / 2,
+      towerY - CELL_SIZE / 2,
+      1 // scale
+    );
+
+    if (!isValidPlacement) {
+      ctx.globalAlpha = 0.7;
+      ctx.strokeStyle = "rgba(255, 100, 100, 1)"; // Red for invalid
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(towerX, towerY, CELL_SIZE / 2, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    ctx.restore();
   }
 
   drawCell(ctx, row, col, design, isSprite) {
@@ -155,7 +232,6 @@ class TowerDefenseMap {
   }
 
   handleClick(pos) {
-    // TODO: towers seem to be taking priority over the popup
     // convert pixel coordinates to cell coordinates
     const col = Math.floor(pos.x / CELL_SIZE);
     const row = Math.floor(pos.y / CELL_SIZE);
@@ -206,7 +282,6 @@ class TowerDefenseMap {
         this.placedTowers.push(tower);
         if (DEBUG.io) console.log("Tower placed. Cost: ", cost, "Money left: ", this.gameEngine.playerMoney);
         
-        // TODO: maybe remove this bit, and let the user toggle it off if they'd like?
         // Clear selection after placing
         this.gameEngine.selectedTower = null;
       }

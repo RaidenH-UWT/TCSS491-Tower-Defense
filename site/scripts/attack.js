@@ -67,11 +67,7 @@ class AttackEntity {
     }
     this.removeFromWorld = true;
   }
-  // TODO: the projectiles look like they're targeting the bottom-right corner of enemies
-  // this makes it difficult to tune the explosion call radius in a way that looks good
-  // at every angle. see if you can target the center of enemies instead
-  // this may also be because we're targeting based on the projectile x/y, which is the top-left
-  // corner. so when that corner reaches the center of enemies that's when it triggers.
+
   update(clockTick) {
     this.clockTick = clockTick;
     this.x += this.velocity.x * clockTick;

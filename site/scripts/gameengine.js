@@ -178,18 +178,13 @@ class GameEngine {
             if (this.winScreen.handleInput(e.key)) return;
             if (this.loseScreen.handleInput(e.key)) return;
 
-            // Shortcut for Toggle Next Wave: Cmd + P or Ctrl + P
-            if ((e.key === "p" || e.key === "P") && (e.metaKey || e.ctrlKey)) {
-                e.preventDefault();
-                if (this.state === "PLAYING" && !this.gameOver) {
-                    this.map.isSpawning = true;
-                    console.log("Next wave toggled via shortcut");
-                }
+            if ((e.key === "p" || e.key === "P") && this.state === "PLAYING" && !this.gameOver) {
+                this.isPaused = !this.isPaused;
                 return;
             }
 
-            if ((e.key === "p" || e.key === "P") && this.state === "PLAYING" && !this.gameOver) {
-                this.isPaused = !this.isPaused;
+            if ((e.key === "z" || e.key === "Z") && this.state === "PLAYING" && !this.gameOver) {
+                music.toggle();;
                 return;
             }
             
@@ -207,6 +202,18 @@ class GameEngine {
             if (e.key === "m" || e.key === "M") {
                 if (this.state === "PLAYING" && !this.gameOver) {
                     this.autoStartWaves = !this.autoStartWaves;
+                }
+                return;
+            }
+
+            // Press F to change game speed
+            if (e.key === "f" || e.key === "F") {
+                if (this.state === "PLAYING" && !this.gameOver) {
+                    this.currentSpeed++;
+                    if (this.currentSpeed >= this.speedLevels.length) {
+                        this.currentSpeed = 0;
+                    }
+                    this.gameSpeed = this.speedLevels[this.currentSpeed];
                 }
                 return;
             }
@@ -448,17 +455,6 @@ class GameEngine {
         this.clockTick = this.isPaused ? 0 : this.timer.tick() * this.gameSpeed;
         this.update();
         this.draw();
-    }
-    
-    upgradeTower(x, y) {
-        for (let tower of this.map.placedTowers) {
-            if (Math.floor(tower.x / CELL_SIZE) == x && Math.floor(tower.y / CELL_SIZE) == y) {
-                // TODO: replace "1" with a value from the user, via the UI
-                tower.upgrade("1");
-            }
-        }
-        
-        this.hud.update();
     }
     
     /**

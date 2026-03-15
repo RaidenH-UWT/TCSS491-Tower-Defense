@@ -110,7 +110,7 @@
                 "idle": {
                     "spritesheet": "bomb_tower.png",
                     "xStart": 0,
-                    "yStart": 0,
+                    "yStart": 64,
                     "width": 64,
                     "height": 64,
                     "frameCount": 3,
@@ -124,7 +124,7 @@
                 "attack": {
                     "spritesheet": "bomb_tower.png",
                     "xStart": 0,
-                    "yStart": 0,
+                    "yStart": 64,
                     "width": 64,
                     "height": 64,
                     "frameCount": 3,
@@ -178,7 +178,7 @@
                 "idle": {
                     "spritesheet": "bomb_tower.png",
                     "xStart": 0,
-                    "yStart": 0,
+                    "yStart": 128,
                     "width": 64,
                     "height": 64,
                     "frameCount": 3,
@@ -192,7 +192,7 @@
                 "attack": {
                     "spritesheet": "bomb_tower.png",
                     "xStart": 0,
-                    "yStart": 0,
+                    "yStart": 128,
                     "width": 64,
                     "height": 64,
                     "frameCount": 3,

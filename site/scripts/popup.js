@@ -103,7 +103,7 @@ class Popup {
             if (gameEngine.spendMoney(this.tower.upgrades[this.tower.currentLevel + 1].cost)) {
                 this.tower.upgrade(this.tower.currentLevel + 1);
             }
-        } else if (!this.tower.removeFromWorld && insideBox(pos, {x: this.x + 8, y: this.y + this.height - 32, width: 80, height: 24})) {
+        } else if (!this.tower.removeFromWorld && insideBox(pos, {x: this.x + 8, y: this.y + this.height - 32, width: 130, height: 24})) {
             gameEngine.addMoney(Math.round(this.tower.getValue() * 0.75));
             this.tower.removeFromWorld = true;
             this.removeFromWorld = true;

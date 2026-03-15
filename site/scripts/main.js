@@ -14,7 +14,7 @@ const DEBUG = {
 const gameEngine = new GameEngine();
 const ASSET_MANAGER = new AssetManager();
 const music = new MusicManager();
-const MAPS = ["test_map.json"];
+const MAPS = ["map_easy.json"];
 const ENEMIES = ["BossEnemy", "FastEnemy", "BasicEnemy"];
 
 const DEBUG_ELEMENTS = document.getElementsByClassName("debug");
@@ -41,6 +41,7 @@ ASSET_MANAGER.queueDownload("./assets/startButton.png");
 ASSET_MANAGER.queueDownload("./assets/aboutButton.png");
 ASSET_MANAGER.queueDownload("./assets/map_bg_easy.png");
 ASSET_MANAGER.queueDownload("./assets/map_bg_medium.png");
+ASSET_MANAGER.queueDownload("./assets/map_bg_hard.png");
 
 // queue up all the data assets
 ASSET_MANAGER.queueDownload("./data/ArrowTower.json");
@@ -50,13 +51,14 @@ ASSET_MANAGER.queueDownload("./data/FlameTower.json");
 ASSET_MANAGER.queueDownload("./data/BossEnemy.json");
 ASSET_MANAGER.queueDownload("./data/FastEnemy.json");
 ASSET_MANAGER.queueDownload("./data/BasicEnemy.json");
-ASSET_MANAGER.queueDownload("./data/test_map.json");
+ASSET_MANAGER.queueDownload("./data/map_easy.json");
 ASSET_MANAGER.queueDownload("./data/map_medium.json");
+ASSET_MANAGER.queueDownload("./data/map_hard.json");
 
 ASSET_MANAGER.downloadAll(() => {
 	const canvas = document.getElementById("gameCanvas");
 	const ctx = canvas.getContext("2d");
-	const defaultMapData = ASSET_MANAGER.getAsset(`./data/test_map.json`);
+	const defaultMapData = ASSET_MANAGER.getAsset(`./data/map_easy.json`);
     const defaultMap = new TowerDefenseMap(defaultMapData, ASSET_MANAGER, gameEngine);
 
 	gameEngine.init(ctx, defaultMap);
