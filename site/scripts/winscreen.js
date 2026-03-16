@@ -163,6 +163,9 @@ class WinScreen {
         return true;
       } else if (key === "e" || key === "E") {
         this.gameEngine.map.isEndless = true;
+        this.gameEngine.map.wavesCompleted = 0;  // ← add this
+    this.gameEngine.map.totalWaves = 0;  
+        this.gameEngine.map.isSpawning = true; 
         this.gameEngine.gameOver = false;
         this.hide();
         return true;

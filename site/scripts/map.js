@@ -34,8 +34,9 @@ class TowerDefenseMap {
     this.waves = json.waves;
     this.totalWaves = json.waves.length;
     this.currentWave = 0;
+    this.wavesCompleted = 0;              // FIX 1: track completed waves separately
     this.waveInProgress = false;
-    this.isEndless = false;
+    this.isEndless = json.isEndless ?? false; // FIX 2: read from JSON instead of hardcoding false
   }
 
   update(clockTick) {
@@ -89,6 +90,7 @@ class TowerDefenseMap {
         if (this.waves[0].length == 0) {
           // we've finished a wave
           this.waves.shift();
+          this.wavesCompleted++;          // FIX 3: increment completed counter
           this.isSpawning = false;
           this.waveInProgress = false;
           if (DEBUG.wave) console.log("wave done");
@@ -146,7 +148,7 @@ class TowerDefenseMap {
     const mouseX = this.gameEngine.mouse.x;
     const mouseY = this.gameEngine.mouse.y;
 
-    if (mouseY > 512) return;
+    if (mouseY > this.rows * CELL_SIZE) return;
 
     const col = Math.floor(mouseX / CELL_SIZE);
     const row = Math.floor(mouseY / CELL_SIZE);
@@ -162,7 +164,6 @@ class TowerDefenseMap {
       !this.placedTowers.some(t => insideBox({x: towerX, y: towerY}, 
         {x: t.x - CELL_SIZE / 2, y: t.y - CELL_SIZE / 2, width: 64, height: 64}));
 
-    // Get tower data to display sprite
     const towerData = ASSET_MANAGER.getAsset(`./data/${this.gameEngine.selectedTower}.json`);
     if (!towerData || !towerData.upgrades?.[0]) return;
 
@@ -172,7 +173,6 @@ class TowerDefenseMap {
 
     if (!animConfig) return;
 
-    // Create a temporary animator for the preview
     const previewAnim = new Animator(
       ASSET_MANAGER.getAsset("./assets/" + animConfig.spritesheet),
       animConfig.xStart, animConfig.yStart, animConfig.width, animConfig.height,
@@ -188,25 +188,23 @@ class TowerDefenseMap {
     ctx.arc(towerX, towerY, attackData.range * CELL_SIZE, 0, Math.PI * 2);
     ctx.stroke();
     
-    // Set opacity based on validity
     if (isValidPlacement) {
       ctx.globalAlpha = 0.6;
     } else {
       ctx.globalAlpha = 0.3;
     }
 
-    // Draw the tower sprite preview
     previewAnim.drawFrame(
       this.gameEngine.clockTick,
       ctx,
       towerX - CELL_SIZE / 2,
       towerY - CELL_SIZE / 2,
-      1 // scale
+      1
     );
 
     if (!isValidPlacement) {
       ctx.globalAlpha = 0.7;
-      ctx.strokeStyle = "rgba(255, 100, 100, 1)"; // Red for invalid
+      ctx.strokeStyle = "rgba(255, 100, 100, 1)";
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.arc(towerX, towerY, CELL_SIZE / 2, 0, Math.PI * 2);
@@ -232,11 +230,9 @@ class TowerDefenseMap {
   }
 
   handleClick(pos) {
-    // convert pixel coordinates to cell coordinates
     const col = Math.floor(pos.x / CELL_SIZE);
     const row = Math.floor(pos.y / CELL_SIZE);
     
-    // error checking for out of bounds coordinates
     if (
       row < 0 ||
       row >= this.rows ||
@@ -249,40 +245,31 @@ class TowerDefenseMap {
     if (insideBox(pos, this.popup)) {
       this.popup.handleClick(pos);
     } else if (this.placedTowers.filter((a) => insideBox(pos, {x: a.x - CELL_SIZE / 2, y: a.y - CELL_SIZE / 2, width: 64, height: 64})).length > 0) {
-      // There's already a tower in that position
       const tower = this.placedTowers.filter((a) => insideBox(pos, {x: a.x - CELL_SIZE / 2, y: a.y - CELL_SIZE / 2, width: 64, height: 64}))[0]
       this.popup = new Popup(tower);
     } else {
       this.popup = null;
-      // No tower selected → do nothing
       if (!this.gameEngine.selectedTower) {
         return;
       }
       
-      // Only allow towers on buildable tiles
       if (cellType === "B") {
-        
-        // center of the cell
         const towerX = col * CELL_SIZE + CELL_SIZE / 2;
         const towerY = row * CELL_SIZE + CELL_SIZE / 2;
         
-        // get tower data
         const towerData = ASSET_MANAGER.getAsset(`./data/${this.gameEngine.selectedTower}.json`);
         const cost = towerData.upgrades[0].cost;
         
-        // check money
         if (!this.gameEngine.spendMoney(cost)) {
           if (DEBUG.io) console.log("Not enough money to place tower. Cost: ", cost);
           return;
         }
         
-        // create a real tower object
         const tower = new Tower(towerData, towerX, towerY, this.gameEngine);
         
         this.placedTowers.push(tower);
         if (DEBUG.io) console.log("Tower placed. Cost: ", cost, "Money left: ", this.gameEngine.playerMoney);
         
-        // Clear selection after placing
         this.gameEngine.selectedTower = null;
       }
     }
@@ -312,7 +299,6 @@ class TowerDefenseMap {
 
   getNextCell(row, col) {
     const dir = this.cells[row][col];
-    // Starting cell always moves right
     if (dir === "F") {
       return { row, col: col + 1 };
     }
@@ -342,6 +328,7 @@ class TowerDefenseMap {
     this.portal.close();
     this.portal = null;
   }
+
   /**
    * Randomly generate and add a wave of enemies, based on the total money the player has collected
    */
@@ -351,16 +338,15 @@ class TowerDefenseMap {
       return {name: a, bounty: ASSET_MANAGER.getAsset("./data/" + a + ".json").bounty};
     });
     let wave = [];
-    // add enemies to the wave based on their bounty compared to the total value on the map
     while (wave.map((a) => a.bounty).reduce((acc, val) => acc + val, 0) < totalValue * 0.15) {
-      // weight towards smaller enemies
       wave.push(enemies[Math.floor(Math.sqrt(Math.random()) * enemies.length)]);
     }
 
     if (DEBUG.wave) console.log("Value: ",totalValue, "\nEnemies:", enemies, "\nWave: ", wave, "\nWave value: ", wave.map((a) => a.bounty).reduce((acc, val) => acc + val, 0));
     
+    // FIX 4: Math.max(..., 1) prevents division by zero
     return wave.map((a) => {
-      return {enemy: a.name, delay: Math.pow(Math.random() * 2 / Math.min(this.currentWave - 10, 5) + 0.025, 3)};
+      return {enemy: a.name, delay: Math.pow(Math.random() * 2 / Math.max(Math.min(this.currentWave - 10, 5), 1) + 0.025, 3)};
     });
   }
 }
