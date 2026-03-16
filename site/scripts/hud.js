@@ -116,7 +116,11 @@ class HUD {
     handleClick(pos) {
         for (let btn of this.towerButtons) {
             if (insideBox(pos, btn)) {
-                this.game.selectedTower = btn.tower.name;
+                if (this.game.selectedTower === btn.tower.name) {
+                    this.game.selectedTower = null;
+                } else {
+                    this.game.selectedTower = btn.tower.name;
+                }
             }
         }
     }
@@ -124,7 +128,11 @@ class HUD {
     handleKeyDown(e) {
         const index = parseInt(e.key) - 1;
         if (index >= 0 && index < this.towers.length) {
-            this.game.selectedTower = this.towers[index].name;
+            if (this.game.selectedTower === this.towers[index].name) {
+                this.game.selectedTower = null;
+            } else {
+                this.game.selectedTower = this.towers[index].name;
+            }
         }
         if (e.key === "Escape") {
             this.game.selectedTower = null;

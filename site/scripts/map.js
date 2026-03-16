@@ -148,7 +148,7 @@ class TowerDefenseMap {
     const mouseX = this.gameEngine.mouse.x;
     const mouseY = this.gameEngine.mouse.y;
 
-    if (mouseY > 512) return;
+    if (mouseY > this.rows * CELL_SIZE) return;
 
     const col = Math.floor(mouseX / CELL_SIZE);
     const row = Math.floor(mouseY / CELL_SIZE);
