@@ -274,7 +274,10 @@ class GameEngine {
             }
 
             // Check win condition
-            this.winScreen.checkWinCondition();
+            //this.winScreen.checkWinCondition();
+            if (!this.map.isEndless) {
+                this.winScreen.checkWinCondition();
+            }
 
             // Check lose condition
             if (this.baseHealth <= 0) this.loseScreen.show();
